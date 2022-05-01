@@ -23,6 +23,8 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
 
     steps:
 
