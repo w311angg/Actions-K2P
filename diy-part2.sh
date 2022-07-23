@@ -37,3 +37,10 @@ sed -i "s/option filter_proxy_ipv6 '0'/option filter_proxy_ipv6 '1'/" package/fe
 
 #开启ChinaDNS-NG
 sed -i "/config global/a\	option chinadns_ng '1'" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
+
+# 直连光猫
+sed -i '/broadcast 192.168.1.255/d' /etc/firewall.user
+sed -i '/_rule -d 192.168.1.1/d' /etc/firewall.user
+echo 'ifconfig wan 192.168.1.2 netmask 255.255.255.0 broadcast 192.168.1.255' >> /etc/firewall.user
+echo 'iptables -I forwarding_rule -d 192.168.1.1 -j ACCEPT' >> /etc/firewall.user
+echo 'iptables -t nat -I postrouting_rule -d 192.168.1.1 -j MASQUERADE' >> /etc/firewall.user
