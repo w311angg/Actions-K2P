@@ -40,3 +40,6 @@ sed -i "/config global/a\	option chinadns_ng '1'" package/feeds/passwallluci/luc
 
 #修复UDP53端口代理不起作用
 sed -i "/--dport 53 -j RETURN/d" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/iptables.sh
+
+#chinadns-ng与mtwifi冲突解决
+patch < patch/helper_dnsmasq.patch
