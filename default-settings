@@ -1,2 +1,5 @@
 #开启fullcone
 #sed -i "s/option fullcone_nat '0'/option fullcone_nat '1'/" /etc/config/turboacc
+
+#首次开机30秒后启动mtkwifi
+(sleep 30s; /sbin/mtkwifi up)& 
