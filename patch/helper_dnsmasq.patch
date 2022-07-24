@@ -1,5 +1,5 @@
---- helper_dnsmasq.sh	2022-07-24 20:59:37.381728554 +0800
-+++ "helper_dnsmasq.sh"	2022-07-24 21:00:48.031728527 +0800
+--- package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/helper_dnsmasq.sh	2022-07-24 20:59:37.381728554 +0800
++++ package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/helper_dnsmasq.sh	2022-07-24 21:00:48.031728527 +0800
 @@ -35,6 +35,7 @@ restore_servers() {
  }
  
