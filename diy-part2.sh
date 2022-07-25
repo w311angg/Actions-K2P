@@ -19,6 +19,9 @@ echo >> default-settings
 sed -n -i -e '/rm -rf \/tmp\/luci-modulecache\//r default-settings' -e 1x -e '2,${x;p}' -e '${x;p}' package/lean/default-settings/files/zzz-default-settings
 rm default-settings
 
+# Patch
+patch -p0 < $GITHUB_WORKSPACE/patches/*
+
 #代理DNS53端口
 sed -i "s/option udp_redir_ports .*/option udp_redir_ports '53'/" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
 
