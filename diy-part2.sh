@@ -19,10 +19,7 @@ echo >> default-settings
 sed -n -i -e '/rm -rf \/tmp\/luci-modulecache\//r default-settings' -e 1x -e '2,${x;p}' -e '${x;p}' package/lean/default-settings/files/zzz-default-settings
 rm default-settings
 
-#TCP全端口代理
-sed -i "s/option tcp_redir_ports .*/option tcp_redir_ports '1:65535'/" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
-
-#代理53-DNS端口
+#代理DNS53端口
 sed -i "s/option udp_redir_ports .*/option udp_redir_ports '53'/" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
 
 #关闭passwall日志
@@ -35,11 +32,5 @@ sed -i "/REDIRECT --to-ports 53' >>/d" package/lean/default-settings/files/zzz-d
 #过滤代理域名IPv6
 sed -i "s/option filter_proxy_ipv6 '0'/option filter_proxy_ipv6 '1'/" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
 
-#开启ChinaDNS-NG
-sed -i "/config global/a\	option chinadns_ng '1'" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
-
 #修复UDP53端口代理不起作用
 sed -i "/--dport 53 -j RETURN/d" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/iptables.sh
-
-#chinadns-ng与mtwifi冲突解决
-patch -p0 < $GITHUB_WORKSPACE/patch/helper_dnsmasq.patch
