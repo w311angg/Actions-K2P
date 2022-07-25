@@ -1,1 +1,10 @@
-
+--- package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/iptables.sh	2022-07-26 04:09:40.987267267 +0800
++++ package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/iptables.sh	2022-07-26 04:17:23.097267091 +0800
+@@ -643,6 +643,7 @@ load_acl() {
+ 				$ipt_n -A PSW $(comment "默认") -p tcp $(factor $TCP_REDIR_PORTS "-m multiport --dport") $(dst $IPSET_SHUNTLIST) $(REDIRECT $TCP_REDIR_PORT)
+ 				$ipt_n -A PSW $(comment "默认") -p tcp $(factor $TCP_REDIR_PORTS "-m multiport --dport") $(dst $IPSET_BLACKLIST) $(REDIRECT $TCP_REDIR_PORT)
+ 				$ipt_n -A PSW $(comment "默认") -p tcp $(factor $TCP_REDIR_PORTS "-m multiport --dport") $(get_redirect_ipt $TCP_PROXY_MODE $TCP_REDIR_PORT)
++				source $APP_PATH/redirport.sh
+ 			else
+ 				$ipt_m -A PSW $(comment "默认") -p tcp -d $FAKE_IP -j PSW_RULE
+ 				$ipt_m -A PSW $(comment "默认") -p tcp $(factor $TCP_REDIR_PORTS "-m multiport --dport") $(dst $IPSET_SHUNTLIST) -j PSW_RULE
