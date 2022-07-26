@@ -39,7 +39,7 @@ sed -i "s/option filter_proxy_ipv6 '0'/option filter_proxy_ipv6 '1'/" package/fe
 sed -i "/--dport 53 -j RETURN/d" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/iptables.sh
 
 #为passwall增加redirport钩子
-$redirport_bash="#iptables -t nat -w -A PSW -m comment --comment '默认' -p tcp -m multiport --dport 85,86 -m set --match-set shuntlist dst -j REDIRECT --to-ports 1041
+redirport_bash="#iptables -t nat -w -A PSW -m comment --comment '默认' -p tcp -m multiport --dport 85,86 -m set --match-set shuntlist dst -j REDIRECT --to-ports 1041
 #iptables -t nat -w -A PSW -m comment --comment '默认' -p tcp -m multiport --dport 85,86 -m set --match-set blacklist dst -j REDIRECT --to-ports 1041
 #iptables -t nat -w -A PSW -m comment --comment '默认' -p tcp -m multiport --dport 85,86 -m set ! --match-set chnroute dst -j REDIRECT --to-ports 1041"
 echo $redirport_bash > package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/redirport.sh
