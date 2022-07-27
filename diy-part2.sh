@@ -27,3 +27,6 @@ sed -i "s/option filter_aaaa.*/option filter_aaaa	1/" package/network/services/d
 
 #打开bbr加速
 sed -i "s/option bbr_cca '0'/option bbr_cca '1'/" package/lean/luci-app-turboacc/root/etc/config/turboacc
+
+#清空ssrplus黑名单
+echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
