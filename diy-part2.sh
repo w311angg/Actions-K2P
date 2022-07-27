@@ -42,4 +42,4 @@ sed -i "/--dport 53 -j RETURN/d" package/feeds/passwallluci/luci-app-passwall/ro
 cp $GITHUB_WORKSPACE/redirport.sh package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/
 
 #dnsmasq禁止解析IPv6 DNS记录
-sed -i "s/option filter_aaaa .*/option filter_aaaa '1'/" package/network/services/dnsmasq/files/dhcp.conf
+sed -i "s/option filter_aaaa.*/option filter_aaaa	'1'/" package/network/services/dnsmasq/files/dhcp.conf
