@@ -30,7 +30,7 @@ sed -i "s/option close_log_tcp '0'/option close_log_tcp '1'/" package/feeds/pass
 sed -i "s/option close_log_udp '0'/option close_log_udp '1'/" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
 
 #删除ssrplus对防火墙的修改
-sed -i "/REDIRECT --to-ports 53' >>/d" package/lean/default-settings/files/zzz-default-settings
+#sed -i "/REDIRECT --to-ports 53' >>/d" package/lean/default-settings/files/zzz-default-settings
 
 #过滤代理域名IPv6
 #sed -i "s/option filter_proxy_ipv6 '0'/option filter_proxy_ipv6 '1'/" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
@@ -43,3 +43,6 @@ cp $GITHUB_WORKSPACE/redirport.sh package/feeds/passwallluci/luci-app-passwall/r
 
 #dnsmasq禁止解析IPv6 DNS记录
 sed -i "s/option filter_aaaa.*/option filter_aaaa	1/" package/network/services/dnsmasq/files/dhcp.conf
+
+#移除passwall不支持的tcp dns请求的劫持
+sed -i "/tcp --dport 53 -j REDIRECT --to-ports 53/d" package/lean/default-settings/files/zzz-default-settings
