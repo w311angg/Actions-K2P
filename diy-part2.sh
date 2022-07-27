@@ -33,10 +33,13 @@ sed -i "s/option close_log_udp '0'/option close_log_udp '1'/" package/feeds/pass
 sed -i "/REDIRECT --to-ports 53' >>/d" package/lean/default-settings/files/zzz-default-settings
 
 #过滤代理域名IPv6
-sed -i "s/option filter_proxy_ipv6 '0'/option filter_proxy_ipv6 '1'/" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
+#sed -i "s/option filter_proxy_ipv6 '0'/option filter_proxy_ipv6 '1'/" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/0_default_config
 
 #修复UDP53端口代理不起作用
 sed -i "/--dport 53 -j RETURN/d" package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/iptables.sh
 
 #为passwall增加redirport钩子
 cp $GITHUB_WORKSPACE/redirport.sh package/feeds/passwallluci/luci-app-passwall/root/usr/share/passwall/
+
+#dnsmasq禁止解析IPv6 DNS记录
+sed -i "s/option filter_aaaa .*/option filter_aaaa '1'/" package/network/services/dnsmasq/files/dhcp.conf
