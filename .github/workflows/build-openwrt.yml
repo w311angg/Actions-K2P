@@ -66,7 +66,7 @@ jobs:
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: cache
-      uses: klever1988/cachewrtbuild@main
+      uses: w311ang/cachewrtbuild@main
       with:
         ccache: true
         prefix: ${{ github.workspace }}/openwrt
