@@ -45,3 +45,6 @@ sed -i "s/option trust_dns.*/option trust_dns '127.0.0.1#5353'/" package/chinadn
 
 #chinadns-ng: 关闭多线程复用端口，减少内存占用
 sed -i "s/option reuse_port '1'/option reuse_port '0'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng: 增加dnsmasq重定向规则
+curl -o package/chinadns-ng/files/ https://w311ang.github.io/chinadns_with_dnsmasq/dnsmasq-chinadns.conf
