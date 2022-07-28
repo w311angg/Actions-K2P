@@ -47,4 +47,4 @@ sed -i "s/option trust_dns.*/option trust_dns '127.0.0.1#5353'/" package/chinadn
 sed -i "s/option reuse_port '1'/option reuse_port '0'/" package/chinadns-ng/files/chinadns-ng.config
 
 #chinadns-ng: 内置dnsmasq重定向规则，还需要Makefile包含该文件
-curl -o package/chinadns-ng/files/ https://w311ang.github.io/chinadns_with_dnsmasq/dnsmasq-chinadns.conf
+curl -o package/chinadns-ng/files/dnsmasq-chinadns.conf https://w311ang.github.io/chinadns_with_dnsmasq/dnsmasq-chinadns.conf
