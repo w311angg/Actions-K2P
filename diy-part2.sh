@@ -31,13 +31,13 @@ sed -i "s/option bbr_cca '0'/option bbr_cca '1'/" package/lean/luci-app-turboacc
 #清空ssrplus黑名单
 echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
 
-#chinadns-ng: 设置监听端口为5335
+#chinadns-ng: 设置监听端口为ssrplus自定义DNS端口5335
 sed -i "s/option bind_port.*/option bind_port '5335'/" package/chinadns-ng/files/chinadns-ng.config
 
 #chinadns-ng: 开启公平模式
 sed -i "s/option fair_mode '0'/option fair_mode '1'/" package/chinadns-ng/files/chinadns-ng.config
 
-#chinadns-ng: 监听127.0.0.1
+#chinadns-ng: 监听本机127.0.0.1
 sed -i "s/option bind_addr '0.0.0.0'/option bind_addr '127.0.0.1'/" package/chinadns-ng/files/chinadns-ng.config
 
 #chinadns-ng: 信任DNS为dns2tcp
