@@ -20,7 +20,7 @@ sed -n -i -e '/rm -rf \/tmp\/luci-modulecache\//r default-settings' -e 1x -e '2,
 rm default-settings
 
 # Patch
-patch -p0 < $GITHUB_WORKSPACE/patches/*
+patch -p0 < "$GITHUB_WORKSPACE/patches/*"
 
 #dnsmasq禁止解析IPv6 DNS记录
 sed -i "s/option filter_aaaa.*/option filter_aaaa	1/" package/network/services/dnsmasq/files/dhcp.conf
