@@ -1,0 +1,11 @@
+--- package/lean/default-settings/files/zzz-default-settings	2022-07-29 00:32:53.467060612 +0800
++++ package/lean/default-settings/files/zzz-default-settings	2022-07-29 00:34:38.707060571 +0800
+@@ -37,6 +37,8 @@ sed -i "s/# //g" /etc/opkg/distfeeds.con
+ sed -i '/openwrt_luci/ { s/snapshots/releases\/18.06.9/g; }'  /etc/opkg/distfeeds.conf
+ 
+ sed -i '/REDIRECT --to-ports 53/d' /etc/firewall.user
++sed -i '/--dport 53 -j RETURN/d' /etc/firewall.user
++echo '#iptables -t nat -A PREROUTING -p udp --dport 53 -j RETURN -d 192.168.1.1' >> /etc/firewall.user
+ echo 'iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user
+ echo 'iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user
+ echo '[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user
