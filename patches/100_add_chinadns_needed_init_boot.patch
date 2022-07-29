@@ -1,11 +1,8 @@
 --- package/base-files/files/etc/rc.local	2022-07-27 17:37:25.862250698 +0800
 +++ package/base-files/files/etc/rc.local	2022-07-29 00:53:51.564596601 +0800
-@@ -1,4 +1,8 @@
+@@ -1,4 +1,5 @@
  # Put your custom commands here that should be executed once
  # the system init finished. By default this file does nothing.
-+#chinadns-ng
-+#(dns2tcp -L 127.0.0.1#5353 -R 1.0.0.1#53 > /dev/null)&
-+#cp /etc/chinadns-ng/dnsmasq-chinadns.conf /var/dnsmasq.d/
-+#/etc/init.d/dnsmasq restart
++#(dns2tcp -L 127.0.0.1#1053 -R 1.0.0.1#53 > /dev/null)& #chinadns-ng
  
  exit 0
