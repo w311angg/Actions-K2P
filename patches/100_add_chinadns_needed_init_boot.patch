@@ -3,6 +3,6 @@
 @@ -1,4 +1,5 @@
  # Put your custom commands here that should be executed once
  # the system init finished. By default this file does nothing.
-+#(dns2tcp -L 127.0.0.1#1053 -R 1.0.0.1#53 > /dev/null)& #chinadns-ng
++#(dns2tcp -L 127.0.0.1#1053 -R 1.0.0.1#53 -af > /dev/null)& #chinadns-ng
  
  exit 0
