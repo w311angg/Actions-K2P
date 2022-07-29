@@ -23,7 +23,7 @@ rm default-settings
 for i in $GITHUB_WORKSPACE/patches/*; do patch -p0 < $i; done
 
 #打开bbr加速
-sed -i "s/option bbr_cca '0'/option bbr_cca '1'/" feeds/luci/applications/luci-app-turboacc/root/etc/config/turboacc
+sed -i "s/option bbr_cca.*/option bbr_cca '1'/" feeds/luci/applications/luci-app-turboacc/root/etc/config/turboacc
 
 #清空ssrplus黑名单
 echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
