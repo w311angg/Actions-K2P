@@ -27,21 +27,3 @@ sed -i "s/option bbr_cca '0'/option bbr_cca '1'/" feeds/luci/applications/luci-a
 
 #清空ssrplus黑名单
 echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
-
-#chinadns-ng: 设置监听端口为pdnsd上游DNS端口5353
-sed -i "s/option bind_port.*/option bind_port '5353'/" package/chinadns-ng/files/chinadns-ng.config
-
-#chinadns-ng: 开启公平模式
-sed -i "s/option fair_mode '0'/option fair_mode '1'/" package/chinadns-ng/files/chinadns-ng.config
-
-#chinadns-ng: 监听本机127.0.0.1
-sed -i "s/option bind_addr '0.0.0.0'/option bind_addr '127.0.0.1'/" package/chinadns-ng/files/chinadns-ng.config
-
-#chinadns-ng: 信任DNS为dns2tcp
-sed -i "s/option trust_dns.*/option trust_dns '127.0.0.1#1053'/" package/chinadns-ng/files/chinadns-ng.config
-
-#chinadns-ng: 关闭多线程复用端口，减少内存占用
-sed -i "s/option reuse_port '1'/option reuse_port '0'/" package/chinadns-ng/files/chinadns-ng.config
-
-#chinadns-ng: 同一地址对dns2tcp发送1次查询包
-sed -i "s/option repeat_times.*/option repeat_times '1'/" package/chinadns-ng/files/chinadns-ng.config
