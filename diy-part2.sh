@@ -28,7 +28,7 @@ sed -i "s/option bbr_cca '0'/option bbr_cca '1'/" feeds/luci/applications/luci-a
 #清空ssrplus黑名单
 echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
 
-#chinadns-ng: 设置监听端口为ssrplus自定义DNS端口5353
+#chinadns-ng: 设置监听端口为pdnsd上游DNS端口5353
 sed -i "s/option bind_port.*/option bind_port '5353'/" package/chinadns-ng/files/chinadns-ng.config
 
 #chinadns-ng: 开启公平模式
