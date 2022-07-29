@@ -27,3 +27,6 @@ sed -i "s/option bbr_cca '0'/option bbr_cca '1'/" feeds/luci/applications/luci-a
 
 #清空ssrplus黑名单
 echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
+
+#ssrplus访问国外域名DNS服务器设为1.0.0.1
+sed -i "s/tunnel_forward=.*/tunnel_forward='1.0.0.1:53'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
