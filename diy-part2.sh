@@ -23,7 +23,7 @@ rm default-settings
 for i in $GITHUB_WORKSPACE/patches/*; do patch -p0 < $i; done
 
 #dnsmasq禁止解析IPv6 DNS记录
-sed -i "s/option filter_aaaa.*/option filter_aaaa	1/" package/network/services/dnsmasq/files/dhcp.conf
+#sed -i "s/option filter_aaaa.*/option filter_aaaa	1/" package/network/services/dnsmasq/files/dhcp.conf
 
 #打开bbr加速
 sed -i "s/option bbr_cca '0'/option bbr_cca '1'/" feeds/luci/applications/luci-app-turboacc/root/etc/config/turboacc
