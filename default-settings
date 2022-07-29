@@ -1,6 +1,3 @@
 #防火墙预留自定义ssrplus端口规则
 sed -i '/REDIRECT --to-ports 1234/d' /etc/firewall.user
 echo '#(sleep 2s; iptables -t nat -A SS_SPEC_WAN_FW -p tcp -m multiport --dport 85,86 -j REDIRECT --to-ports 1234)&' >> /etc/firewall.user
-
-#chinadns-ng: 设置ssrplus的DNS解析端口为5335
-sed -i "s/option pdnsd_enable '1'/option pdnsd_enable '0'/" /etc/config/shadowsocksr
