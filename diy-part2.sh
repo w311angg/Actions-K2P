@@ -33,3 +33,6 @@ sed -i "s/tunnel_forward=.*/tunnel_forward='1.0.0.1:53'/" feeds/helloworld/luci-
 
 #清空chinadns-ng gfwlist
 echo > package/chinadns-ng/files/gfwlist.txt
+
+#关闭chinadns-ng多进程端口复用
+sed -i "s/option reuse_port '1'/option reuse_port '0'/" package/chinadns-ng/files/chinadns-ng.config
