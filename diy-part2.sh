@@ -31,6 +31,9 @@ echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
 #ssrplus访问国外域名DNS服务器设为1.0.0.1
 sed -i "s/tunnel_forward=.*/tunnel_forward='1.0.0.1:53'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
+#dnsmasq禁止解析IPv6 DNS记录
+sed -i "s/option filter_aaaa.*/option filter_aaaa	1/" package/network/services/dnsmasq/files/dhcp.conf
+
 #清空chinadns-ng gfwlist
 echo > package/chinadns-ng/files/gfwlist.txt
 
