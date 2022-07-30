@@ -36,3 +36,12 @@ echo > package/chinadns-ng/files/gfwlist.txt
 
 #关闭chinadns-ng多进程端口复用
 sed -i "s/option reuse_port '1'/option reuse_port '0'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng开启公平模式
+sed -i "s/option fair_mode '0'/option fair_mode '1'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng监听本机127.0.0.1
+sed -i "s/option bind_addr '0.0.0.0'/option bind_addr '127.0.0.1'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng信任DNS为dns2tcp
+sed -i "s/option trust_dns.*/option trust_dns '127.0.0.1#5335'/" package/chinadns-ng/files/chinadns-ng.config
