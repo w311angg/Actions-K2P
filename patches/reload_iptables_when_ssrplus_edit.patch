@@ -1,0 +1,18 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-08-06 02:03:25.583188474 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-08-06 02:06:45.263188397 +0800
+@@ -807,6 +807,7 @@ start_rules() {
+ 		-M "$(uci_get_by_type global netflix_proxy 0)" \
+ 		-I "/etc/ssrplus/netflixip.list" \
+ 		$(get_arg_out) $(gfwmode) $ARG_UDP
++	fw3 reload
+ 	return $?
+ }
+ 
+@@ -855,6 +856,7 @@ stop() {
+ 	unlock
+ 	set_lock
+ 	/usr/bin/ssr-rules -f
++	fw3 reload
+ 	local srulecount=$(iptables -L | grep SSR-SERVER-RULE | wc -l)
+ 	if [ $srulecount -gt 0 ]; then
+ 		iptables -F SSR-SERVER-RULE
