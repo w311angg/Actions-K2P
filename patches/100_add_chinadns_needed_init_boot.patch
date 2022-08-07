@@ -3,6 +3,6 @@
 @@ -1,4 +1,5 @@
  # Put your custom commands here that should be executed once
  # the system init finished. By default this file does nothing.
-+#uci set dhcp.@dnsmasq[0].noresolv="1"; uci commit dhcp
++#uci set dhcp.@dnsmasq[0].noresolv="1"; uci commit dhcp; /etc/init.d/dnsmasq restart
  
  exit 0
