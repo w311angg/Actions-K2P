@@ -8,3 +8,8 @@
  	return $?
  }
  
+--- /dev/null	1970-01-04 01:58:20.819999999 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh	2022-08-16 18:35:54.455908926 +0800
+@@ -0,0 +1 @@
++#iptables -t nat -A SS_SPEC_WAN_FW -p tcp -m multiport --dport 85,86 -j REDIRECT --to-ports 1234
+\ No newline at end of file
