@@ -4,15 +4,7 @@
  		-M "$(uci_get_by_type global netflix_proxy 0)" \
  		-I "/etc/ssrplus/netflixip.list" \
  		$(get_arg_out) $(gfwmode) $ARG_UDP
-+	fw3 restart
++	source /etc/ssrplus/iptables_config.sh
  	return $?
  }
  
-@@ -855,6 +856,7 @@ stop() {
- 	unlock
- 	set_lock
- 	/usr/bin/ssr-rules -f
-+	fw3 restart
- 	local srulecount=$(iptables -L | grep SSR-SERVER-RULE | wc -l)
- 	if [ $srulecount -gt 0 ]; then
- 		iptables -F SSR-SERVER-RULE
