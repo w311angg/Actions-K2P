@@ -54,5 +54,5 @@ sed -i "s/option bind_addr.*/option bind_addr '127.0.0.1'/" package/chinadns-ng/
 sed -i "s/option trust_dns.*/option trust_dns '127.0.0.1#5335'/" package/chinadns-ng/files/chinadns-ng.config
 
 #chinadns-ng黑白名单改为ssrplus黑白名单
-sed -i "s/option gfwlist_file.*/option gfwlist_file '/etc/ssrplus/black.list'/" package/chinadns-ng/files/chinadns-ng.config
+sed -i "s/option gfwlist_file.*/option gfwlist_file '/etc/chinadns-ng/blacklist.txt'/" package/chinadns-ng/files/chinadns-ng.config
 sed -i "s/option chnlist_file.*/option chnlist_file '/etc/ssrplus/white.list'/" package/chinadns-ng/files/chinadns-ng.config
