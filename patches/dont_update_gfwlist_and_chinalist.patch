@@ -8,6 +8,8 @@
 -mv -f /tmp/gfwlist.txt.tmp /etc/chinadns-ng/gfwlist.txt
 +#wget https://pexcn.me/daily/gfwlist/gfwlist.txt -O /tmp/gfwlist.txt.tmp
 +#mv -f /tmp/gfwlist.txt.tmp /etc/chinadns-ng/gfwlist.txt
- wget https://pexcn.me/daily/chinalist/chinalist.txt -O /tmp/chinalist.txt.tmp
- mv -f /tmp/chinalist.txt.tmp /etc/chinadns-ng/chinalist.txt
+-wget https://pexcn.me/daily/chinalist/chinalist.txt -O /tmp/chinalist.txt.tmp
+-mv -f /tmp/chinalist.txt.tmp /etc/chinadns-ng/chinalist.txt
++#wget https://pexcn.me/daily/chinalist/chinalist.txt -O /tmp/chinalist.txt.tmp
++#mv -f /tmp/chinalist.txt.tmp /etc/chinadns-ng/chinalist.txt
  
