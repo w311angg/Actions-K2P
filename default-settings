@@ -1,4 +1,1 @@
-#绕过局域网53端口
-sed -i '/53 -j RETURN -d 192.168.0.0\/16/d' /etc/firewall.user
-echo '#iptables -t nat -A PREROUTING -p udp --dport 53 -j RETURN -d 192.168.0.0/16' >> /etc/firewall.user
-echo '#iptables -t nat -A PREROUTING -p tcp --dport 53 -j RETURN -d 192.168.0.0/16' >> /etc/firewall.user
+
