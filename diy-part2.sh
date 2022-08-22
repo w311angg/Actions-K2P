@@ -58,3 +58,6 @@ sed -i "s/option chnlist_file.*/option chnlist_file '\/etc\/ssrplus\/white.list'
 
 #chinadns-ng黑名单改为自定义黑名单
 sed -i "s/option gfwlist_file.*/option gfwlist_file '\/etc\/chinadns-ng\/blacklist.txt'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng国内路由表优先
+sed -i "s/option chnlist_first.*/option chnlist_first '1'/" package/chinadns-ng/files/chinadns-ng.config
