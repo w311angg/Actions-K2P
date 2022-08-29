@@ -64,3 +64,6 @@ sed -i "s/option chnlist_first.*/option chnlist_first '1'/" package/chinadns-ng/
 
 #修改dnsforwarder配置
 cp $GITHUB_WORKSPACE/replace_files/dnsforwarder.config feeds/packages/net/dnsforwarder/files/etc/config/dnsforwarder
+
+#去除dnsforwarder无用文件
+rm feeds/packages/net/dnsforwarder/files/etc/dnsforwarder/gfw.txt
