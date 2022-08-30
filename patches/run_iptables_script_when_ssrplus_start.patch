@@ -1,15 +1,13 @@
---- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-08-16 19:18:53.845907942 +0800
-+++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-08-16 19:21:28.035907883 +0800
-@@ -160,7 +160,8 @@ fw_rule() {
- 	$IPT -A SS_SPEC_WAN_FW -d 192.168.0.0/16 -j RETURN
- 	$IPT -A SS_SPEC_WAN_FW -d 224.0.0.0/4 -j RETURN
- 	$IPT -A SS_SPEC_WAN_FW -d 240.0.0.0/4 -j RETURN
--	$IPT -A SS_SPEC_WAN_FW -p tcp $PROXY_PORTS -j REDIRECT --to-ports $local_port 2>/dev/null || {
-+	$IPT -A SS_SPEC_WAN_FW -p tcp $PROXY_PORTS -j REDIRECT --to-ports $local_port
-+	source /etc/ssrplus/iptables_config.sh 2>/dev/null || {
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-08-30 21:41:27.743478022 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-08-30 21:42:46.003477993 +0800
+@@ -164,6 +164,7 @@ fw_rule() {
  		loger 3 "Can't redirect, please check the iptables."
  		exit 1
  	}
++	source /etc/ssrplus/iptables_config.sh
+ 	return $?
+ }
+ 
 
 --- /dev/null	1970-01-04 01:58:20.819999999 +0800
 +++ feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh	2022-08-16 18:35:54.455908926 +0800
