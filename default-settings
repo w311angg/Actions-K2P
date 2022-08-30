@@ -8,5 +8,5 @@ echo '#iptables -t filter -A forwarding_lan_rule -o eth1 -p udp -m multiport --d
 echo '#iptables -t filter -A forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -j REJECT' >> /etc/firewall.user
 
 #修改保留内存到1M
-sed -i '/vm.min_free_kbytes=1024/d' /etc/sysctl.conf
+sed -i '/vm.min_free_kbytes=/d' /etc/sysctl.conf
 echo 'vm.min_free_kbytes=1024' >> /etc/sysctl.conf
