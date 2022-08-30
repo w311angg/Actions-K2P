@@ -53,7 +53,7 @@ sed -i "s/option fair_mode.*/option fair_mode '1'/" package/chinadns-ng/files/ch
 #chinadns-ng监听本机127.0.0.1
 sed -i "s/option bind_addr.*/option bind_addr '127.0.0.1'/" package/chinadns-ng/files/chinadns-ng.config
 
-#chinadns-ng信任DNS为dns2tcp
+#chinadns-ng信任DNS为dnsforwarder
 sed -i "s/option trust_dns.*/option trust_dns '127.0.0.1#5335'/" package/chinadns-ng/files/chinadns-ng.config
 
 #chinadns-ng白名单改为ssrplus白名单
