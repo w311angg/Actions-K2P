@@ -1,7 +1,9 @@
 #屏蔽国外QUIC
-sed -i '/filter -N forwarding_lan_rule/d' /etc/firewall.user
 sed -i '/forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443/d' /etc/firewall.user
-echo '#iptables -t filter -N forwarding_lan_rule' >> /etc/firewall.user
+sed -i '/whitelist hash:net/d' /etc/firewall.user
+sed -i '/china hash:net/d' /etc/firewall.user
+echo '#ipset -N whitelist hash:net' >> /etc/firewall.user
+echo '#ipset -N china hash:net' >> /etc/firewall.user
 echo '#iptables -t filter -A forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443 -m set --match-set whitelist dst -j RETURN' >> /etc/firewall.user
 echo '#iptables -t filter -A forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -j REJECT' >> /etc/firewall.user
 
