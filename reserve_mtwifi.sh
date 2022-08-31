@@ -1,4 +1,4 @@
-changed_files=$(git diff-tree --no-commit-id --name-only -r 9483e6d)
+changed_files="$(git diff-tree --no-commit-id --name-only -r 9483e6d)$(git diff-tree --no-commit-id --name-only -r a28334d)"
 
 while IFS= read -r line; do
     echo reserving $line
