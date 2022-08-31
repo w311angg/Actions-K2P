@@ -68,6 +68,9 @@ sed -i "s/option gfwlist_file.*/option gfwlist_file '\/etc\/chinadns-ng\/blackli
 #chinadns-ng国内路由表优先
 sed -i "s/option chnlist_first.*/option chnlist_first '1'/" package/chinadns-ng/files/chinadns-ng.config
 
+#chinadns-ng接受无ip地址的应答
+sed -i "s/option noip_as_chnip.*/option noip_as_chnip '1'/" package/chinadns-ng/files/chinadns-ng.config
+
 #修改dnsforwarder配置
 cp $GITHUB_WORKSPACE/replace_files/dnsforwarder.config feeds/packages/net/dnsforwarder/files/etc/config/dnsforwarder
 
