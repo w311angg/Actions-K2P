@@ -62,10 +62,10 @@ jobs:
     - name: Clone source code
       working-directory: /workdir
       run: |
-        echo commit: $(cd openwrt; git rev-parse HEAD)
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        echo commit: $(cd openwrt; git rev-parse HEAD)
 
     - name: cache
       uses: w311angg/cachewrtbuild@main
