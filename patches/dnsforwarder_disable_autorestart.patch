@@ -18,7 +18,7 @@
  		fi
 +	#dnsforwarder
 +	elif [ $(uci get dnsforwarder.@arguments[0].enabled 2>/dev/null) == 1 ]; then
-+		dnsport=$($(uci get dnsforwarder.@config[0].udp_local 2>/dev/null) | awk -F ':' '{print $2}')
++		dnsport=$(echo $(uci get dnsforwarder.@config[0].udp_local 2>/dev/null) | awk -F ':' '{print $2}')
 +		if [ $dnsport == 5335 ]; then
 +			/etc/init.d/dnsforwarder health #如果进程挂掉就重启它
 +		fi
@@ -32,7 +32,7 @@
  			;;
  		esac
 +	elif [ $(uci get dnsforwarder.@arguments[0].enabled 2>/dev/null) == 1 ]; then #重启ssrplus会使dnsforwarder退出故重启
-+		dnsport=$($(uci get dnsforwarder.@config[0].udp_local 2>/dev/null) | awk -F ':' '{print $2}')
++		dnsport=$(echo $(uci get dnsforwarder.@config[0].udp_local 2>/dev/null) | awk -F ':' '{print $2}')
 +		if [ $dnsport == 5335 ]; then
 +			/etc/init.d/dnsforwarder health #如果进程挂掉就重启它
 +		fi
