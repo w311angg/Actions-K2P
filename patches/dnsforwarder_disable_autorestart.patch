@@ -10,11 +10,32 @@
  	crontab $CRON_FILE
  }
 
---- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2022-09-01 08:46:29.889956352 +0800
-+++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2022-09-01 08:47:15.229956335 +0800
-@@ -109,4 +109,5 @@ while [ "1" == "1" ]; do #死循环
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2022-09-01 20:29:49.646396524 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2022-09-01 20:29:25.976396533 +0800
+@@ -108,5 +108,11 @@ while [ "1" == "1" ]; do #死循环
+ 			ln_start_bin $(first_type microsocks) microsocks -i 127.0.0.1 -p $tmp_dns_port ssrplus-dns
  			ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_dns_port $dnsserver:$dnsport 127.0.0.1:$dns_port -q
  		fi
++	#dnsforwarder
++	elif [ $(uci get dnsforwarder.@arguments[0].enabled 2>/dev/null) == 1 ]; then
++		dnsport=$($(uci get dnsforwarder.@config[0].udp_local 2>/dev/null) | awk -F ':' '{print $2}')
++		if [ $dnsport == 5335 ]; then
++			/etc/init.d/dnsforwarder health #如果进程挂掉就重启它
++		fi
  	fi
-+	#/etc/init.d/dnsforwarder health
  done
+
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-09-01 20:28:44.376396549 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-09-01 20:28:28.516396555 +0800
+@@ -186,6 +186,11 @@ start_dns() {
+ 			pdnsd_enable_flag=2
+ 			;;
+ 		esac
++	elif [ $(uci get dnsforwarder.@arguments[0].enabled 2>/dev/null) == 1 ]; then #重启ssrplus会使dnsforwarder退出故重启
++		dnsport=$($(uci get dnsforwarder.@config[0].udp_local 2>/dev/null) | awk -F ':' '{print $2}')
++		if [ $dnsport == 5335 ]; then
++			/etc/init.d/dnsforwarder health #如果进程挂掉就重启它
++		fi
+ 	fi
+ }
+ 
