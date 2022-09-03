@@ -40,7 +40,7 @@ sed -i "s/pdnsd_enable=.*/pdnsd_enable='0'/" feeds/helloworld/luci-app-ssr-plus/
 #ssrplus全端口代理
 sed -i "s/dports=.*/dports='1'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
-#ssrplus全端口代理
+#ssrplus关闭自动切换
 sed -i "s/enable_switch=.*/enable_switch='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #dnsmasq禁止解析IPv6 DNS记录
