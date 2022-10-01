@@ -30,4 +30,4 @@
 @@ -0,0 +1,3 @@
 +#$IPT -A SS_SPEC_WAN_FW -p tcp -m multiport --dport 85,86 -j REDIRECT --to-ports $local_port
 +#$IPT -t nat -I SS_SPEC_WAN_AC 1 -p tcp --dport 443 -j RETURN -d 1.1.1.1
-+#$IPT -t nat -I SS_SPEC_WAN_AC 1 -p tcp --dport 443 -j RETURN -d 8.8.8.8
++#$IPT -t nat -I SS_SPEC_WAN_AC 2 -p tcp --dport 443 -j RETURN -d 8.8.8.8
