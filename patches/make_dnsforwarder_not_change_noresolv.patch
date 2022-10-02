@@ -17,10 +17,11 @@
  start()
  {
      echo luci for dnsforwarder
-@@ -193,13 +203,17 @@ start()
+@@ -193,13 +203,18 @@ start()
  		uci set dhcp.@dnsmasq[0].serversfile=/tmp/dnsmasq.dnsforwarder.conf
          uci commit dhcp
          /etc/init.d/dnsmasq restart
++        touch /etc/dnsforwarder/dnsmasq_configed.lock
 +    else
 +        if [ -f /etc/dnsforwarder/dnsmasq_configed.lock ]; then
 +            revert_dnsmasq_config
@@ -40,7 +41,7 @@
  	add_cron
  }
  
-@@ -212,12 +226,8 @@ stop()
+@@ -212,12 +227,8 @@ stop()
      addr=${addr/:/#}
      if [ "${dnsmasq}" = "1" ]; then
  	    uci del_list dhcp.@dnsmasq[0].server=$addr 2>/dev/null
