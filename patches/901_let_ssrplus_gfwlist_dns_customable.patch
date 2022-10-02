@@ -21,7 +21,7 @@
 +for file in /etc/ssrplus/oversea_list.conf /etc/ssrplus/gfw_list.conf /etc/ssrplus/gfw_base.conf; do
 +	dns=$(grep '^server=/' -m1 $file)
 +	dns=${dns##*/}
-+	if [ $dns != "$dns_ip#$dns_port" ]; do
++	if [ $dns != "$dns_ip#$dns_port" ]; then
 +		sed -i "s/$dns/$dns_ip#$dns_port/g" $file
 +	fi
 +done
