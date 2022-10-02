@@ -1,6 +1,6 @@
 --- feeds/packages/net/dnsforwarder/files/etc/init.d/dnsforwarder	2022-10-02 13:50:03.878017906 +0800
 +++ feeds/packages/net/dnsforwarder/files/etc/init.d/dnsforwarder	2022-10-02 16:03:25.276292070 +0800
-@@ -163,6 +163,15 @@ makeconfig () {
+@@ -163,6 +163,16 @@ makeconfig () {
      fi
  }
 
@@ -12,11 +12,12 @@
 +    uci commit dhcp
 +    /etc/init.d/dnsmasq restart
 +    rm /etc/dnsforwarder/dnsmasq_configed.lock || true
++}
 +
  start()
  {
      echo luci for dnsforwarder
-@@ -186,20 +195,25 @@ start()
+@@ -186,20 +196,25 @@ start()
      [ -n "${addr}" ] && addr=${addr/:/#}
 
         if [ "${dnsmasq}" = "1" ]; then
@@ -54,7 +55,7 @@
         add_cron
  }
 
-@@ -212,12 +226,8 @@ stop()
+@@ -212,12 +227,8 @@ stop()
      addr=${addr/:/#}
      if [ "${dnsmasq}" = "1" ]; then
             uci del_list dhcp.@dnsmasq[0].server=$addr 2>/dev/null
