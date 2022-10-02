@@ -12,12 +12,45 @@
  local bc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
  -- base64decoding
 
---- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-10-02 12:19:35.908019976 +0800
-+++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-10-02 12:20:45.428019950 +0800
-@@ -904,6 +904,8 @@ reset() {
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2022-10-02 17:40:21.315292865 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2022-10-02 19:54:13.599505274 +0800
+@@ -8,6 +8,10 @@ netflix() {
+ 	cat /etc/ssrplus/netflix.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/server=\/&\/127.0.0.1#$1\nipset=\/&\/netflix/" >$TMP_DNSMASQ_PATH/netflix_forward.conf
+ }
+ mkdir -p $TMP_DNSMASQ_PATH
++for file in /etc/ssrplus/oversea_list.conf /etc/ssrplus/gfw_list.conf /etc/ssrplus/gfw_base.conf; do
++	dns=$(grep -P 'server=/.*/\K.*' -o -m1 $file)
++	sed -i "s/$dns/$dns_ip#$dns_port/g" $file
++done
+ if [ "$(uci_get_by_type global run_mode router)" == "oversea" ]; then
+ 	cp -rf /etc/ssrplus/oversea_list.conf $TMP_DNSMASQ_PATH/
+ else
+@@ -31,7 +35,7 @@ for line in $(cat /etc/ssrplus/white.lis
+ for line in $(cat /etc/ssrplus/white.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/gfw_base.conf; done
+ for line in $(cat /etc/ssrplus/deny.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/gfw_list.conf; done
+ for line in $(cat /etc/ssrplus/deny.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/gfw_base.conf; done
+-cat /etc/ssrplus/black.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/server=\/&\/127.0.0.1#$dns_port\nipset=\/&\/blacklist/" >$TMP_DNSMASQ_PATH/blacklist_forward.conf
++cat /etc/ssrplus/black.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/server=\/&\/$dns_ip#$dns_port\nipset=\/&\/blacklist/" >$TMP_DNSMASQ_PATH/blacklist_forward.conf
+ cat /etc/ssrplus/white.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/server=\/&\/127.0.0.1\nipset=\/&\/whitelist/" >$TMP_DNSMASQ_PATH/whitelist_forward.conf
+ cat /etc/ssrplus/deny.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/address=\/&\//" >$TMP_DNSMASQ_PATH/denylist.conf
+ if [ "$(uci_get_by_type global adblock 0)" == "1" ]; then
+
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-10-02 17:33:30.035293022 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2022-10-02 20:03:12.869505068 +0800
+@@ -27,7 +27,8 @@ shunt_dns_config_file=
+ tmp_local_port=
+ ARG_UDP=
+ ARG_OTA=
+-dns_port="5335"            #dns port
++dns_ip=$(uci get shadowsocksr.@global[0].mydnsip)
++dns_port=$(uci get shadowsocksr.@global[0].mydnsport)            #dns port
+ tmp_dns_port="300"         #dns2socks temporary port
+ tmp_udp_port="301"         #udp temporary port
+ tmp_udp_local_port="302"   #udp socks temporary port
+@@ -889,6 +890,8 @@ reset() {
  		set shadowsocksr.@global[0].chnroute_url='https://ispip.clang.cn/all_cn.txt'
- 		set shadowsocksr.@global[0].nfip_url='https://fastly.jsdelivr.net/gh/QiuSimons/Netflix_IP/NF_only.txt'
- 		set shadowsocksr.@global[0].adblock_url='https://anti-ad.net/anti-ad-for-dnsmasq.conf'
+ 		set shadowsocksr.@global[0].nfip_url='https://ghproxy.com/https://raw.githubusercontent.com/QiuSimons/Netflix_IP/master/NF_only.txt'
+ 		set shadowsocksr.@global[0].adblock_url='https://ghproxy.com/https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/adblock-for-dnsmasq.conf'
 +		set shadowsocksr.@global[0].mydnsip='127.0.0.1'
 +		set shadowsocksr.@global[0].mydnsport='5335'
  		add shadowsocksr server_subscribe
