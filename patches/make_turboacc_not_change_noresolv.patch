@@ -5,7 +5,7 @@
  	uci set dhcp.@dnsmasq[0].noresolv="1"
  	uci commit dhcp
 +	mkdir /etc/turboacc 2>/dev/null || true
-+	touch /etc/turboacc/dnsmasq_configed.lock
++	touch /etc/turboacc/dnsmasq_configed.lock || true
  }
  
  revert_dns() {
