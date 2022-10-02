@@ -14,12 +14,13 @@
 
 --- feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2022-10-02 17:40:21.315292865 +0800
 +++ feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2022-10-02 19:54:13.599505274 +0800
-@@ -8,6 +8,10 @@ netflix() {
+@@ -8,6 +8,11 @@ netflix() {
  	cat /etc/ssrplus/netflix.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/server=\/&\/127.0.0.1#$1\nipset=\/&\/netflix/" >$TMP_DNSMASQ_PATH/netflix_forward.conf
  }
  mkdir -p $TMP_DNSMASQ_PATH
 +for file in /etc/ssrplus/oversea_list.conf /etc/ssrplus/gfw_list.conf /etc/ssrplus/gfw_base.conf; do
-+	dns=$(grep -P 'server=/.*/\K.*' -o -m1 $file)
++	dns=$(grep '^server=/' -m1 $file)
++	dns=${dns##*#}
 +	sed -i "s/$dns/$dns_ip#$dns_port/g" $file
 +done
  if [ "$(uci_get_by_type global run_mode router)" == "oversea" ]; then
