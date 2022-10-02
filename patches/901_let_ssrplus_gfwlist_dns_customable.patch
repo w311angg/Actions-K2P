@@ -1,0 +1,25 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/update.lua	2022-10-02 12:16:54.528020038 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/update.lua	2022-10-02 12:17:30.008020024 +0800
+@@ -17,8 +17,8 @@ local ip_pattern = "^%d+%.%d+%.%d+%.%d+"
+ local domain_pattern = "([%w%-%_]+%.[%w%.%-%_]+)[%/%*]*"
+ local excluded_domain = {"apple.com", "sina.cn", "sina.com.cn", "baidu.com", "byr.cn", "jlike.com", "weibo.com", "zhongsou.com", "youdao.com", "sogou.com", "so.com", "soso.com", "aliyun.com", "taobao.com", "jd.com", "qq.com"}
+ -- gfwlist parameter
+-local mydnsip = '127.0.0.1'
+-local mydnsport = '5335'
++local mydnsip = uci:get_first("shadowsocksr", "global", "mydnsip")
++local mydnsport = uci:get_first("shadowsocksr", "global", "mydnsport")
+ local ipsetname = 'gfwlist'
+ local bc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+ -- base64decoding
+
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-10-02 12:19:35.908019976 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-10-02 12:20:45.428019950 +0800
+@@ -904,6 +904,8 @@ reset() {
+ 		set shadowsocksr.@global[0].chnroute_url='https://ispip.clang.cn/all_cn.txt'
+ 		set shadowsocksr.@global[0].nfip_url='https://fastly.jsdelivr.net/gh/QiuSimons/Netflix_IP/NF_only.txt'
+ 		set shadowsocksr.@global[0].adblock_url='https://anti-ad.net/anti-ad-for-dnsmasq.conf'
++		set shadowsocksr.@global[0].mydnsip='127.0.0.1'
++		set shadowsocksr.@global[0].mydnsport='5335'
+ 		add shadowsocksr server_subscribe
+ 		set shadowsocksr.@server_subscribe[0].proxy='0'
+ 		set shadowsocksr.@server_subscribe[0].auto_update_time='2'
