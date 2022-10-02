@@ -23,7 +23,7 @@
 +	dns=${dns##*/}
 +	if [ $dns != "$dns_ip#$dns_port" ]; do
 +		sed -i "s/$dns/$dns_ip#$dns_port/g" $file
-+	done
++	fi
 +done
  if [ "$(uci_get_by_type global run_mode router)" == "oversea" ]; then
  	cp -rf /etc/ssrplus/oversea_list.conf $TMP_DNSMASQ_PATH/
