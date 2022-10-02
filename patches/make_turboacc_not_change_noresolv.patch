@@ -13,7 +13,7 @@
  		uci set dhcp.@dnsmasq[0].resolvfile="/tmp/resolv.conf.auto"
  	fi
  	uci commit dhcp
-+  rm /etc/turboacc/dnsmasq_configed.lock
++  rm /etc/turboacc/dnsmasq_configed.lock || true
  }
  
  load_sfe() {
