@@ -21,7 +21,7 @@
  		uci set dhcp.@dnsmasq[0].serversfile=/tmp/dnsmasq.dnsforwarder.conf
          uci commit dhcp
          /etc/init.d/dnsmasq restart
-+        touch /etc/dnsforwarder/dnsmasq_configed.lock
++        touch /etc/dnsforwarder/dnsmasq_configed.lock || true
 +    else
 +        if [ -f /etc/dnsforwarder/dnsmasq_configed.lock ]; then
 +            revert_dnsmasq_config
