@@ -4,7 +4,7 @@
  	uci add_list dhcp.@dnsmasq[0].server="127.0.0.1#5333"
  	uci set dhcp.@dnsmasq[0].noresolv="1"
  	uci commit dhcp
-+	mkdir /etc/turboacc 2>/dev/null || true
++	mkdir -p /etc/turboacc
 +	touch /etc/turboacc/dnsmasq_configed.lock || true
  }
  
