@@ -3,49 +3,66 @@
 @@ -163,6 +163,15 @@ makeconfig () {
      fi
  }
- 
-+revert_dnsmasq_config()
+
++revent_dnsmasq_config()
 +{
 +    uci set dhcp.@dnsmasq[0].resolvfile=/tmp/resolv.conf.d/resolv.conf.auto 2>/dev/null
 +    uci delete dhcp.@dnsmasq[0].noresolv 2>/dev/null
-+	uci delete dhcp.@dnsmasq[0].serversfile 2>/dev/null
++       uci delete dhcp.@dnsmasq[0].serversfile 2>/dev/null
 +    uci commit dhcp
 +    /etc/init.d/dnsmasq restart
-+}
++    rm /etc/dnsforwarder/dnsmasq_configed.lock || true
 +
  start()
  {
      echo luci for dnsforwarder
-@@ -193,13 +202,15 @@ start()
- 		uci set dhcp.@dnsmasq[0].serversfile=/tmp/dnsmasq.dnsforwarder.conf
-         uci commit dhcp
-         /etc/init.d/dnsmasq restart
+@@ -186,20 +195,25 @@ start()
+     [ -n "${addr}" ] && addr=${addr/:/#}
+
+        if [ "${dnsmasq}" = "1" ]; then
+-        uci delete dhcp.@dnsmasq[0].server 2>/dev/null
+-        # uci add_list dhcp.@dnsmasq[0].server=$addr
+-        uci delete dhcp.@dnsmasq[0].resolvfile 2>/dev/null
+-        uci set dhcp.@dnsmasq[0].noresolv=1
+-               uci set dhcp.@dnsmasq[0].serversfile=/tmp/dnsmasq.dnsforwarder.conf
+-        uci commit dhcp
+-        /etc/init.d/dnsmasq restart
++           if [ ! -f /etc/dnsforwarder/dnsmasq_configed.lock ]; then
++            uci delete dhcp.@dnsmasq[0].server 2>/dev/null
++            # uci add_list dhcp.@dnsmasq[0].server=$addr
++            uci delete dhcp.@dnsmasq[0].resolvfile 2>/dev/null
++            uci set dhcp.@dnsmasq[0].noresolv=1
++                   uci set dhcp.@dnsmasq[0].serversfile=/tmp/dnsmasq.dnsforwarder.conf
++            uci commit dhcp
++            /etc/init.d/dnsmasq restart
++            touch /etc/dnsforwarder/dnsmasq_configed.lock
++        fi
 +    else
-+        revert_dnsmasq_config
++        revent_dnsmasq_config
      fi
-     	local dnsmasq_server_addr=$(uci get dhcp.@dnsmasq[0].server 2>/dev/null)
--	if [ -n "${dnsmasq_server_addr}" ]; then
--		uci set dhcp.@dnsmasq[0].noresolv=1
--		uci commit dhcp 
--		/etc/init.d/dnsmasq restart
--	fi
-+	# if [ -n "${dnsmasq_server_addr}" ]; then
-+	# 	uci set dhcp.@dnsmasq[0].noresolv=1
-+	# 	uci commit dhcp 
-+	# 	/etc/init.d/dnsmasq restart
-+	# fi
- 	add_cron
+        local dnsmasq_server_addr=$(uci get dhcp.@dnsmasq[0].server 2>/dev/null)
+-       if [ -n "${dnsmasq_server_addr}" ]; then
+-               uci set dhcp.@dnsmasq[0].noresolv=1
+-               uci commit dhcp
+-               /etc/init.d/dnsmasq restart
+-       fi
++       # if [ -n "${dnsmasq_server_addr}" ]; then
++       #       uci set dhcp.@dnsmasq[0].noresolv=1
++       #       uci commit dhcp
++       #       /etc/init.d/dnsmasq restart
++       # fi
+        add_cron
  }
- 
-@@ -212,12 +223,8 @@ stop()
+
+@@ -212,12 +226,8 @@ stop()
      addr=${addr/:/#}
      if [ "${dnsmasq}" = "1" ]; then
- 	    uci del_list dhcp.@dnsmasq[0].server=$addr 2>/dev/null
-+	    revert_dnsmasq_config
+            uci del_list dhcp.@dnsmasq[0].server=$addr 2>/dev/null
++           revent_dnsmasq_config
      fi
 -    uci set dhcp.@dnsmasq[0].resolvfile=/tmp/resolv.conf.d/resolv.conf.auto 2>/dev/null
 -    uci delete dhcp.@dnsmasq[0].noresolv 2>/dev/null
--	uci delete dhcp.@dnsmasq[0].serversfile 2>/dev/null
+-       uci delete dhcp.@dnsmasq[0].serversfile 2>/dev/null
 -    uci commit dhcp
 -    /etc/init.d/dnsmasq restart
      [ -e ${PID_FILE} ] && {
