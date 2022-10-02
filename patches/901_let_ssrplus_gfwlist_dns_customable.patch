@@ -36,7 +36,7 @@
  if [ "$(uci_get_by_type global adblock 0)" == "1" ]; then
 
 --- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-10-02 17:33:30.035293022 +0800
-+++ feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2022-10-02 20:03:12.869505068 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-10-02 20:03:12.869505068 +0800
 @@ -27,7 +27,8 @@ shunt_dns_config_file=
  tmp_local_port=
  ARG_UDP=
