@@ -4,7 +4,7 @@
  sed -i '/openwrt_luci/ { s/snapshots/releases\/18.06.9/g; }'  /etc/opkg/distfeeds.conf
  
  sed -i '/REDIRECT --to-ports 53/d' /etc/firewall.user
-+sed -i '/53 -j RETURN -d 192.168.0.0\/16/d' /etc/firewall.user #局域网53端口直连
++sed -i '/53 -j RETURN -d/d' /etc/firewall.user #局域网53端口直连
 +sed -i '/forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443/d' /etc/firewall.user #屏蔽国外QUIC
 +sed -i '/whitelist hash:net/d' /etc/firewall.user #屏蔽国外QUIC
 +sed -i '/china hash:net/d' /etc/firewall.user #屏蔽国外QUIC
