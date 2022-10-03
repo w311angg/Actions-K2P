@@ -34,3 +34,4 @@ ssrplus添加53端口绕过是因为AC在53劫持规则之前，必须绕过才�
 +#$IPT -I SS_SPEC_WAN_AC 2 -p tcp --dport 443 -j RETURN -d 8.8.8.8
 +#$IPT -I SS_SPEC_WAN_AC 1 -i br-lan -p udp --dport 53 -j RETURN
 +#$IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
++#$IPT -I SS_SPEC_WAN_AC 1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -j RETURN
