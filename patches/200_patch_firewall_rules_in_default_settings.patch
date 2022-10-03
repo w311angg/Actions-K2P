@@ -1,0 +1,45 @@
+--- package/lean/default-settings/files/zzz-default-settings	2022-08-22 13:27:55.604529727 +0800
++++ package/lean/default-settings/files/zzz-default-settings	2022-08-22 13:28:56.904529704 +0800
+@@ -37,11 +37,40 @@ sed -i "s/# //g" /etc/opkg/distfeeds.con
+ sed -i '/openwrt_luci/ { s/snapshots/releases\/18.06.9/g; }'  /etc/opkg/distfeeds.conf
+ 
+ sed -i '/REDIRECT --to-ports 53/d' /etc/firewall.user
++sed -i '/53 -j RETURN -d 192.168.0.0\/16/d' /etc/firewall.user #局域网53端口直连
++sed -i '/forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443/d' /etc/firewall.user #屏蔽国外QUIC
++sed -i '/whitelist hash:net/d' /etc/firewall.user #屏蔽国外QUIC
++sed -i '/china hash:net/d' /etc/firewall.user #屏蔽国外QUIC
++sed -i '/tcp-reset -d 1.1.1.1/d' /etc/firewall.user #屏蔽DoH
++sed -i '/tcp-reset -d 8.8.8.8/d' /etc/firewall.user #屏蔽DoH
++sed -i '/REDIRECT --to-ports 534/d' /etc/firewall.user #直连主机DNS请求路由器IPv4/IPv6走DNS转发到国内DNS
++sed -i '/bplan src -j RETURN --dport 53/d' /etc/firewall.user #直连主机DNS请求网络DNS直连
++sed -i '/53 -j RETURN -s $ipv6/d' /etc/firewall.user #直连主机DNS请求IPv6网络DNS直连
++sed -i '/bplan hash:net/d' /etc/firewall.user #匹配直连主机先决条件
++sed -i '/forwarding_lan_rule -m set --match-set bplan src/d' /etc/firewall.user #forwarding_lan_rule对直连主机的任何规则全部失效
+ echo \
+-'iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
++'ipset -N bplan hash:net 2>/dev/null
++#iptables -t nat -A PREROUTING -p udp -d $(dig +short A OpenWrt.lan) --dport 53 -m set --match-set bplan src -j REDIRECT --to-ports 534
++#iptables -t nat -A PREROUTING -p tcp -d $(dig +short A OpenWrt.lan) --dport 53 -m set --match-set bplan src -j REDIRECT --to-ports 534
++iptables -t nat -A PREROUTING -p udp -m set --match-set bplan src -j RETURN --dport 53
++iptables -t nat -A PREROUTING -p tcp -m set --match-set bplan src -j RETURN --dport 53
++iptables -t nat -A PREROUTING -p udp --dport 53 -j RETURN -d 192.168.0.0/16
++iptables -t nat -A PREROUTING -p tcp --dport 53 -j RETURN -d 192.168.0.0/16
++iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
+ iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53
++#for ipv6 in $(dig +short AAAA bropc.lan); do [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp -d $(dig +short AAAA OpenWrt.lan) --dport 53 -s $ipv6 -j REDIRECT --to-ports 534; done
++#for ipv6 in $(dig +short AAAA bropc.lan); do [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp -d $(dig +short AAAA OpenWrt.lan) --dport 53 -s $ipv6 -j REDIRECT --to-ports 534; done
++#for ipv6 in $(dig +short AAAA bropc.lan); do [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp --dport 53 -j RETURN -s $ipv6; done
++#for ipv6 in $(dig +short AAAA bropc.lan); do [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j RETURN -s $ipv6; done
+ [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
+-[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user
++[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53
++iptables -t filter -A forwarding_lan_rule -m set --match-set bplan src -j RETURN
++#ipset -N whitelist hash:net 2>/dev/null
++#ipset -N china hash:net 2>/dev/null
++#iptables -t filter -A forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443 -m set --match-set whitelist dst -j RETURN
++#iptables -t filter -A forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -j REJECT
++#iptables -t filter -A forwarding_lan_rule -p tcp --dport 443 -j REJECT --reject-with tcp-reset -d 1.1.1.1
++#iptables -t filter -A forwarding_lan_rule -p tcp --dport 443 -j REJECT --reject-with tcp-reset -d 8.8.8.8' >> /etc/firewall.user
+ 
+ sed -i '/option disabled/d' /etc/config/wireless
+ sed -i '/set wireless.radio${devidx}.disabled/d' /lib/wifi/mac80211.sh
