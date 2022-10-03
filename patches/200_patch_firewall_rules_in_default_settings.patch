@@ -1,6 +1,6 @@
 --- package/lean/default-settings/files/zzz-default-settings	2022-08-22 13:27:55.604529727 +0800
 +++ package/lean/default-settings/files/zzz-default-settings	2022-08-22 13:28:56.904529704 +0800
-@@ -37,11 +37,44 @@ sed -i "s/# //g" /etc/opkg/distfeeds.con
+@@ -37,11 +37,42 @@ sed -i "s/# //g" /etc/opkg/distfeeds.con
  sed -i '/openwrt_luci/ { s/snapshots/releases\/18.06.9/g; }'  /etc/opkg/distfeeds.conf
  
  sed -i '/REDIRECT --to-ports 53/d' /etc/firewall.user
@@ -20,12 +20,10 @@
 +'ipset -N bplan hash:net 2>/dev/null
 +#iptables -t nat -A PREROUTING -p udp -d $(dig +short A OpenWrt.lan) --dport 53 -m set --match-set bplan src -j REDIRECT --to-ports 534
 +#iptables -t nat -A PREROUTING -p tcp -d $(dig +short A OpenWrt.lan) --dport 53 -m set --match-set bplan src -j REDIRECT --to-ports 534
-+iptables -t nat -A PREROUTING -p udp -m set --match-set bplan src -j RETURN --dport 53
-+iptables -t nat -A PREROUTING -p tcp -m set --match-set bplan src -j RETURN --dport 53
 +iptables -t nat -A PREROUTING -p udp --dport 53 -j RETURN -d 192.168.0.0/16
 +iptables -t nat -A PREROUTING -p tcp --dport 53 -j RETURN -d 192.168.0.0/16
-+iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
- iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53
++iptables -t nat -A PREROUTING -p udp --dport 53 -m set ! --match-set bplan src -j REDIRECT --to-ports 53
+ iptables -t nat -A PREROUTING -p tcp --dport 53 -m set ! --match-set bplan src -j REDIRECT --to-ports 53
 +#for ipv6 in $(dig +short AAAA bropc.lan); do [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp -d $(dig +short AAAA OpenWrt.lan) --dport 53 -s $ipv6 -j REDIRECT --to-ports 534; done
 +#for ipv6 in $(dig +short AAAA bropc.lan); do [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp -d $(dig +short AAAA OpenWrt.lan) --dport 53 -s $ipv6 -j REDIRECT --to-ports 534; done
 +#for ipv6 in $(dig +short AAAA bropc.lan); do [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp --dport 53 -j RETURN -s $ipv6; done
