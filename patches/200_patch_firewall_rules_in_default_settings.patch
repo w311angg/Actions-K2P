@@ -1,6 +1,6 @@
 --- package/lean/default-settings/files/zzz-default-settings	2022-08-22 13:27:55.604529727 +0800
 +++ package/lean/default-settings/files/zzz-default-settings	2022-08-22 13:28:56.904529704 +0800
-@@ -37,11 +37,42 @@ sed -i "s/# //g" /etc/opkg/distfeeds.con
+@@ -37,11 +37,44 @@ sed -i "s/# //g" /etc/opkg/distfeeds.con
  sed -i '/openwrt_luci/ { s/snapshots/releases\/18.06.9/g; }'  /etc/opkg/distfeeds.conf
  
  sed -i '/REDIRECT --to-ports 53/d' /etc/firewall.user
