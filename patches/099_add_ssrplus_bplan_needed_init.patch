@@ -11,5 +11,5 @@
 +UseCache true
 +MemoryCache true' > /tmp/dnsforwarder-bplan.conf
 +dnsforwarder -d -f /tmp/dnsforwarder-bplan.conf
-
+ 
  exit 0
