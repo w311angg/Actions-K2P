@@ -1,4 +1,5 @@
 import sys
+import os
 from pytools.pytools import execCmd
 
 with open(sys.argv[1]) as f:
