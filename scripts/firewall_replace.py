@@ -8,13 +8,15 @@ lines=txt.splitlines()
 
 seds=''
 echos=''
+genEcho=''
 
 for line in lines:
   echos+="echo '%s' >> /etc/firewall.user\n"%line
   seds+="sed -i '/%s/d' /etc/firewall.user\n"%(line.replace('/','\/') if not line == '' else '^\s*$')
 
-print(echos)
-genEcho=execCmd(echos.replace(' >> /etc/firewall.user','').replace('\n','; '))
+#print(echos)
+for line in echos.splitlines():
+  genEcho+=execCmd(line.replace(' >> /etc/firewall.user',''))
 if genEcho == txt+'\n':
   print('echo pass')
 else:
