@@ -26,7 +26,9 @@ for i in $GITHUB_WORKSPACE/patches/*.patch; do patch --fuzz 3 -p0 < $i; done
 chmod +x package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh
 
 # Patch firewall.user
-pip install --upgrade git+https://github.com/w311ang/pytools.git@package 1>/dev/null
+echo "::group::Install dependencies"
+pip install --upgrade git+https://github.com/w311ang/pytools.git@package
+echo "::endgroup::"
 python $GITHUB_WORKSPACE/scripts/firewall_replace.py $GITHUB_WORKSPACE/firewall.user package/lean/default-settings/files/zzz-default-settings
 
 #打开bbr加速
