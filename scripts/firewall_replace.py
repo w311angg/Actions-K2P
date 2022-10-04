@@ -14,7 +14,7 @@ for line in lines:
   seds+="sed -i '/%s/d' /etc/firewall.user\n"%(line.replace('/','\/') if not line == '' else '^\s*$')
 
 print(echos)
-genEcho=execCmd(echos.replace(' >> /etc/firewall.user',''))
+genEcho=execCmd(echos.replace(' >> /etc/firewall.user','').replace('\n','; '))
 if genEcho == txt+'\n':
   print('echo pass')
 else:
