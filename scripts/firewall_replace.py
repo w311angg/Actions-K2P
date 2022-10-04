@@ -17,6 +17,9 @@ if genEcho == txt+'\n':
   print('echo pass')
 else:
   print('echo failed!')
+  with open('/tmp/echo.txt','w') as f:
+    f.write(genEcho)
+  os.system('diff -up %s /tmp/echo.txt'%sys.argv[2])
   exit(1)
 sedcmd=' | '.join(["echo '%s'"%txt]+[line.replace('-i ','').replace(' /etc/firewall.user','') for line in seds.splitlines()])
 #print(sedcmd)
