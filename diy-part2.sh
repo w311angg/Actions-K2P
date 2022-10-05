@@ -10,7 +10,7 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
-# Exit 1 if error
+# Exit if error
 set -e
 
 # Modify default IP
