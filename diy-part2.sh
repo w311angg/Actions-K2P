@@ -77,6 +77,9 @@ sed -i "s/option chnlist_first.*/option chnlist_first '1'/" package/chinadns-ng/
 #chinadns-ng接受无ip地址的应答
 sed -i "s/option noip_as_chnip.*/option noip_as_chnip '1'/" package/chinadns-ng/files/chinadns-ng.config
 
+#chinadns-ng`tw`域代理解析
+echo -e '\ntw' >> package/luci-app-chinadns-ng/root/etc/chinadns-ng/blacklist.txt
+
 #修改dnsforwarder配置
 cp $GITHUB_WORKSPACE/replace_files/dnsforwarder.config feeds/packages/net/dnsforwarder/files/etc/config/dnsforwarder
 
