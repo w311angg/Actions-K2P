@@ -40,22 +40,22 @@
 
 --- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-10-02 17:33:30.035293022 +0800
 +++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-10-02 20:03:12.869505068 +0800
-@@ -27,7 +27,8 @@ shunt_dns_config_file=
+@@ -25,7 +25,8 @@ local_config_file=
+ shunt_dns_config_file=
  tmp_local_port=
  ARG_UDP=
- ARG_OTA=
 -dns_port="5335"            #dns port
 +dns_ip=$(uci get shadowsocksr.@global[0].mydnsip)
 +dns_port=$(uci get shadowsocksr.@global[0].mydnsport)            #dns port
  tmp_dns_port="300"         #dns2socks temporary port
  tmp_udp_port="301"         #udp temporary port
  tmp_udp_local_port="302"   #udp socks temporary port
-@@ -889,6 +890,8 @@ reset() {
- 		set shadowsocksr.@global[0].chnroute_url='https://ispip.clang.cn/all_cn.txt'
- 		set shadowsocksr.@global[0].nfip_url='https://ghproxy.com/https://raw.githubusercontent.com/QiuSimons/Netflix_IP/master/NF_only.txt'
- 		set shadowsocksr.@global[0].adblock_url='https://ghproxy.com/https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/adblock-for-dnsmasq.conf'
-+		set shadowsocksr.@global[0].mydnsip='127.0.0.1'
-+		set shadowsocksr.@global[0].mydnsport='5335'
- 		add shadowsocksr server_subscribe
- 		set shadowsocksr.@server_subscribe[0].proxy='0'
- 		set shadowsocksr.@server_subscribe[0].auto_update_time='2'
+@@ -916,6 +917,8 @@ reset() {
+                set shadowsocksr.@global[0].chnroute_url='https://ispip.clang.cn/all_cn.txt'
+                set shadowsocksr.@global[0].nfip_url='https://fastly.jsdelivr.net/gh/QiuSimons/Netflix_IP/NF_only.txt'
+                set shadowsocksr.@global[0].adblock_url='https://anti-ad.net/anti-ad-for-dnsmasq.conf'
++               set shadowsocksr.@global[0].mydnsip='127.0.0.1'
++               set shadowsocksr.@global[0].mydnsport='5335'
+                add shadowsocksr server_subscribe
+                set shadowsocksr.@server_subscribe[0].proxy='0'
+                set shadowsocksr.@server_subscribe[0].auto_update_time='2'
