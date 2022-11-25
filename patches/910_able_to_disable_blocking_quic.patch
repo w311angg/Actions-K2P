@@ -1,0 +1,86 @@
+--- openwrt/feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-11-26 02:56:07.129670405 +0800
++++ openwrt/feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-11-26 03:39:36.148768996 +0800
+@@ -38,6 +38,8 @@ usage() {
+ 		    -O                      apply the global rules to the OUTPUT chain
+ 		    -u                      enable udprelay mode, TPROXY is required
+ 		    -U                      enable udprelay mode, using different IP
++		    -q                      disable blocking quic
++		    -Q                      enable blocking quic
+ 		                            and ports for TCP and UDP
+ 		    -f                      flush the rules
+ 		    -g                      gfwlist mode
+@@ -245,15 +247,19 @@ tp_rule() {
+ 	router)
+ 		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set ss_spec_wan_ac dst -j RETURN
+ 		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set china dst -j RETURN
++		if [[ "$BLOCKQUIC" == 1 ]]; then
+ 		$ipt -A SS_SPEC_TPROXY -p udp --dport 443 -j DROP
+ 		$ipt -A SS_SPEC_TPROXY -p udp --dport 80 -j DROP
++		fi
+ 		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set gmlan src -m set ! --match-set china dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
+ 		$ipt -A SS_SPEC_TPROXY -p udp $PROXY_PORTS -m set ! --match-set ss_spec_wan_ac dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
+ 		;;
+ 	gfw)
+ 		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set china dst -j RETURN
++		if [[ "$BLOCKQUIC" == 1 ]]; then
+ 		$ipt -A SS_SPEC_TPROXY -p udp --dport 443 -j DROP
+ 		$ipt -A SS_SPEC_TPROXY -p udp --dport 80 -j DROP
++		fi
+ 		$ipt -A SS_SPEC_TPROXY -p udp $PROXY_PORTS -m set --match-set gfwlist dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
+ 		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set gmlan src -m set ! --match-set china dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
+ 		;;
+@@ -325,7 +331,7 @@ gen_include() {
+ 	return 0
+ }
+ 
+-while getopts ":m:s:l:S:L:i:e:a:B:b:w:p:G:D:F:N:M:I:oOuUfgrczh" arg; do
++while getopts ":m:s:l:S:L:i:e:a:B:b:w:p:G:D:F:N:M:I:oOuUqQfgrczh" arg; do
+ 	case "$arg" in
+ 	m)
+ 		Interface=$OPTARG
+@@ -393,6 +399,12 @@ while getopts ":m:s:l:S:L:i:e:a:B:b:w:p:
+ 	U)
+ 		TPROXY=2
+ 		;;
++	q)
++		BLOCKQUIC=0
++		;;
++	Q)
++		BLOCKQUIC=1
++		;;
+ 	g)
+ 		RUNMODE=gfw
+ 		;;
+
+--- openwrt/feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-11-26 02:56:07.141670316 +0800
++++ openwrt/feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-11-26 03:40:04.056528998 +0800
+@@ -794,6 +794,12 @@ start_rules() {
+ 		2) echo "-O" ;;
+ 		esac
+ 	}
++	get_if_block_quic() {
++		case "$(uci get shadowsocksr.@global[0].block_quic)" in
++		0) echo "-q" ;;
++		1) echo "-Q" ;;
++		esac
++	}
+ 	/usr/share/shadowsocksr/gfw2ipset.sh
+ 	/usr/bin/ssr-rules \
+ 		-s "$server" \
+@@ -813,7 +819,7 @@ start_rules() {
+ 		-N "$shunt_ip" \
+ 		-M "$(uci_get_by_type global netflix_proxy 0)" \
+ 		-I "/etc/ssrplus/netflixip.list" \
+-		$(get_arg_out) $(gfwmode) $ARG_UDP
++		$(get_arg_out) $(gfwmode) $ARG_UDP $(get_if_block_quic)
+ 	return $?
+ }
+ 
+@@ -919,6 +925,7 @@ reset() {
+ 		set shadowsocksr.@global[0].adblock_url='https://anti-ad.net/anti-ad-for-dnsmasq.conf'
+ 		set shadowsocksr.@global[0].mydnsip='127.0.0.1'
+ 		set shadowsocksr.@global[0].mydnsport='5335'
++		set shadowsocksr.@global[0].block_quic='0'
+ 		add shadowsocksr server_subscribe
+ 		set shadowsocksr.@server_subscribe[0].proxy='0'
+ 		set shadowsocksr.@server_subscribe[0].auto_update_time='2'
