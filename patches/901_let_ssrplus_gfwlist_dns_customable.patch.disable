@@ -51,11 +51,11 @@
  tmp_udp_port="301"         #udp temporary port
  tmp_udp_local_port="302"   #udp socks temporary port
 @@ -916,6 +917,8 @@ reset() {
-                set shadowsocksr.@global[0].chnroute_url='https://ispip.clang.cn/all_cn.txt'
-                set shadowsocksr.@global[0].nfip_url='https://fastly.jsdelivr.net/gh/QiuSimons/Netflix_IP/NF_only.txt'
-                set shadowsocksr.@global[0].adblock_url='https://anti-ad.net/anti-ad-for-dnsmasq.conf'
-+               set shadowsocksr.@global[0].mydnsip='127.0.0.1'
-+               set shadowsocksr.@global[0].mydnsport='5335'
-                add shadowsocksr server_subscribe
-                set shadowsocksr.@server_subscribe[0].proxy='0'
-                set shadowsocksr.@server_subscribe[0].auto_update_time='2'
+ 		set shadowsocksr.@global[0].chnroute_url='https://ispip.clang.cn/all_cn.txt'
+ 		set shadowsocksr.@global[0].nfip_url='https://fastly.jsdelivr.net/gh/QiuSimons/Netflix_IP/NF_only.txt'
+ 		set shadowsocksr.@global[0].adblock_url='https://anti-ad.net/anti-ad-for-dnsmasq.conf'
++		set shadowsocksr.@global[0].mydnsip='127.0.0.1'
++		set shadowsocksr.@global[0].mydnsport='5335'
+ 		add shadowsocksr server_subscribe
+ 		set shadowsocksr.@server_subscribe[0].proxy='0'
+ 		set shadowsocksr.@server_subscribe[0].auto_update_time='2'
