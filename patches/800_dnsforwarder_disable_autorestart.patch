@@ -17,7 +17,7 @@
  		fi
  	fi
 +	#dnsforwarder
-+	if [ $(uci get dnsforwarder.@arguments[0].enabled 2>/dev/null) == 1 ]; then
++	if [ $(uci get dnsforwarder.@arguments[0].enabled 2>/dev/null | echo 0) == 1 ]; then
 +		/etc/init.d/dnsforwarder health #如果进程挂掉就重启它
 +	fi
  done
@@ -28,7 +28,7 @@
  			;;
  		esac
  	fi
-+	if [ $(uci get dnsforwarder.@arguments[0].enabled 2>/dev/null) == 1 ]; then #重启ssrplus会使dnsforwarder退出故重启
++	if [ $(uci get dnsforwarder.@arguments[0].enabled 2>/dev/null | echo 0) == 1 ]; then #重启ssrplus会使dnsforwarder退出故重启
 +		/etc/init.d/dnsforwarder health #如果进程挂掉就重启它
 +	fi
  }
