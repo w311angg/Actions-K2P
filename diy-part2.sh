@@ -23,7 +23,7 @@ sed -n -i -e '/rm -rf \/tmp\/luci-modulecache\//r default-settings' -e 1x -e '2,
 rm default-settings
 
 # Patch
-for i in $(find $GITHUB_WORKSPACE/patches/ -type f -regex ".*\.patch"); do echo "using $(basename $i)"; patch -p0 < $i; done
+for i in $(find $GITHUB_WORKSPACE/patches/ -type f -regex ".*\.patch" | sort); do echo "using $(basename $i)"; patch -p0 < $i; done
 
 # Set permissions
 chmod +x package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh
