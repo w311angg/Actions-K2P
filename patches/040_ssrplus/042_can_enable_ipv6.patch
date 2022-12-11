@@ -1,5 +1,5 @@
---- shadowsocksr.4	2022-12-12 02:31:56.641677651 +0800
-+++ shadowsocksr.5	2022-12-12 02:42:25.991677411 +0800
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-12-12 02:31:56.641677651 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-12-12 02:42:25.991677411 +0800
 @@ -41,6 +41,7 @@ redir_udp=0
  local_enable=0
  kcp_enable_flag=0
