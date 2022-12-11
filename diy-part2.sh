@@ -46,6 +46,9 @@ sed -i "s/dports=.*/dports='1'/" feeds/helloworld/luci-app-ssr-plus/root/etc/ini
 #ssrplus关闭自动切换
 sed -i "s/enable_switch=.*/enable_switch='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
+#ssrplus不屏蔽quic
+sed -i "s/block_quic=.*/block_quic='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+
 #dnsmasq禁止解析IPv6 DNS记录
 #sed -i "s/option filter_aaaa.*/option filter_aaaa	1/" package/network/services/dnsmasq/files/dhcp.conf
 
