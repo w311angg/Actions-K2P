@@ -80,7 +80,7 @@
  		set shadowsocksr.@global[0].adblock_url='https://anti-ad.net/anti-ad-for-dnsmasq.conf'
  		set shadowsocksr.@global[0].mydnsip='127.0.0.1'
  		set shadowsocksr.@global[0].mydnsport='5335'
-+		set shadowsocksr.@global[0].block_quic='0'
++		set shadowsocksr.@global[0].block_quic='1'
  		add shadowsocksr server_subscribe
  		set shadowsocksr.@server_subscribe[0].proxy='0'
  		set shadowsocksr.@server_subscribe[0].auto_update_time='2'
