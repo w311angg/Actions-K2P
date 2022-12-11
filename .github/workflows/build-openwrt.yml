@@ -18,6 +18,10 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+      commit:
+        description: 'commit'
+        required: false
+        default: ''
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -61,9 +65,16 @@ jobs:
 
     - name: Clone source code
       working-directory: /workdir
+      env:
+        commit: ${{ github.event.inputs.commit }}
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
+        if [[ "$commit" != "" ]]; then
+          cd openwrt
+          git checkeout $commit
+          cd -
+        fi
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         echo commit: $(cd openwrt; git rev-parse HEAD)
 
