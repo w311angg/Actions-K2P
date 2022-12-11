@@ -3,7 +3,7 @@
 @@ -13,7 +13,7 @@ add_cron()
  {
  	sed -i '/dnsforwarder/d' $CRON_FILE
- 	#echo '*/5 * * * * /etc/init.d/dnsforwarder health' >> $CRON_FILE
+ 	echo '*/5 * * * * /etc/init.d/dnsforwarder health' >> $CRON_FILE
 -	echo '0 1 * * 0 /etc/init.d/dnsforwarder makegfwlist' >> $CRON_FILE
 +	#echo '0 1 * * 0 /etc/init.d/dnsforwarder makegfwlist' >> $CRON_FILE
  	crontab $CRON_FILE
