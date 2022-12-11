@@ -38,7 +38,7 @@ echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
 sed -i "s/tunnel_forward=.*/tunnel_forward='1.0.0.1:53'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #ssrplus访问国内域名DNS服务器设为wan读取的
-sed -i "s/chinadns_forward=.*/chinadns_forward='1.0.0.1:53'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i "s/chinadns_forward=.*/chinadns_forward='wan'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #ssrplus使用本机5335端口
 #sed -i "s/pdnsd_enable=.*/pdnsd_enable='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
