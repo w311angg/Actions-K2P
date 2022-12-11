@@ -50,7 +50,20 @@
  china_dns_port="5333"      #china_dns_port
  tmp_dns_port="300"         #dns2socks temporary port
  tmp_udp_port="301"         #udp temporary port
-@@ -986,6 +987,8 @@ reset() {
+@@ -186,8 +187,10 @@ start_dns() {
+ 		esac
+ 		case "$ssrplus_dns" in
+ 		1)
+-			ln_start_bin $(first_type dns2tcp) dns2tcp -L 127.0.0.1#$dns_port -R ${dnsserver/:/#}
+-			pdnsd_enable_flag=1
++			if [[ "$mydnsip" == "127.0.0.1" ]]; then
++				ln_start_bin $(first_type dns2tcp) dns2tcp -L 127.0.0.1#$dns_port -R ${dnsserver/:/#}
++				pdnsd_enable_flag=1
++			fi
+ 			;;
+ 		2)
+ 			ln_start_bin $(first_type microsocks) microsocks -i 127.0.0.1 -p $tmp_dns_port ssrplus-dns
+@@ -986,6 +989,8 @@ reset() {
  		set shadowsocksr.@global[0].chnroute_url='https://ispip.clang.cn/all_cn.txt'
  		set shadowsocksr.@global[0].nfip_url='https://fastly.jsdelivr.net/gh/QiuSimons/Netflix_IP/NF_only.txt'
  		set shadowsocksr.@global[0].adblock_url='https://anti-ad.net/anti-ad-for-dnsmasq.conf'
