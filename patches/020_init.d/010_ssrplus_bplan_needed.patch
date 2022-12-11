@@ -1,0 +1,15 @@
+--- package/base-files/files/etc/rc.local	2022-07-27 17:37:25.852250698 +0800
++++ package/base-files/files/etc/rc.local	2022-07-27 17:38:29.942250674 +0800
+@@ -1,4 +1,12 @@
+ # Put your custom commands here that should be executed once
+ # the system init finished. By default this file does nothing.
++echo \
++'UDPLocal 127.0.0.1:534,[::1]:534
++TCPLocal 127.0.0.1:534,[::1]:534
++UDPGroup 192.168.1.1,223.5.5.5 * on
++EnableTCPtoUDP true
++UseCache true
++MemoryCache true' > /tmp/dnsforwarder-bplan.conf
++dnsforwarder -d -f /tmp/dnsforwarder-bplan.conf
+ 
+ exit 0

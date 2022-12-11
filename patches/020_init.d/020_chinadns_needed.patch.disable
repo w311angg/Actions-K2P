@@ -1,0 +1,8 @@
+--- package/base-files/files/etc/rc.local	2022-07-27 17:37:25.852250698 +0800
++++ package/base-files/files/etc/rc.local	2022-07-27 17:38:29.942250674 +0800
+@@ -1,4 +1,5 @@
+ # Put your custom commands here that should be executed once
+ # the system init finished. By default this file does nothing.
++#uci set dhcp.@dnsmasq[0].noresolv="1"; uci commit dhcp; /etc/init.d/dnsmasq restart
+ 
+ exit 0

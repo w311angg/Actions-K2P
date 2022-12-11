@@ -1,0 +1,11 @@
+--- target/linux/ramips/files/drivers/net/ethernet/mtk/mtk_hnat/hnat.c	2022-09-01 18:09:41.958660156 +0800
++++ target/linux/ramips/files/drivers/net/ethernet/mtk/mtk_hnat/hnat.c	2022-09-01 18:10:19.308660141 +0800
+@@ -855,7 +855,7 @@ static int hnat_remove(struct platform_d
+ 
+ static const struct mtk_hnat_data hnat_data_v1 = {
+ 	.num_of_sch = 2,
+-	.whnat = false,
++	.whnat = true,
+ 	.per_flow_accounting = false,
+ 	.mcast = false,
+ 	.version = MTK_HNAT_V1,

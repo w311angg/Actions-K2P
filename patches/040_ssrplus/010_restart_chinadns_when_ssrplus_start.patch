@@ -1,0 +1,12 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-09-01 20:28:44.376396549 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-09-01 21:29:27.433464115 +0800
+@@ -187,6 +187,9 @@ start_dns() {
+ 			;;
+ 		esac
+ 	fi
++	if [ $(uci get chinadns-ng.@chinadns-ng[0].enable 2>/dev/null) == 1 ]; then #修改访问控制后重启chinadns-ng
++		/etc/init.d/chinadns-ng restart
++	fi
+ }
+ 
+ gen_service_file() {

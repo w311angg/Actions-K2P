@@ -1,0 +1,41 @@
+--- feeds/luci/applications/luci-app-turboacc/root/etc/init.d/turboacc	2022-10-02 16:52:09.836290954 +0800
++++ feeds/luci/applications/luci-app-turboacc/root/etc/init.d/turboacc	2022-10-02 16:57:01.036290843 +0800
+@@ -212,6 +212,8 @@ change_dns() {
+ 	uci add_list dhcp.@dnsmasq[0].server="127.0.0.1#5333"
+ 	uci set dhcp.@dnsmasq[0].noresolv="1"
+ 	uci commit dhcp
++	mkdir -p /etc/turboacc
++	touch /etc/turboacc/dnsmasq_configed.lock || true
+ }
+ 
+ revert_dns() {
+@@ -223,6 +225,7 @@ revert_dns() {
+ 		uci set dhcp.@dnsmasq[0].resolvfile="/tmp/resolv.conf.auto"
+ 	fi
+ 	uci commit dhcp
++  rm /etc/turboacc/dnsmasq_configed.lock || true
+ }
+ 
+ load_sfe() {
+@@ -276,7 +279,9 @@ start(){
+ 
+ 		/usr/share/dnscache/dnscache-while.sh > "/var/log/dnscache.file" 2>&1 &
+ 	else
+-		revert_dns
++		if [ -f /etc/turboacc/dnsmasq_configed.lock ]; then
++			revert_dns
++		fi
+ 		stop_dnscache
+ 	fi
+ 
+@@ -302,7 +307,9 @@ stop(){
+ 	unload_sfe
+ 
+ 	stop_dnscache
+-	revert_dns
++	if [ -f /etc/turboacc/dnsmasq_configed.lock ]; then
++		revert_dns
++	fi
+ 
+ 	if [ "${restart_utils}" = "true" ]; then
+ 		echo "DNSMASQ revert"

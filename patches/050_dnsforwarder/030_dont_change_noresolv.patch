@@ -1,0 +1,57 @@
+--- feeds/packages/net/dnsforwarder/files/etc/init.d/dnsforwarder	2022-10-02 13:50:03.878017906 +0800
++++ feeds/packages/net/dnsforwarder/files/etc/init.d/dnsforwarder	2022-10-02 16:03:25.276292070 +0800
+@@ -163,6 +163,16 @@ makeconfig () {
+     fi
+ }
+ 
++revert_dnsmasq_config()
++{
++    uci set dhcp.@dnsmasq[0].resolvfile=/tmp/resolv.conf.d/resolv.conf.auto 2>/dev/null
++    uci delete dhcp.@dnsmasq[0].noresolv 2>/dev/null
++	uci delete dhcp.@dnsmasq[0].serversfile 2>/dev/null
++    uci commit dhcp
++    /etc/init.d/dnsmasq restart
++    rm /etc/dnsforwarder/dnsmasq_configed.lock || true
++}
++
+ start()
+ {
+     echo luci for dnsforwarder
+@@ -193,13 +203,18 @@ start()
+ 		uci set dhcp.@dnsmasq[0].serversfile=/tmp/dnsmasq.dnsforwarder.conf
+         uci commit dhcp
+         /etc/init.d/dnsmasq restart
++        touch /etc/dnsforwarder/dnsmasq_configed.lock || true
++    else
++        if [ -f /etc/dnsforwarder/dnsmasq_configed.lock ]; then
++            revert_dnsmasq_config
++        fi
+     fi
+     	local dnsmasq_server_addr=$(uci get dhcp.@dnsmasq[0].server 2>/dev/null)
+-	if [ -n "${dnsmasq_server_addr}" ]; then
+-		uci set dhcp.@dnsmasq[0].noresolv=1
+-		uci commit dhcp 
+-		/etc/init.d/dnsmasq restart
+-	fi
++	# if [ -n "${dnsmasq_server_addr}" ]; then
++	# 	uci set dhcp.@dnsmasq[0].noresolv=1
++	# 	uci commit dhcp 
++	# 	/etc/init.d/dnsmasq restart
++	# fi
+ 	add_cron
+ }
+ 
+@@ -212,12 +227,8 @@ stop()
+     addr=${addr/:/#}
+     if [ "${dnsmasq}" = "1" ]; then
+ 	    uci del_list dhcp.@dnsmasq[0].server=$addr 2>/dev/null
++	    revert_dnsmasq_config
+     fi
+-    uci set dhcp.@dnsmasq[0].resolvfile=/tmp/resolv.conf.d/resolv.conf.auto 2>/dev/null
+-    uci delete dhcp.@dnsmasq[0].noresolv 2>/dev/null
+-	uci delete dhcp.@dnsmasq[0].serversfile 2>/dev/null
+-    uci commit dhcp
+-    /etc/init.d/dnsmasq restart
+     [ -e ${PID_FILE} ] && {
+         pid=$(cat ${PID_FILE})
+         logger -t killing dnsforwarder pid ${pid}
