@@ -37,8 +37,11 @@ echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
 #ssrplus访问国外域名DNS服务器设为1.0.0.1
 sed -i "s/tunnel_forward=.*/tunnel_forward='1.0.0.1:53'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
+#ssrplus访问国内域名DNS服务器设为wan读取的
+sed -i "s/chinadns_forward=.*/chinadns_forward='wan'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+
 #ssrplus使用本机5335端口
-sed -i "s/pdnsd_enable=.*/pdnsd_enable='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+#sed -i "s/pdnsd_enable=.*/pdnsd_enable='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #ssrplus全端口代理
 sed -i "s/dports=.*/dports='1'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
@@ -51,6 +54,37 @@ sed -i "s/block_quic=.*/block_quic='0'/" feeds/helloworld/luci-app-ssr-plus/root
 
 #dnsmasq禁止解析IPv6 DNS记录
 #sed -i "s/option filter_aaaa.*/option filter_aaaa	1/" package/network/services/dnsmasq/files/dhcp.conf
+
+#清空chinadns-ng gfwlist chinalist
+echo > package/chinadns-ng/files/gfwlist.txt
+echo > package/chinadns-ng/files/chinalist.txt
+
+#关闭chinadns-ng多进程端口复用
+sed -i "s/option reuse_port.*/option reuse_port '0'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng开启公平模式
+sed -i "s/option fair_mode.*/option fair_mode '1'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng监听本机127.0.0.1
+sed -i "s/option bind_addr.*/option bind_addr '127.0.0.1'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng信任DNS为dnsforwarder
+sed -i "s/option trust_dns.*/option trust_dns '127.0.0.1#5335'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng白名单改为ssrplus白名单
+sed -i "s/option chnlist_file.*/option chnlist_file '\/etc\/ssrplus\/white.list'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng黑名单改为自定义黑名单
+sed -i "s/option gfwlist_file.*/option gfwlist_file '\/etc\/chinadns-ng\/blacklist.txt'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng国内路由表优先
+sed -i "s/option chnlist_first.*/option chnlist_first '1'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng接受无ip地址的应答
+sed -i "s/option noip_as_chnip.*/option noip_as_chnip '1'/" package/chinadns-ng/files/chinadns-ng.config
+
+#chinadns-ng`tw`域代理解析
+echo -e '\ntw' >> package/luci-app-chinadns-ng/root/etc/chinadns-ng/blacklist.txt
 
 #修改dnsforwarder配置
 cp $GITHUB_WORKSPACE/replace_files/dnsforwarder.config feeds/packages/net/dnsforwarder/files/etc/config/dnsforwarder
