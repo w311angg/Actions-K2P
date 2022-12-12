@@ -18,6 +18,10 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+      commit:
+        description: 'commit'
+        required: false
+        default: ''
       branch:
         description: 'branch'
         required: false
@@ -68,6 +72,11 @@ jobs:
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
+        if [[ "$commit" != "" ]]; then
+          cd openwrt
+          git checkout $commit
+          cd -
+        fi
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         echo commit: $(cd openwrt; git rev-parse HEAD)
 
@@ -183,7 +192,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
+        echo "::set-output name=release_tag::${{ github.ref_name }}-$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
