@@ -69,6 +69,8 @@ jobs:
 
     - name: Clone source code
       working-directory: /workdir
+      env:
+        commit: ${{ github.event.inputs.commit }}
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
