@@ -1,5 +1,5 @@
---- shadowsocksr.9	2022-12-12 17:40:20.598672140 +0800
-+++ shadowsocksr.10	2022-12-12 17:45:04.838672031 +0800
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-12-12 17:40:20.598672140 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-12-12 17:45:04.838672031 +0800
 @@ -209,7 +209,7 @@ start_dns() {
  				"wan_114") chinadns="$wandns,114.114.114.114" ;;
  				esac
