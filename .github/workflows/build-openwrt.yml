@@ -18,6 +18,10 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+      branch:
+        description: 'branch'
+        required: false
+        default: ''
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -72,6 +76,7 @@ jobs:
       with:
         ccache: true
         prefix: ${{ github.workspace }}/openwrt
+        branch: ${{ github.event.inputs.ssh }}
 
     - name: Load custom feeds
       run: |
