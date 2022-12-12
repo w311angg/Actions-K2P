@@ -9,3 +9,21 @@
  
  				cat <<-EOF >> "$TMP_DNSMASQ_PATH/chinadns_fixed_server.conf"
  					no-poll
+
+--- /dev/null	1970-02-21 18:00:35.829999999 +0800
++++ tmp/dot	2022-12-12 17:57:56.858671737 +0800
+@@ -0,0 +1 @@
++.
+\ No newline at end of file
+
+--- tmp/dot	2022-12-12 17:57:56.858671737 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list	2022-12-12 17:57:37.168671744 +0800
+@@ -1 +0,0 @@
+-.
+\ No newline at end of file
+
+--- tmp/dot	2022-12-12 17:57:56.858671737 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_white.list	2022-12-12 17:57:37.168671744 +0800
+@@ -1 +0,0 @@
+-.
+\ No newline at end of file
