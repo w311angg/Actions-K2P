@@ -56,8 +56,8 @@ touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list
 #ssrplus chinadns-ng`tw`域代理解析
 echo 'tw' >> feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list
 
-#dnsmasq禁止解析IPv6 DNS记录
-#sed -i "s/option filter_aaaa.*/option filter_aaaa	1/" package/network/services/dnsmasq/files/dhcp.conf
+#dnsmasq不禁止解析IPv6 DNS记录
+sed -i "s/option filter_aaaa.*/option filter_aaaa	0/" package/network/services/dnsmasq/files/dhcp.conf
 
 #修改dnsforwarder配置
 cp $GITHUB_WORKSPACE/replace_files/dnsforwarder.config feeds/packages/net/dnsforwarder/files/etc/config/dnsforwarder
