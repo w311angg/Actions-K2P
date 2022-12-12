@@ -4,8 +4,8 @@
  # Put your custom commands here that should be executed once
  # the system init finished. By default this file does nothing.
 +echo \
-+'UDPLocal 127.0.0.1:534,[::1]:534
-+TCPLocal 127.0.0.1:534,[::1]:534
++'UDPLocal [::]:534
++TCPLocal [::]:534
 +UDPGroup 223.5.5.5 * on
 +EnableTCPtoUDP true
 +UseCache true
