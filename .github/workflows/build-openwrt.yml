@@ -76,7 +76,7 @@ jobs:
       with:
         ccache: true
         prefix: ${{ github.workspace }}/openwrt
-        branch: ${{ github.event.inputs.ssh }}
+        branch: ${{ github.event.inputs.branch }}
 
     - name: Load custom feeds
       run: |
