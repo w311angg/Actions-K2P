@@ -49,7 +49,11 @@ sed -i "s/enable_switch=.*/enable_switch='0'/" feeds/helloworld/luci-app-ssr-plu
 #ssrplus不屏蔽quic
 sed -i "s/block_quic=.*/block_quic='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
-#chinadns-ng`tw`域代理解析
+#ssrplus chinadns-ng创建规则文件
+touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_white.list
+touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list
+
+#ssrplus chinadns-ng`tw`域代理解析
 echo 'tw' >> feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list
 
 #dnsmasq禁止解析IPv6 DNS记录
