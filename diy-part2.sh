@@ -50,7 +50,13 @@ sed -i "s/enable_switch=.*/enable_switch='0'/" feeds/helloworld/luci-app-ssr-plu
 sed -i "s/block_quic=.*/block_quic='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #ssrplus chinadns-ng添加中国ipv6地址文件
-wget -O feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/china6_ssr.txt https://ispip.clang.cn/all_cn_ipv6.txt
+for i in {0..2}; do
+  exit_code=0
+  wget -O feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/china6_ssr.txt https://ispip.clang.cn/all_cn_ipv6.txt || exit_code=$?
+  if [[ $exit_code == 0 ]]; then
+    break
+  fi
+done
 
 #ssrplus chinadns-ng创建规则文件
 touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_white.list
