@@ -3,7 +3,7 @@
 @@ -1,4 +1,8 @@
  # Put your custom commands here that should be executed once
  # the system init finished. By default this file does nothing.
-+ipset -! -R <<-EOF || exit 1
++ipset -! -R <<-EOF
 +	create china6 hash:net
 +	$(cat /etc/ssrplus/china6_ssr.txt | sed -e "s/^/add china6 /")
 +EOF
