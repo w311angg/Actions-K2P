@@ -49,7 +49,7 @@ sed -i "s/enable_switch=.*/enable_switch='0'/" feeds/helloworld/luci-app-ssr-plu
 #ssrplus不屏蔽quic
 sed -i "s/block_quic=.*/block_quic='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
-#ssrplus chinadns-ng添加中国ipv6文件
+#ssrplus chinadns-ng添加中国ipv6地址文件
 wget -O feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/china6_ssr.txt https://ispip.clang.cn/all_cn_ipv6.txt
 
 #ssrplus chinadns-ng创建规则文件
