@@ -56,6 +56,7 @@ for i in {0..2}; do
   if [[ $exit_code == 0 ]]; then
     break
   fi
+  sleep 1m
 done
 
 #ssrplus chinadns-ng创建规则文件
