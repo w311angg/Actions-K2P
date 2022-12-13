@@ -1,0 +1,11 @@
+--- package/base-files/files/etc/rc.local	2022-07-27 17:37:25.852250698 +0800
++++ package/base-files/files/etc/rc.local	2022-07-27 17:38:29.942250674 +0800
+@@ -1,4 +1,8 @@
+ # Put your custom commands here that should be executed once
+ # the system init finished. By default this file does nothing.
++ipset -! -R <<-EOF || exit 1
++	create china6 hash:net
++	$(cat /etc/ssrplus/china6_ssr.txt | sed -e "s/^/add china6 /")
++EOF
+ 
+ exit 0
