@@ -40,7 +40,7 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  TRIGGERTYPE: ${{ github.event.action }}
+  PURE: ${{ github.event.action == 'Source Code Pure Update' }}
 
 jobs:
   build:
@@ -91,7 +91,7 @@ jobs:
         ccache: true
         prefix: ${{ github.workspace }}/openwrt
         branch: ${{ github.event.inputs.branch }}
-        skipSave: ${{ env.TRIGGERTYPE }}
+        skipSave: ${{ env.PURE }}
 
     - name: Load custom feeds
       run: |
@@ -112,7 +112,7 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
         cd openwrt
-        if [[ "$TRIGGERTYPE" == "Source Code Pure Update" ]]; then
+        if [[ "$PURE" == "true" ]]; then
           sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
           patch -p0 < $GITHUB_WORKSPACE/patches/020_init.d/990_mtkwifi.patch
         else
