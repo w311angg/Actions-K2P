@@ -40,7 +40,6 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  PURE: false
 
 jobs:
   build:
@@ -104,12 +103,14 @@ jobs:
       run: cd openwrt && ./scripts/feeds install -a
 
     - name: Load custom configuration
+      env:
+        pure: ${{ github.event.action }}
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
         cd openwrt
-        if [[ "$PURE" == "true" ]]; then
+        if [[ "$pure" == "true" ]]; then
           patch -p0 < $GITHUB_WORKSPACE/patches/020_init.d/990_mtkwifi.patch
         else
           $GITHUB_WORKSPACE/$DIY_P2_SH
