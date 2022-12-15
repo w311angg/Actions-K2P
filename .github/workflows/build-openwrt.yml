@@ -68,6 +68,7 @@ jobs:
         sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
+      id: clone
       working-directory: /workdir
       env:
         commit: ${{ github.event.inputs.commit }}
@@ -80,7 +81,8 @@ jobs:
           cd -
         fi
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        echo commit: $(cd openwrt; git rev-parse HEAD)
+        echo commit: $(cd openwrt; git rev-parse HEAD | tee /tmp/commit.log)
+        echo "::set-output name=commit::$(cat /tmp/commit.log)"
 
     - name: cache
       uses: w311angg/cachewrtbuild@main
@@ -111,6 +113,7 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         if [[ "$triggerType" == "Source Code Pure Update" ]]; then
+          sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
           patch -p0 < $GITHUB_WORKSPACE/patches/020_init.d/990_mtkwifi.patch
         else
           $GITHUB_WORKSPACE/$DIY_P2_SH
@@ -200,7 +203,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       env:
-        commit: ${{ github.event.inputs.commit }}
+        commit: ${{ steps.clone.outputs.commit }}
       run: |
         echo "::set-output name=release_tag::${{ github.ref_name }}-$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
