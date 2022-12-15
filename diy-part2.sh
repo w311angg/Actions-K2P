@@ -38,19 +38,19 @@ sed -i "s/option fullcone.*/option fullcone	0/" package/network/config/firewall/
 echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
 
 #ssrplus访问国外域名DNS服务器设为1.0.0.1
-sed -i "s/tunnel_forward=.*/tunnel_forward='1.0.0.1:53'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i "s/set \(.*\)tunnel_forward=.*/set \1tunnel_forward='1.0.0.1:53'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #ssrplus使用本机5335端口
 #sed -i "s/pdnsd_enable=.*/pdnsd_enable='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #ssrplus全端口代理
-sed -i "s/dports=.*/dports='1'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i "s/set \(.*\)dports=.*/set \1dports='1'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #ssrplus关闭自动切换
-sed -i "s/enable_switch=.*/enable_switch='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i "s/set \(.*\)enable_switch=.*/set \1enable_switch='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #ssrplus不屏蔽quic
-sed -i "s/block_quic=.*/block_quic='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i "s/set \(.*\)block_quic=.*/set \1block_quic='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #ssrplus chinadns-ng添加中国ipv6地址文件
 for i in {0..2}; do
@@ -70,7 +70,7 @@ touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list
 echo 'tw' >> feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list
 
 #ssrplus chinadns-ng设置国内第二DNS为阿里
-sed -i "s/chinadns_forward_second=.*/chinadns_forward_second='223.5.5.5'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i "s/set \(.*\)chinadns_forward_second=.*/set \1chinadns_forward_second='223.5.5.5'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #dnsmasq不禁止解析IPv6 DNS记录
 sed -i "s/option filter_aaaa.*/option filter_aaaa	0/" package/network/services/dnsmasq/files/dhcp.conf
