@@ -69,6 +69,9 @@ touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list
 #ssrplus chinadns-ng`tw`域代理解析
 echo 'tw' >> feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list
 
+#ssrplus chinadns-ng设置国内第二DNS为阿里
+sed -i "s/chinadns_forward_second=.*/chinadns_forward_second='223.5.5.5'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+
 #dnsmasq不禁止解析IPv6 DNS记录
 sed -i "s/option filter_aaaa.*/option filter_aaaa	0/" package/network/services/dnsmasq/files/dhcp.conf
 
