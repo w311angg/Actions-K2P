@@ -104,13 +104,13 @@ jobs:
 
     - name: Load custom configuration
       env:
-        pure: ${{ github.event.action }}
+        triggerType: ${{ github.event.action }}
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
         cd openwrt
-        if [[ "$pure" == "true" ]]; then
+        if [[ "$triggerType" == "Source Code Pure Update" ]]; then
           patch -p0 < $GITHUB_WORKSPACE/patches/020_init.d/990_mtkwifi.patch
         else
           $GITHUB_WORKSPACE/$DIY_P2_SH
