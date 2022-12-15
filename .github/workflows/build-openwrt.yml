@@ -26,6 +26,10 @@ on:
         description: 'branch'
         required: false
         default: ''
+      pure:
+        description: 'pure'
+        required: false
+        default: 'false'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -103,12 +107,18 @@ jobs:
       run: cd openwrt && ./scripts/feeds install -a
 
     - name: Load custom configuration
+      env:
+        pure: ${{ github.event.inputs.pure }}
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
         cd openwrt
-        $GITHUB_WORKSPACE/$DIY_P2_SH
+        if [[ "$pure" == "true" ]]; then
+          patch -p0 < $GITHUB_WORKSPACE/patches/020_init.d/990_mtkwifi.patch
+        else
+          $GITHUB_WORKSPACE/$DIY_P2_SH
+        fi
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -193,9 +203,12 @@ jobs:
     - name: Generate release tag
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      env:
+        commit: ${{ github.event.inputs.commit }}
       run: |
         echo "::set-output name=release_tag::${{ github.ref_name }}-$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
+        echo "commit: $commit" >> release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
