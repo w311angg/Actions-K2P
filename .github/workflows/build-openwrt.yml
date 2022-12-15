@@ -205,7 +205,10 @@ jobs:
       env:
         commit: ${{ steps.clone.outputs.commit }}
       run: |
-        echo "::set-output name=release_tag::${{ github.ref_name }}-$(date +"%Y.%m.%d-%H%M")"
+        if [[ "$PURE" == "true" ]]; then
+          pureSign='-pure'
+        fi
+        echo "::set-output name=release_tag::${{ github.ref_name }}$pureSign-$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
         echo "commit: $commit" >> release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
