@@ -31,9 +31,6 @@ chmod +x package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_co
 #打开bbr加速
 sed -i "s/option bbr_cca.*/option bbr_cca '1'/" feeds/luci/applications/luci-app-turboacc/root/etc/config/turboacc
 
-#设置fullcone模式为兼容模式
-sed -i "s/option fullcone.*/option fullcone	1/" package/network/config/firewall/files/firewall.config
-
 #清空ssrplus黑名单
 echo > package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/deny.list
 
