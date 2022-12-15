@@ -1,0 +1,24 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-12-15 23:10:04.802056863 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-12-15 23:23:29.254606703 +0800
+@@ -202,11 +202,12 @@ start_dns() {
+ 
+ 		if [ "$run_mode" = "router" ]; then
+ 			local chinadns="$(uci_get_by_type global chinadns_forward)"
++			local chinadns_second="$(uci_get_by_type global chinadns_forward_second)"
+ 			if [ -n "$chinadns" ]; then
+ 				local wandns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo "119.29.29.29")"
+ 				case "$chinadns" in
+ 				"wan") chinadns="$wandns" ;;
+-				"wan_114") chinadns="$wandns,114.114.114.114" ;;
++				"wan_114") chinadns="$wandns,$chinadns_second" ;;
+ 				esac
+ 
+ 				ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port $(test "$no_ipv6" -eq 1 && echo -N) -f -r -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
+@@ -990,6 +991,7 @@ reset() {
+ 		set shadowsocksr.@global[0].pdnsd_enable='1'
+ 		set shadowsocksr.@global[0].tunnel_forward='1.0.0.1:53'
+ 		set shadowsocksr.@global[0].chinadns_forward='wan'
++		set shadowsocksr.@global[0].chinadns_forward_second='114.114.114.114'
+ 		set shadowsocksr.@global[0].monitor_enable='1'
+ 		set shadowsocksr.@global[0].enable_switch='0'
+ 		set shadowsocksr.@global[0].switch_time='667'
