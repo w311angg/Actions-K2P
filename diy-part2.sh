@@ -28,6 +28,12 @@ for i in $(find $GITHUB_WORKSPACE/patches/ -type f -regex ".*\.patch" | sort); d
 # Set permissions
 chmod +x package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh
 
+# 设置WiFi密码
+sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.dat
+sed -i 's/^WPAPSK1=.*/WPAPSK1=password/' package/lean/mt/drivers/mt_wifi/files/mt7615.dat
+sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.5G.dat
+sed -i 's/^WPAPSK1=.*/WPAPSK1=password/' package/lean/mt/drivers/mt_wifi/files/mt7615.5G.dat
+
 #打开bbr加速
 sed -i "s/option bbr_cca.*/option bbr_cca '1'/" feeds/luci/applications/luci-app-turboacc/root/etc/config/turboacc
 
