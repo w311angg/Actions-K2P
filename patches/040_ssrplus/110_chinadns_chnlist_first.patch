@@ -1,0 +1,11 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-12-18 14:22:16.896790134 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2022-12-18 14:22:49.276790122 +0800
+@@ -210,7 +210,7 @@ start_dns() {
+ 				"wan_114") chinadns="$wandns,$chinadns_second" ;;
+ 				esac
+ 
+-				ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port $(test "$no_ipv6" -eq 1 && echo -N) -f -r -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
++				ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port $(test "$no_ipv6" -eq 1 && echo -N) -f -r -M -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
+ 
+ 				cat <<-EOF >> "$TMP_DNSMASQ_PATH/chinadns_fixed_server.conf"
+ 					no-poll
