@@ -24,6 +24,13 @@ rm default-settings
 
 # Patch
 for i in $(find $GITHUB_WORKSPACE/patches/ -type f -regex ".*\.patch" | sort); do echo "using $(basename $i)"; patch -p0 < $i; done
+find . '(' \
+    -name \*-baseline -o \
+    -name \*-merge -o \
+    -name \*-original -o \
+    -name \*.orig -o \
+    -name \*.rej \
+')' -delete
 
 # Set permissions
 chmod +x package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh
