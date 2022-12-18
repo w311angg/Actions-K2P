@@ -68,6 +68,8 @@ for i in {0..2}; do
   wget -O feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/china6_ssr.txt https://ispip.clang.cn/all_cn_ipv6.txt || exit_code=$?
   if [[ $exit_code == 0 ]]; then
     break
+  elif [[ $i == 2 ]]; then
+    exit $exit_code
   fi
   sleep 1m
 done
