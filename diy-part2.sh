@@ -24,6 +24,14 @@ rm default-settings
 
 # Patch
 for i in $(find $GITHUB_WORKSPACE/patches/ -type f -regex ".*\.patch" | sort); do echo "using $(basename $i)"; patch -p0 < $i; done
+
+#修复重复添加chinadns dnsmasq config的问题
+wget https://github.com/fw876/helloworld/pull/1070.patch
+cd package/feeds/helloworld
+patch -p1 < ../../../1070.patch
+cd -
+
+# Delete files of patch
 find . '(' \
     -name \*-baseline -o \
     -name \*-merge -o \
@@ -92,9 +100,3 @@ cp $GITHUB_WORKSPACE/replace_files/dnsforwarder.config feeds/packages/net/dnsfor
 
 #清空dnsforwarder无用文件
 echo > feeds/packages/net/dnsforwarder/files/etc/dnsforwarder/gfw.txt
-
-#修复重复添加chinadns dnsmasq config的问题
-wget https://github.com/fw876/helloworld/pull/1070.patch
-cd package/feeds/helloworld
-patch -p1 < ../../../1070.patch
-cd -
