@@ -26,6 +26,10 @@ on:
         description: 'branch'
         required: false
         default: ''
+      cache:
+        description: 'cache'
+        required: false
+        default: 'true'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -92,6 +96,7 @@ jobs:
         prefix: ${{ github.workspace }}/openwrt
         branch: ${{ github.event.inputs.branch }}
         skipSave: ${{ env.PURE }}
+        skipFetch: ${{ ! env.cache == 'true' }}
 
     - name: Load custom feeds
       run: |
