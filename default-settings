@@ -1,3 +1,9 @@
 #修改保留内存到1M
 sed -i '/vm.min_free_kbytes=/d' /etc/sysctl.conf
 echo 'vm.min_free_kbytes=1024' >> /etc/sysctl.conf
+
+#预留绕过代理LANIP DHCP规则
+uci set dhcp.bplan_tag="tag"
+uci set dhcp.bplan_tag.dhcp_option="option6:dns-server,[2400:3200::1],[2400:3200:baba::1]"
+uci commit
+/etc/init.d/dnsmasq reload
