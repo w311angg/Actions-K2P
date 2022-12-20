@@ -26,10 +26,9 @@ rm default-settings
 for i in $(find $GITHUB_WORKSPACE/patches/ -type f -regex ".*\.patch" | sort); do echo "using $(basename $i)"; patch -p0 < $i; done
 
 #修复重复添加chinadns dnsmasq config的问题
-cd package/feeds/helloworld
 wget https://github.com/fw876/helloworld/pull/1070.patch
-patch -p1 < 1070.patch
-rm 1070.patch
+cd package/feeds/helloworld
+git apply ../../../1070.patch
 cd -
 
 # Delete files of patch
