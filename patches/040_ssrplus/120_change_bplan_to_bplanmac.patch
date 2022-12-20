@@ -1,0 +1,33 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-12-20 21:43:36.158894148 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-12-20 21:46:37.528894079 +0800
+@@ -71,7 +71,7 @@ flush_r() {
+ 	ipset -X ss_spec_wan_ac 2>/dev/null
+ 	ipset -X ssr_gen_router 2>/dev/null
+ 	ipset -X fplan 2>/dev/null
+-	ipset -X bplan 2>/dev/null
++	ipset -X bplanmac 2>/dev/null
+ 	ipset -X gmlan 2>/dev/null
+ 	ipset -X oversea 2>/dev/null
+ 	ipset -X whitelist 2>/dev/null
+@@ -117,9 +117,9 @@ ipset_r() {
+ 	ipset -N fplan hash:net 2>/dev/null
+ 	for ip in $LAN_FP_IP; do ipset -! add fplan $ip; done
+ 	$IPT -I SS_SPEC_WAN_AC -m set --match-set fplan src -j SS_SPEC_WAN_FW
+-	ipset -N bplan hash:net 2>/dev/null
+-	for ip in $LAN_BP_IP; do ipset -! add bplan $ip; done
+-	$IPT -I SS_SPEC_WAN_AC -m set --match-set bplan src -j RETURN
++	ipset -N bplanmac hash:mac 2>/dev/null
++	for ip in $LAN_BP_IP; do ipset -! add bplanmac $ip; done
++	$IPT -I SS_SPEC_WAN_AC -m set --match-set bplanmac src -j RETURN
+ 	ipset -N whitelist hash:net 2>/dev/null
+ 	ipset -N blacklist hash:net 2>/dev/null
+ 	$IPT -I SS_SPEC_WAN_AC -m set --match-set blacklist dst -j SS_SPEC_WAN_FW
+@@ -231,7 +231,7 @@ tp_rule() {
+ 	$ipt -A SS_SPEC_TPROXY -p udp -d 240.0.0.0/4 -j RETURN
+ 	$ipt -A SS_SPEC_TPROXY -p udp ! --dport 53 -d $SERVER -j RETURN
+ 	[ "$server" != "$SERVER" ] && ipset -! add whitelist $SERVER
+-	$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set bplan src -j RETURN
++	$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set bplanmac src -j RETURN
+ 	$ipt -A SS_SPEC_TPROXY -p udp $PROXY_PORTS -m set --match-set fplan src -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
+ 	case "$RUNMODE" in
+ 	router)
