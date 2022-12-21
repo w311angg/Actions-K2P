@@ -26,8 +26,8 @@
  		set shadowsocksr.@server_subscribe[0].proxy='0'
  		set shadowsocksr.@server_subscribe[0].auto_update_time='2'
 
---- ssr-monitor	2022-12-21 23:39:14.612940239 +0800
-+++ ssr-monitor.1	2022-12-21 23:48:55.192940017 +0800
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2022-12-21 23:39:14.612940239 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2022-12-21 23:48:55.192940017 +0800
 @@ -118,7 +118,7 @@ while [ "1" == "1" ]; do #死循环
  			""|"wan_114") chinadns="$wandns,114.114.114.114" ;;
  			esac
