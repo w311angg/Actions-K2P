@@ -25,3 +25,15 @@
  		add shadowsocksr server_subscribe
  		set shadowsocksr.@server_subscribe[0].proxy='0'
  		set shadowsocksr.@server_subscribe[0].auto_update_time='2'
+
+--- ssr-monitor	2022-12-21 23:39:14.612940239 +0800
++++ ssr-monitor.1	2022-12-21 23:48:55.192940017 +0800
+@@ -118,7 +118,7 @@ while [ "1" == "1" ]; do #死循环
+ 			""|"wan_114") chinadns="$wandns,114.114.114.114" ;;
+ 			esac
+ 			kill -9 $(busybox ps -w | grep $TMP_BIN_PATH/chinadns-ng | grep -v grep | awk '{print $1}') >/dev/null 2>&1
+-			ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port -N -f -r
++			ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port $(test "$no_ipv6" -eq 1 && echo -N) -f -r
+ 		fi
+ 	fi
+ done
