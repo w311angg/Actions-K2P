@@ -22,3 +22,23 @@
  		set shadowsocksr.@global[0].monitor_enable='1'
  		set shadowsocksr.@global[0].enable_switch='0'
  		set shadowsocksr.@global[0].switch_time='667'
+
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2022-12-21 23:39:14.612940239 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2022-12-22 00:07:41.432939588 +0800
+@@ -112,13 +112,14 @@ while [ "1" == "1" ]; do #死循环
+ 			logger -t "$NAME" "chinadns-ng tunnel error.restart!"
+ 			echolog "chinadns-ng tunnel error.restart!"
+ 			chinadns=$(uci_get_by_type global chinadns_forward)
++			chinadns_second="$(uci_get_by_type global chinadns_forward_second)"
+ 			wandns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo "119.29.29.29")"
+ 			case "$chinadns" in
+ 			"wan") chinadns="$wandns" ;;
+-			""|"wan_114") chinadns="$wandns,114.114.114.114" ;;
++			""|"wan_114") chinadns="$wandns,$chinadns_second" ;;
+ 			esac
+ 			kill -9 $(busybox ps -w | grep $TMP_BIN_PATH/chinadns-ng | grep -v grep | awk '{print $1}') >/dev/null 2>&1
+-			ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -p 3 -c ${chinadns/:/#} -t 127.0.0.1#$dns_port -N -f -r
++			ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port $(test "$no_ipv6" -eq 1 && echo -N) -f -r -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
+ 		fi
+ 	fi
+ done
