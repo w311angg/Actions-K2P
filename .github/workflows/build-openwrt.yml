@@ -95,7 +95,7 @@ jobs:
         ccache: true
         prefix: ${{ github.workspace }}/openwrt
         branch: ${{ github.event.inputs.branch }}
-        skipSave: ${{ env.PURE || github.event.inputs.commit != '' }}
+        skipSave: ${{ env.PURE || (github.event.inputs.commit != '') }}
         skipFetch: ${{ github.event.inputs.cache == 'false' }}
 
     - name: Load custom feeds
