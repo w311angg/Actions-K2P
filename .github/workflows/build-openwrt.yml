@@ -56,8 +56,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@main
-      with:
-        fetch-depth: 0
 
     - name: Initialization environment
       env:
@@ -79,7 +77,7 @@ jobs:
         commit: ${{ github.event.inputs.commit }}
       run: |
         df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        git clone --depth 0 $REPO_URL -b $REPO_BRANCH openwrt
         if [[ "$commit" != "" ]]; then
           cd openwrt
           git checkout $commit
