@@ -32,7 +32,6 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  PURE: ${{ github.event.action == 'Source Code Pure Update' }}
 
 jobs:
   build:
