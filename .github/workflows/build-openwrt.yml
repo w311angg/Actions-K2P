@@ -18,18 +18,6 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-      commit:
-        description: 'commit'
-        required: false
-        default: ''
-      branch:
-        description: 'branch'
-        required: false
-        default: ''
-      cache:
-        description: 'cache'
-        required: false
-        default: 'true'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
