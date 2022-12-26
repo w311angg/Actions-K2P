@@ -87,15 +87,6 @@ jobs:
         echo commit: $(cd openwrt; git rev-parse HEAD | tee /tmp/commit.log)
         echo "::set-output name=commit::$(cat /tmp/commit.log)"
 
-    - name: cache
-      uses: w311angg/cachewrtbuild@main
-      with:
-        ccache: true
-        prefix: ${{ github.workspace }}/openwrt
-        branch: ${{ github.event.inputs.branch }}
-        skipSave: ${{ env.PURE || (github.event.inputs.commit != '') }}
-        skipFetch: ${{ github.event.inputs.cache == 'false' }}
-
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
