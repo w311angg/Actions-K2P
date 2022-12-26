@@ -43,8 +43,8 @@ env:
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
+  BUILD_PURE: ${{ github.event.action == 'Source Code Pure Update' }}
   TZ: Asia/Shanghai
-  PURE: ${{ github.event.action == 'Source Code Pure Update' }}
 
 jobs:
   build:
@@ -93,7 +93,7 @@ jobs:
         ccache: true
         prefix: ${{ github.workspace }}/openwrt
         branch: ${{ github.event.inputs.branch }}
-        skipSave: ${{ env.PURE || (github.event.inputs.commit != '') }}
+        skipSave: ${{ env.BUILD_PURE || (github.event.inputs.commit != '') }}
         skipFetch: ${{ github.event.inputs.cache == 'false' }}
 
     - name: Load custom feeds
@@ -115,7 +115,7 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
         cd openwrt
-        if [[ "$PURE" == "true" ]]; then
+        if [[ "$BUILD_PURE" == "true" ]]; then
           sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
           patch -p0 < $GITHUB_WORKSPACE/patches/020_init.d/990_mtkwifi.patch
           # 设置WiFi密码
@@ -213,7 +213,7 @@ jobs:
       env:
         commit: ${{ steps.clone.outputs.commit }}
       run: |
-        if [[ "$PURE" == "true" ]]; then
+        if [[ "$BUILD_PURE" == "true" ]]; then
           pureSign='-pure'
         fi
         echo "::set-output name=release_tag::${{ github.ref_name }}$pureSign-$(date +"%Y.%m.%d-%H%M")"
