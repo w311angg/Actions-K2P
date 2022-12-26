@@ -18,6 +18,18 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+      commit:
+        description: 'commit'
+        required: false
+        default: ''
+      branch:
+        description: 'branch'
+        required: false
+        default: ''
+      cache:
+        description: 'cache'
+        required: false
+        default: 'true'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -32,10 +44,14 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
+  PURE: ${{ github.event.action == 'Source Code Pure Update' }}
 
 jobs:
   build:
     runs-on: ubuntu-20.04
+    permissions:
+      actions: write
+      contents: write
 
     steps:
     - name: Checkout
@@ -55,11 +71,30 @@ jobs:
         sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
+      id: clone
       working-directory: /workdir
+      env:
+        commit: ${{ github.event.inputs.commit }}
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
+        if [[ "$commit" != "" ]]; then
+          cd openwrt
+          git checkout $commit
+          cd -
+        fi
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        echo commit: $(cd openwrt; git rev-parse HEAD | tee /tmp/commit.log)
+        echo "::set-output name=commit::$(cat /tmp/commit.log)"
+
+    - name: cache
+      uses: w311angg/cachewrtbuild@main
+      with:
+        ccache: true
+        prefix: ${{ github.workspace }}/openwrt
+        branch: ${{ github.event.inputs.branch }}
+        skipSave: ${{ env.PURE || (github.event.inputs.commit != '') }}
+        skipFetch: ${{ github.event.inputs.cache == 'false' }}
 
     - name: Load custom feeds
       run: |
@@ -80,7 +115,17 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
         cd openwrt
-        $GITHUB_WORKSPACE/$DIY_P2_SH
+        if [[ "$PURE" == "true" ]]; then
+          sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
+          patch -p0 < $GITHUB_WORKSPACE/patches/020_init.d/990_mtkwifi.patch
+          # 设置WiFi密码
+          sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.dat
+          sed -i 's/^WPAPSK1=.*/WPAPSK1=password/' package/lean/mt/drivers/mt_wifi/files/mt7615.dat
+          sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.5G.dat
+          sed -i 's/^WPAPSK1=.*/WPAPSK1=password/' package/lean/mt/drivers/mt_wifi/files/mt7615.5G.dat
+        else
+          $GITHUB_WORKSPACE/$DIY_P2_SH
+        fi
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
