@@ -18,6 +18,18 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+      commit:
+        description: 'commit'
+        required: false
+        default: ''
+      branch:
+        description: 'branch'
+        required: false
+        default: ''
+      cache:
+        description: 'cache'
+        required: false
+        default: 'true'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -26,16 +38,20 @@ env:
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
-  UPLOAD_BIN_DIR: false
+  UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: false
+  UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
+  PURE: ${{ github.event.action == 'Source Code Pure Update' }}
 
 jobs:
   build:
     runs-on: ubuntu-20.04
+    permissions:
+      actions: write
+      contents: write
 
     steps:
     - name: Checkout
@@ -55,10 +71,18 @@ jobs:
         sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
+      id: clone
       working-directory: /workdir
+      env:
+        commit: ${{ github.event.inputs.commit }}
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
+        if [[ "$commit" != "" ]]; then
+          cd openwrt
+          git checkout $commit
+          cd -
+        fi
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Load custom feeds
@@ -80,7 +104,17 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
         cd openwrt
-        $GITHUB_WORKSPACE/$DIY_P2_SH
+        if [[ "$PURE" == "true" ]]; then
+          sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
+          patch -p0 < $GITHUB_WORKSPACE/patches/020_init.d/990_mtkwifi.patch
+          # 设置WiFi密码
+          sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.dat
+          sed -i 's/^WPAPSK1=.*/WPAPSK1=password/' package/lean/mt/drivers/mt_wifi/files/mt7615.dat
+          sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.5G.dat
+          sed -i 's/^WPAPSK1=.*/WPAPSK1=password/' package/lean/mt/drivers/mt_wifi/files/mt7615.5G.dat
+        else
+          $GITHUB_WORKSPACE/$DIY_P2_SH
+        fi
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -109,6 +143,13 @@ jobs:
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+    - name: SSH connection to Actions to debug
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: failure() && steps.compile.outputs.status != 'success'
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
     - name: Check space usage
       if: (!cancelled())
@@ -158,9 +199,15 @@ jobs:
     - name: Generate release tag
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      env:
+        commit: ${{ steps.clone.outputs.commit }}
       run: |
-        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
+        if [[ "$PURE" == "true" ]]; then
+          pureSign='-pure'
+        fi
+        echo "::set-output name=release_tag::${{ github.ref_name }}$pureSign-$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
+        echo "commit: $commit" >> release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
@@ -174,18 +221,3 @@ jobs:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*
-
-    - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
-      with:
-        retain_days: 1
-        keep_minimum_runs: 3
-
-    - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.1.0
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      with:
-        keep_latest: 3
-        delete_tags: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
