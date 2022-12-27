@@ -1,0 +1,11 @@
+--- package/lean/ipv6-helper/Makefile	2022-12-28 02:18:35.284849251 +0800
++++ package/lean/ipv6-helper/Makefile	2022-12-28 02:27:37.654849044 +0800
+@@ -23,7 +23,7 @@ define Package/ipv6helper
+ 	SECTION:=ipv6
+ 	TITLE:=IPv6 Helper and Dynamic Update he.net of ip
+ 	PKGARCH:=all
+-	DEPENDS:=+luci-proto-ipv6 +wget +ip6tables +libip6tc +kmod-ipt-nat6 +odhcpd-ipv6only +odhcp6c +6in4
++	DEPENDS:=+luci-proto-ipv6 +wget +ip6tables +libip6tc +kmod-ipt-nat6 +dnsmasq_full_dhcpv6 +odhcp6c +6in4
+ endef
+ 
+ define Package/ipv6helper/description
