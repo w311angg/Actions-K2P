@@ -157,7 +157,7 @@ jobs:
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
     - name: SSH connection to Actions to debug
-      uses: P3TERX/ssh2actions@v1.0.0
+      uses: w311angg/ssh2actions-1@main
       if: failure() && steps.compile.outputs.status != 'success'
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
