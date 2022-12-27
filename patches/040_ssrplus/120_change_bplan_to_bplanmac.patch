@@ -31,3 +31,19 @@
  	$ipt -A SS_SPEC_TPROXY -p udp $PROXY_PORTS -m set --match-set fplan src -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
  	case "$RUNMODE" in
  	router)
+
+--- feeds/helloworld/luci-app-ssr-plus/luasrc/model/cbi/shadowsocksr/control.lua	2022-12-27 13:18:17.902742946 +0800
++++ feeds/helloworld/luci-app-ssr-plus/luasrc/model/cbi/shadowsocksr/control.lua	2022-12-27 15:57:01.292739314 +0800
+@@ -45,10 +45,10 @@ o:depends("lan_ac_mode", "w")
+ o:depends("lan_ac_mode", "b")
+ 
+ o = s:taboption("lan_ac", DynamicList, "lan_bp_ips", translate("LAN Bypassed Host List"))
+-o.datatype = "ipaddr"
++o.datatype = "macaddr"
+ luci.ip.neighbors({family = 4}, function(entry)
+ 	if entry.reachable then
+-		o:value(entry.dest:string())
++		o:value(entry.mac)
+ 	end
+ end)
+ 
