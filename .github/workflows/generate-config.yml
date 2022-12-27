@@ -79,10 +79,11 @@ jobs:
 
     - name: SSH connection to Actions
       if: always()
-      uses: P3TERX/ssh2actions@v1.0.0
+      uses: w311angg/ssh2actions-1@main
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Before upload
       run: |
