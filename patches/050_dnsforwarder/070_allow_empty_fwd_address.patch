@@ -1,0 +1,11 @@
+--- feeds/luci/applications/luci-app-dnsforwarder/luasrc/model/cbi/dnsforwarder/general.lua	2023-01-02 21:27:09.704218795 +0800
++++ feeds/luci/applications/luci-app-dnsforwarder/luasrc/model/cbi/dnsforwarder/general.lua	2023-01-02 21:27:39.524218784 +0800
+@@ -45,7 +45,7 @@ s.anonymous = true
+ 	view_enable = s:option(Flag, "enabled", translate("Enable"))
+ 	view_dnsmasq = s:option(Flag, "dnsmasq", translate("设置成DNSmasq的上游服务器"), translate("让DNSMasq从本软件获得解析结果，支持GFWList模式"))
+ 	view_addr = s:option(Value, "addr", translate("转发地址"), translate("请填写dnsforwarder的监听地址,默认127.0.0.1:5053,如果填写<b><font color=\"red\">208.67.222.222:5353</font></b>那么可不通过该软件获得无污染结果"))
+-	view_addr.default = "127.0.0.1:5053"
++	view_addr.placeholder = "127.0.0.1:5053"
+ 
+ -- ---------------------------------------------------
+ s1 = m:section(TypedSection, "config", translate("标准配置"))
