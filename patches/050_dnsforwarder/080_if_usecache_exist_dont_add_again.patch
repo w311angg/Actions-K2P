@@ -1,0 +1,18 @@
+--- feeds/packages/net/dnsforwarder/files/etc/init.d/dnsforwarder	2023-01-02 21:40:20.214218493 +0800
++++ feeds/packages/net/dnsforwarder/files/etc/init.d/dnsforwarder	2023-01-02 21:48:27.974218307 +0800
+@@ -139,6 +139,7 @@ makeconfig () {
+     eval "makelist 'AppendHosts' $append_host" >> $DNSFORWARDER_CONF
+     echo "BlockIpv6WhenIpv4Exists ${block_ipv6}" >> $DNSFORWARDER_CONF
+ 
++    if ! grep '^UseCache' /etc/dnsforwarder/custom.txt >/dev/null; then
+     echo "UseCache ${cache}" >> $DNSFORWARDER_CONF
+     if [ $cache = "true" ]; then
+         echo "CacheSize ${cache_size}" >> $DNSFORWARDER_CONF
+@@ -149,6 +150,7 @@ makeconfig () {
+         echo "ReloadCache true" >> $DNSFORWARDER_CONF
+         echo "OverwriteCache true" >> $DNSFORWARDER_CONF
+     fi
++    fi
+ 	echo "DomainStatistic ${domain_statistic}" >> $DNSFORWARDER_CONF
+ 	if [ $domain_statistic = "true" ]; then
+ 		touch /tmp/dnsforwarder-statistic.html
