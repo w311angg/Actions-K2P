@@ -3,6 +3,7 @@ sed -i '/vm.min_free_kbytes=/d' /etc/sysctl.conf
 echo 'vm.min_free_kbytes=1024' >> /etc/sysctl.conf
 
 #预留绕过代理LANIP DHCP规则
+uci delete dhcp.bplan_tag || true
 uci set dhcp.bplan_tag="tag"
 uci add_list dhcp.bplan_tag.dhcp_option="option:dns-server,223.5.5.5,223.6.6.6"
 uci add_list dhcp.bplan_tag.dhcp_option="option6:dns-server,[2400:3200::1],[2400:3200:baba::1]"
