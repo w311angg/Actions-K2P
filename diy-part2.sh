@@ -40,7 +40,7 @@ git apply ../../../1070.patch
 cd -
 
 #ssrplus自定义防火墙规则配置
-cp $GITHUB_WORKSPACE/replace_files/ssrplus_iptables_config.sh package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh
+cp $GITHUB_WORKSPACE/replace_files/ssrplus/iptables_config.sh package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh
 
 # Delete files of patch
 find . '(' \
@@ -108,7 +108,7 @@ sed -i "s/set \(.*\)chinadns_forward_second=.*/set \1chinadns_forward_second='22
 sed -i "s/option filter_aaaa.*/option filter_aaaa	0/" package/network/services/dnsmasq/files/dhcp.conf
 
 #修改dnsforwarder配置
-cp $GITHUB_WORKSPACE/replace_files/dnsforwarder.config feeds/packages/net/dnsforwarder/files/etc/config/dnsforwarder
+cp $GITHUB_WORKSPACE/replace_files/dnsforwarder/dnsforwarder.config feeds/packages/net/dnsforwarder/files/etc/config/dnsforwarder
 
 #清空dnsforwarder无用文件
 echo > feeds/packages/net/dnsforwarder/files/etc/dnsforwarder/gfw.txt
