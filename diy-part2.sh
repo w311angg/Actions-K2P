@@ -26,7 +26,9 @@ rm default-settings
 for i in $(find $GITHUB_WORKSPACE/patches/ -type f -regex ".*\.patch" | sort); do echo "using $(basename $i)"; patch -p0 < $i; done
 
 # Patch custom firewall config
+cp $GITHUB_WORKSPACE/custom_firewall.sh .
 sed -i 's/%custom_firewall%/r custom_firewall.sh' package/lean/default-settings/files/zzz-default-settings
+rm custom_firewall.sh
 
 #修复重复添加chinadns dnsmasq config的问题
 wget https://github.com/fw876/helloworld/pull/1070.patch
