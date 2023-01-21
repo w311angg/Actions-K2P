@@ -22,7 +22,7 @@ iptables -t nat -A PREROUTING -p tcp -d 192.168.0.0/16 --dport 53 -j RETURN
 #bropc
 iptables -t nat -A PREROUTING -p udp -m set --match-set bropc src --dport 53 -j REDIRECT --to-ports 5337
 iptables -t nat -A PREROUTING -p tcp -m set --match-set bropc src --dport 53 -j REDIRECT --to-ports 5337
-iptables -t nat -A PREROUTING -m set --match-set bropc src -m set ! --match-set bplanmac src -j RETURN
+iptables -t nat -A PREROUTING -m set --match-set bropc src -j RETURN
 
 iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
 iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53
@@ -34,7 +34,7 @@ iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53
 #bropc
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp -m set --match-set bropc src --dport 53 -j REDIRECT --to-ports 5337
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp -m set --match-set bropc src --dport 53 -j REDIRECT --to-ports 5337
-[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -m set --match-set bropc src -m set ! --match-set bplanmac src -j RETURN
+[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -m set --match-set bropc src -j RETURN
 
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53
