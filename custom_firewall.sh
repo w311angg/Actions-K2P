@@ -31,8 +31,8 @@ iptables -t nat -A PREROUTING -p tcp -d 192.168.0.0/16 --dport 53 -j RETURN
 iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
 iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53
 
-#ip6tables -t nat -A PREROUTING -p udp -m set --match-set bplanmac src -m set --match-set bplan_dns6 dst --dport 53 -j REDIRECT --to-ports 5336
-#ip6tables -t nat -A PREROUTING -p tcp -m set --match-set bplanmac src -m set --match-set bplan_dns6 dst --dport 53 -j REDIRECT --to-ports 5336
+#[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp -m set --match-set bplanmac src -m set --match-set bplan_dns6 dst --dport 53 -j REDIRECT --to-ports 5336
+#[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp -m set --match-set bplanmac src -m set --match-set bplan_dns6 dst --dport 53 -j REDIRECT --to-ports 5336
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -m set --match-set bplanmac src -j RETURN
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp -d FC00::/7 --dport 53 -j RETURN
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp -d FC00::/7 --dport 53 -j RETURN
