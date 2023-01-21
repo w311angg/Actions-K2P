@@ -1,0 +1,5 @@
+PROTOCOL UDP
+SERVER 127.0.0.1
+PARALLEL ON
+
+LIST /var/etc/dnsforwarder-bropc/through_dnsmasq.list
