@@ -27,7 +27,7 @@ for i in $(find $GITHUB_WORKSPACE/patches/ -type f -regex ".*\.patch" | sort); d
 
 # Patch custom firewall config
 cp $GITHUB_WORKSPACE/custom_firewall.sh .
-sed -i 's/%custom_firewall%/r custom_firewall.sh' package/lean/default-settings/files/zzz-default-settings
+sed -i 's/%custom_firewall%/r custom_firewall.sh/' package/lean/default-settings/files/zzz-default-settings
 rm custom_firewall.sh
 
 #修复重复添加chinadns dnsmasq config的问题
