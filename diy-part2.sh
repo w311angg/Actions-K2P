@@ -30,6 +30,9 @@ cp $GITHUB_WORKSPACE/custom_firewall.sh .
 sed -i 's/%custom_firewall%/r custom_firewall.sh/' package/lean/default-settings/files/zzz-default-settings
 rm custom_firewall.sh
 
+# Patch root folder
+cp -r $GITHUB_WORKSPACE/root/* feeds/helloworld/luci-app-ssr-plus/root/
+
 #修复重复添加chinadns dnsmasq config的问题
 wget https://github.com/fw876/helloworld/pull/1070.patch
 cd package/feeds/helloworld
@@ -50,6 +53,7 @@ find . '(' \
 
 # Set permissions
 chmod +x package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh
+chmod +x package/feeds/helloworld/luci-app-ssr-plus/root/usr/share/dnsforwarder-bropc/genlist.sh
 
 # 设置WiFi密码
 sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.dat
