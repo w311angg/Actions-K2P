@@ -36,6 +36,9 @@ cd package/feeds/helloworld
 git apply ../../../1070.patch
 cd -
 
+#ssrplus自定义防火墙规则配置
+cp $GITHUB_WORKSPACE/replace_files/ssrplus_iptables_config.sh package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh
+
 # Delete files of patch
 find . '(' \
     -name \*-baseline -o \
