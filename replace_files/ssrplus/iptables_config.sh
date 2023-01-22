@@ -14,3 +14,4 @@ $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 
 #specific domain block quic
 #/usr/share/ssrplus/quic_blocking_genconf.sh
+#iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j RETURN
