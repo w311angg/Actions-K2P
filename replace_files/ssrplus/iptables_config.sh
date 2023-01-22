@@ -11,3 +11,6 @@ $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 #$IPT -I SS_SPEC_WAN_FW $(($(iptables -L SS_SPEC_WAN_FW -t nat | wc -l)-2)) -m set --match-set bropc src -p tcp -m multiport --dports 22,53,587,465,995,993,143,80,443,853,9418 -j REDIRECT --to-ports 1234
 #$IPT -I SS_SPEC_WAN_FW $(($(iptables -L SS_SPEC_WAN_FW -t nat | wc -l)-2)) -m set --match-set bropc src -j RETURN
 #/usr/share/dnsforwarder-bropc/genlist.sh custom
+
+#specific domain block quic
+#/usr/share/ssrplus/quic_blocking_genconf.sh
