@@ -1,0 +1,10 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-01-23 17:08:50.600959766 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-01-23 17:24:06.470959416 +0800
+@@ -118,6 +118,7 @@ ipset_r() {
+ 	for ip in $LAN_FP_IP; do ipset -! add fplan $ip; done
+ 	$IPT -I SS_SPEC_WAN_AC -m set --match-set fplan src -j SS_SPEC_WAN_FW
+ 	ipset -N bplan hash:net 2>/dev/null
++	ipset flush bplan
+ 	for ip in $LAN_BP_IP; do ipset -! add bplan $ip; done
+ 	$IPT -I SS_SPEC_WAN_AC -m set --match-set bplan src -j RETURN
+ 	ipset -N whitelist hash:net 2>/dev/null
