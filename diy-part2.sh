@@ -96,8 +96,8 @@ for i in {0..2}; do
   sleep 1m
 done
 
-#ssrplus chinadns-ng创建规则文件
-touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_white.list
+#ssrplus chinadns-ng创建规则文件，其中白名单为复制ssrplus默认白名单
+cp feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/white.list feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_white.list
 touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/chinadns_black.list
 
 #ssrplus chinadns-ng`tw`域代理解析
