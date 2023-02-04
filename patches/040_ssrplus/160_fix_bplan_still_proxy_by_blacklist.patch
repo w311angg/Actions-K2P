@@ -1,5 +1,5 @@
---- ssr-rules.5	2023-02-04 15:14:07.276507576 +0800
-+++ ssr-rules.6	2023-02-04 15:20:40.686507426 +0800
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-04 15:14:07.276507576 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-04 15:20:40.686507426 +0800
 @@ -116,6 +116,15 @@ ipset_r() {
  		$IPT -A SS_SPEC_WAN_AC -j SS_SPEC_WAN_FW
  		;;
