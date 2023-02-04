@@ -1,0 +1,12 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-04 15:04:13.496507803 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-04 15:14:07.276507576 +0800
+@@ -247,7 +247,8 @@ tp_rule() {
+ 	case "$RUNMODE" in
+ 	router)
+ 		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set ss_spec_wan_ac dst -j RETURN
+-		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set china dst -j RETURN
++		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set whitelist dst -j RETURN
++		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set china dst -m set ! --match-set blacklist dst -j RETURN
+ 		if [[ "$BLOCKQUIC" == 1 ]]; then
+ 		$ipt -A SS_SPEC_TPROXY -p udp --dport 443 -j DROP
+ 		$ipt -A SS_SPEC_TPROXY -p udp --dport 80 -j DROP
