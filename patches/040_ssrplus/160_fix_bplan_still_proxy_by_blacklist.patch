@@ -1,0 +1,34 @@
+--- ssr-rules.5	2023-02-04 15:14:07.276507576 +0800
++++ ssr-rules.6	2023-02-04 15:20:40.686507426 +0800
+@@ -116,6 +116,15 @@ ipset_r() {
+ 		$IPT -A SS_SPEC_WAN_AC -j SS_SPEC_WAN_FW
+ 		;;
+ 	esac
++
++	# -I参数是在前添加，而不是-A在后，需要放在前面才能被压到后面，使bplan和fplan优先分流
++	ipset -N whitelist hash:net 2>/dev/null
++	ipset -N blacklist hash:net 2>/dev/null
++	$IPT -I SS_SPEC_WAN_AC -m set --match-set blacklist dst -j SS_SPEC_WAN_FW
++	$IPT -I SS_SPEC_WAN_AC -m set --match-set whitelist dst -j RETURN
++	for ip in $WAN_BP_IP; do ipset -! add whitelist $ip; done
++	for ip in $WAN_FW_IP; do ipset -! add blacklist $ip; done
++
+ 	ipset -N fplan hash:net 2>/dev/null
+ 	for ip in $LAN_FP_IP; do ipset -! add fplan $ip; done
+ 	$IPT -I SS_SPEC_WAN_AC -m set --match-set fplan src -j SS_SPEC_WAN_FW
+@@ -123,15 +132,9 @@ ipset_r() {
+ 	ipset flush bplanmac
+ 	for ip in $LAN_BP_IP; do ipset -! add bplanmac $ip; done
+ 	$IPT -I SS_SPEC_WAN_AC -m set --match-set bplanmac src -j RETURN
+-	ipset -N whitelist hash:net 2>/dev/null
+-	ipset -N blacklist hash:net 2>/dev/null
+-	$IPT -I SS_SPEC_WAN_AC -m set --match-set blacklist dst -j SS_SPEC_WAN_FW
+-	$IPT -I SS_SPEC_WAN_AC -m set --match-set whitelist dst -j RETURN
+ 	if [ $(ipset list music -name -quiet | grep music) ]; then
+ 		$IPT -I SS_SPEC_WAN_AC -m set --match-set music dst -j RETURN 2>/dev/null
+ 	fi
+-	for ip in $WAN_BP_IP; do ipset -! add whitelist $ip; done
+-	for ip in $WAN_FW_IP; do ipset -! add blacklist $ip; done
+ 	if [ "$SHUNT_PORT" != "0" ]; then
+ 		ipset -N netflix hash:net 2>/dev/null
+ 		for ip in $(cat ${SHUNT_LIST:=/dev/null} 2>/dev/null); do ipset -! add netflix $ip; done
