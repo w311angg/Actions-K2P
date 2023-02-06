@@ -1,10 +1,12 @@
 #bropc
 #ipset -N bropc hash:mac
+#ipset flush bropc
 #ipset add bropc <弟弟电脑mac>
 
 #google one vpn bypass
 #ipset -N googlevpn_lan hash:mac
-#ipset add googlevpn_langooglevpn_lan <弟弟电脑mac>
+#ipset flush googlevpn_lan
+#ipset add googlevpn_lan <要使用googlevpn的设备mac>
 
 ipset -N bplanmac hash:mac 2>/dev/null
 #ipset -N whitelist hash:net 2>/dev/null
