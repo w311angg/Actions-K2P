@@ -5,7 +5,7 @@
  # the system init finished. By default this file does nothing.
 +
 +#bropc
-+#/usr/share/dnsforwarder-bropc/genlist.sh custom
++#/usr/share/dnsforwarder-bropc/genlist.sh custom >/dev/null
 +#ln -s /usr/bin/dnsforwarder /tmp/dnsforwarder-bropc
 +#/tmp/dnsforwarder-bropc -d -f /etc/dnsforwarder-bropc/dnsforwarder.config
  
