@@ -7,7 +7,7 @@ $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 #iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m set ! --match-set blacklist dst -j RETURN || true
 
 #specific domain block quic
-#/usr/share/ssrplus/quic_blocking_genconf.sh
+#/usr/share/ssrplus/quic_blocking_genconf.sh >/dev/null
 #iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j RETURN
 
 #google one vpn bypass
