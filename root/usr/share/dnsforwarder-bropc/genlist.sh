@@ -11,6 +11,7 @@ case "$1" in
     output_path='/var/etc/dnsforwarder-bropc/through_dnsmasq.list'
     ;;
   "all")
+    set -e
     "$0" gfwlist
     "$0" custom
     exit 0
