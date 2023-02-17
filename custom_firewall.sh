@@ -9,8 +9,8 @@
 #ipset add googlevpn_lan <要使用googlevpn的设备mac> 2>/dev/null
 
 ipset -N bplanmac hash:mac 2>/dev/null
-#ipset -N whitelist hash:net 2>/dev/null
-#ipset -N china hash:net 2>/dev/null
+ipset -N whitelist hash:net 2>/dev/null
+ipset -N china hash:net 2>/dev/null
 
 #bplan
 #ipset -N bplan_dns hash:net 2>/dev/null; ipset flush bplan_dns; ipset add bplan_dns 223.5.5.5 2>/dev/null; ipset add bplan_dns 223.6.6.6 2>/dev/null
