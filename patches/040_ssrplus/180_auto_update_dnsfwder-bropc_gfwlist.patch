@@ -3,3 +3,5 @@
 @@ -0,0 +1,2 @@
 +#bropc
 +#/usr/share/dnsforwarder-bropc/genlist.sh gfwlist
++#ps -w | grep -v "grep" | grep '\[dnsforwarder-br\]' | awk '{print $1}' | xargs kill -9 
++#/tmp/dnsforwarder-bropc -d -f /etc/dnsforwarder-bropc/dnsforwarder.config
