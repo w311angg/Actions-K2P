@@ -52,6 +52,9 @@ find . '(' \
     -name \*.rej \
 ')' -delete
 
+# Create empty files
+touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/autoupdate_hook.sh
+
 # Set permissions
 chmod +x $root_folder_path/etc/ssrplus/iptables_config.sh
 chmod +x $root_folder_path/usr/share/dnsforwarder-bropc/genlist.sh
