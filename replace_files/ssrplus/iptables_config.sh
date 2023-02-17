@@ -4,7 +4,7 @@
 $IPT -I SS_SPEC_WAN_AC 1 -i br-lan -p udp --dport 53 -j RETURN
 $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 #iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j RETURN
-#iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m set ! --match-set blacklist dst -j RETURN || true
+#iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m set ! --match-set blacklist dst -j RETURN
 
 #specific domain block quic
 #/usr/share/ssrplus/quic_blocking_genconf.sh >/dev/null
