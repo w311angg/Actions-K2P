@@ -56,6 +56,7 @@ find . '(' \
 chmod +x $root_folder_path/etc/ssrplus/iptables_config.sh
 chmod +x $root_folder_path/usr/share/dnsforwarder-bropc/genlist.sh
 chmod +x $root_folder_path/usr/share/ssrplus/quic_blocking_genconf.sh
+chmod +x $root_folder_path/etc/ssrplus/autoupdate_hook.sh
 
 # 设置WiFi密码
 sed -i 's/^DefaultKeyID=.*/DefaultKeyID=2/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.2G.dat
