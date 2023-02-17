@@ -11,8 +11,11 @@
 ipset -N bplanmac hash:mac 2>/dev/null
 #ipset -N whitelist hash:net 2>/dev/null
 #ipset -N china hash:net 2>/dev/null
+
+#bplan
 #ipset -N bplan_dns hash:net 2>/dev/null; ipset flush bplan_dns; ipset add bplan_dns 223.5.5.5; ipset add bplan_dns 223.6.6.6
 #ipset -N bplan_dns6 hash:net family inet6 2>/dev/null; ipset flush bplan_dns6; ipset add bplan_dns6 2400:3200::1; ipset add bplan_dns6 2400:3200:baba::1
+
 iptables -t filter -A forwarding_lan_rule -m set --match-set bplanmac src -j RETURN
 
 #bropc
