@@ -136,7 +136,7 @@ EOF
 done
 
 gfwdomains=$(curl https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt | base64 -d | grep -P -o '^\|\|\K.+\..+|^\|(?!\|)(http://|https://)\K((?!/).)+')
-for domain in "$gfwdomains"; do
+for domain in $gfwdomains; do
   cat <<EOF >>$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
 $domain
 *.$domain
