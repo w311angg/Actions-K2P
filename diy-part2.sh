@@ -130,7 +130,7 @@ for file in "$root_folder_path/etc/ssrplus/{gfw_list.conf,gfw_base.conf}"; do
     else
       continue
     fi
-  cat <<EOF >>$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
+    cat <<EOF >>$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
 $domain
 *.$domain
 EOF
