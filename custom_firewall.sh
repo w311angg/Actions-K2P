@@ -1,20 +1,20 @@
 #bropc
 #ipset -N bropc hash:mac 2>/dev/null
 #ipset flush bropc
-#ipset add bropc <弟弟电脑mac>
+#ipset add bropc <弟弟电脑mac> 2>/dev/null
 
 #google one vpn bypass
 #ipset -N googlevpn_lan hash:mac 2>/dev/null
 #ipset flush googlevpn_lan
-#ipset add googlevpn_lan <要使用googlevpn的设备mac>
+#ipset add googlevpn_lan <要使用googlevpn的设备mac> 2>/dev/null
 
 ipset -N bplanmac hash:mac 2>/dev/null
 #ipset -N whitelist hash:net 2>/dev/null
 #ipset -N china hash:net 2>/dev/null
 
 #bplan
-#ipset -N bplan_dns hash:net 2>/dev/null; ipset flush bplan_dns; ipset add bplan_dns 223.5.5.5; ipset add bplan_dns 223.6.6.6
-#ipset -N bplan_dns6 hash:net family inet6 2>/dev/null; ipset flush bplan_dns6; ipset add bplan_dns6 2400:3200::1; ipset add bplan_dns6 2400:3200:baba::1
+#ipset -N bplan_dns hash:net 2>/dev/null; ipset flush bplan_dns; ipset add bplan_dns 223.5.5.5 2>/dev/null; ipset add bplan_dns 223.6.6.6 2>/dev/null
+#ipset -N bplan_dns6 hash:net family inet6 2>/dev/null; ipset flush bplan_dns6; ipset add bplan_dns6 2400:3200::1 2>/dev/null; ipset add bplan_dns6 2400:3200:baba::1 2>/dev/null
 
 iptables -t filter -A forwarding_lan_rule -m set --match-set bplanmac src -j RETURN
 
