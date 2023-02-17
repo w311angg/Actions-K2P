@@ -121,3 +121,18 @@ cp $GITHUB_WORKSPACE/replace_files/dnsforwarder/dnsforwarder.config feeds/packag
 
 #清空dnsforwarder无用文件
 echo > feeds/packages/net/dnsforwarder/files/etc/dnsforwarder/gfw.txt
+
+#预处理dnsforwarder-bropc的gfwlist域名列表
+for file in "$root_folder_path/etc/ssrplus/{gfw_list.conf,gfw_base.conf}"; do
+  for domain in $(cat $file); do
+    if [[ "$domain" =~ '^server=' ]]; then
+      domain=$(echo $domain | sed 's/^server=\/\(.*\)\/.*$/\1/')
+    else
+      continue
+    fi
+  cat <<EOF >>$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
+$domain
+*.$domain
+EOF
+  done
+done
