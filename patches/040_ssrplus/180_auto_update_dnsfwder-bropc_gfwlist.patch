@@ -1,5 +1,5 @@
 --- /dev/null	1970-04-25 14:27:31.819999999 +0800
-+++ feeds/helloworld/luci-app-ssr-plus/root/etc/autoupdate_hook.sh	2023-02-17 21:24:14.360511651 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/autoupdate_hook.sh	2023-02-17 21:24:14.360511651 +0800
 @@ -0,0 +1,2 @@
 +#bropc
 +#/usr/share/dnsforwarder-bropc/genlist.sh gfwlist
