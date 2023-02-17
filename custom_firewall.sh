@@ -27,8 +27,10 @@ iptables -t filter -A forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80
 #iptables -t filter -A forwarding_lan_rule -p tcp -d 1.1.1.1 --dport 443 -j REJECT --reject-with tcp-reset
 #iptables -t filter -A forwarding_lan_rule -p tcp -d 8.8.8.8 --dport 443 -j REJECT --reject-with tcp-reset
 
+#bplan
 #iptables -t nat -A prerouting_rule -p udp -m set --match-set bplanmac src -m set --match-set bplan_dns dst --dport 53 -j REDIRECT --to-ports 5336
 #iptables -t nat -A prerouting_rule -p tcp -m set --match-set bplanmac src -m set --match-set bplan_dns dst --dport 53 -j REDIRECT --to-ports 5336
+
 iptables -t nat -A prerouting_rule -m set --match-set bplanmac src -j RETURN
 iptables -t nat -A prerouting_rule -p udp -d 192.168.0.0/16 --dport 53 -j RETURN
 iptables -t nat -A prerouting_rule -p tcp -d 192.168.0.0/16 --dport 53 -j RETURN
@@ -41,8 +43,10 @@ iptables -t nat -A prerouting_rule -p tcp -d 192.168.0.0/16 --dport 53 -j RETURN
 iptables -t nat -A prerouting_rule -p udp --dport 53 -j REDIRECT --to-ports 53
 iptables -t nat -A prerouting_rule -p tcp --dport 53 -j REDIRECT --to-ports 53
 
+#bplan
 #[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A prerouting_rule -p udp -m set --match-set bplanmac src -m set --match-set bplan_dns6 dst --dport 53 -j REDIRECT --to-ports 5336
 #[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A prerouting_rule -p tcp -m set --match-set bplanmac src -m set --match-set bplan_dns6 dst --dport 53 -j REDIRECT --to-ports 5336
+
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A prerouting_rule -m set --match-set bplanmac src -j RETURN
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A prerouting_rule -p udp -d FC00::/7 --dport 53 -j RETURN
 [ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A prerouting_rule -p tcp -d FC00::/7 --dport 53 -j RETURN
