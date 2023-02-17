@@ -6,4 +6,3 @@
  /usr/bin/lua /usr/share/shadowsocksr/subscribe.lua
 +sleep 2s
 +/etc/ssrplus/autoupdate_hook.sh
-\ No newline at end of file
