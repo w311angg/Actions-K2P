@@ -11,7 +11,7 @@ $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j RETURN
 
 #google one vpn bypass
-#iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp --dport 2153 -m set --match-set googlevpn_lan src -j RETURN
+iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp --dport 2153 -m set --match-set googlevpn_lan src -j RETURN
 
 #bropc
 iptables -t mangle -I SS_SPEC_TPROXY 1 -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -j RETURN
