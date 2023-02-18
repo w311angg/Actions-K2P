@@ -10,7 +10,7 @@ uci add_list dhcp.bplan_tag.dhcp_option="option6:dns-server,[2400:3200::1],[2400
 uci commit
 /etc/init.d/dnsmasq reload
 
-#默认开启分配IPv6地址
+#开启分配IPv6地址
 uci set dhcp.lan.dhcpv6="server"
 uci set dhcp.lan.ra="server"
 uci commit
