@@ -1,8 +1,0 @@
---- package/base-files/files/etc/rc.local	2022-07-27 17:37:25.852250698 +0800
-+++ package/base-files/files/etc/rc.local	2022-07-27 17:38:29.942250674 +0800
-@@ -1,4 +1,5 @@
- # Put your custom commands here that should be executed once
- # the system init finished. By default this file does nothing.
-+(tcp2udp 127.0.0.1:5333 :5333 >/dev/null 2>&1)&
-
- exit 0
