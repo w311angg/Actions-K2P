@@ -30,6 +30,3 @@ for i in [1..5]; do
     fi
   fi
 done
-uci set dnsforwarder.@arguments[0].enabled='1'
-uci commit
-/etc/init.d/dnsforwarder reload
