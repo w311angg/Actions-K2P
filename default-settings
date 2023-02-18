@@ -15,3 +15,21 @@ uci set dhcp.lan.dhcpv6="server"
 uci set dhcp.lan.ra="server"
 uci commit
 /etc/init.d/dnsmasq reload
+
+#设置dnsforwarder
+for i in [1..5]; do
+  wan_dns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo "")"
+  if [[ "$wan_dns" != "" ]]; then
+    sed -i "s/%wan_dns%/${wan_dns},/" /etc/config/dnsforwarder
+    break
+  else
+    if [[ $i == 5 ]]; then
+      sed -i "s/%wan_dns%//" /etc/config/dnsforwarder
+    else
+      sleep 1s
+    fi
+  fi
+done
+uci set dnsforwarder.@arguments[0].enabled='1'
+uci commit
+/etc/init.d/dnsforwarder reload
