@@ -1,4 +1,4 @@
-output_path='/var/dnsmasq.d/dnsmasq-ssrplus.d/quic_blocking.conf'
+output_path='/var/dnsmasq.d/dnsmasq-ssrplus.d/010_quic_blocking.conf'
 echo -n >$output_path
 for domain in $(cat "/etc/ssrplus/quic_blocking.list"); do
   if [[ "$domain" != "" ]]; then
