@@ -18,13 +18,13 @@ ipset -N china hash:net 2>/dev/null
 
 iptables -t filter -A forwarding_lan_rule -m set --match-set bplanmac src -j RETURN
 
-#bropc
-#iptables -t filter -A forwarding_lan_rule -m set --match-set bropc src -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j REJECT
-#iptables -t filter -A forwarding_lan_rule -m set --match-set bropc src -j RETURN
-
 #specific domain block quic
 ipset -N quic_blocking hash:net 2>/dev/null
 iptables -t filter -A forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j REJECT
+
+#bropc
+#iptables -t filter -A forwarding_lan_rule -m set --match-set bropc src -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j REJECT
+#iptables -t filter -A forwarding_lan_rule -m set --match-set bropc src -j RETURN
 
 #iptables -t filter -A forwarding_lan_rule -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j REJECT
 #iptables -t filter -A forwarding_lan_rule -p tcp -d 1.1.1.1 --dport 443 -j REJECT --reject-with tcp-reset
