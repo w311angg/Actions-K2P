@@ -19,4 +19,5 @@ $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 #$IPT -I SS_SPEC_WAN_FW $(($(iptables -L SS_SPEC_WAN_FW -t nat | wc -l)-2)) -m set --match-set bropc src -j RETURN
 #/usr/share/dnsforwarder-bropc/genlist.sh custom >/dev/null
 #ps -w | grep -v "grep" | grep '\[dnsforwarder-br\]' | awk '{print $1}' | xargs kill -9 
+#[[ ! -e /tmp/dnsforwarder-bropc ]] && ln -s /usr/bin/dnsforwarder /tmp/dnsforwarder-bropc
 #/tmp/dnsforwarder-bropc -d -f /etc/dnsforwarder-bropc/dnsforwarder.config
