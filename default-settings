@@ -16,7 +16,7 @@ uci set dhcp.lan.ra="server"
 uci commit
 /etc/init.d/dnsmasq reload
 
-#设置dnsforwarder
+#设置dnsforwarder，添加wan端dns
 for i in [1..5]; do
   wan_dns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo "")"
   if [[ "$wan_dns" != "" ]]; then
