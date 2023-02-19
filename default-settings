@@ -3,6 +3,7 @@
 #修改保留内存到1M
 sed -i '/vm.min_free_kbytes=/d' /etc/sysctl.conf
 echo 'vm.min_free_kbytes=1024' >> /etc/sysctl.conf
+sysctl -p
 
 #预留绕过代理LANIP DHCP规则
 uci delete dhcp.bplan_tag || true
@@ -13,22 +14,26 @@ uci commit
 /etc/init.d/dnsmasq reload
 
 #默认开启分配IPv6地址
-uci set dhcp.lan.dhcpv6="server"
-uci set dhcp.lan.ra="server"
-uci commit
-/etc/init.d/dnsmasq reload
+if ! uci get dhcp.lan.dhcpv6 && ! uci get dhcp.lan.ra; then
+  uci set dhcp.lan.dhcpv6="server"
+  uci set dhcp.lan.ra="server"
+  uci commit
+  /etc/init.d/dnsmasq reload
+fi
 
 #设置dnsforwarder，添加wan端dns
-for i in [1..5]; do
-  wan_dns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo "")"
-  if [[ "$wan_dns" != "" ]]; then
-    sed -i "s/%wan_dns%/${wan_dns},/" /etc/config/dnsforwarder
-    break
-  else
-    if [[ $i == 5 ]]; then
-      sed -i "s/%wan_dns%//" /etc/config/dnsforwarder
+if [[ "$(cat /etc/config/dnsforwarder)" =~ "%wan_dns%" ]]; then
+  for i in [1..5]; do
+    wan_dns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo "")"
+    if [[ "$wan_dns" != "" ]]; then
+      sed -i "s/%wan_dns%/${wan_dns},/" /etc/config/dnsforwarder
+      break
     else
-      sleep 1s
+      if [[ $i == 5 ]]; then
+        sed -i "s/%wan_dns%//" /etc/config/dnsforwarder
+      else
+        sleep 1s
+      fi
     fi
-  fi
-done
+  done
+fi
