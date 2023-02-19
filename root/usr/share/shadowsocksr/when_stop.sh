@@ -5,9 +5,9 @@ ps -w | grep -v "grep" | grep 'tcp2udp 127.0.0.1:5333 :5333' | awk '{print $1}' 
 ipset destroy china6
 
 #bropc
+ps -w | grep -v "grep" | grep '\[dnsforwarder-br\]' | awk '{print $1}' | xargs kill -9
 rm -rf /var/etc/dnsforwarder-bropc/
 rm -rf /tmp/dnsforwarder-bropc
-ps -w | grep -v "grep" | grep '\[dnsforwarder-br\]' | awk '{print $1}' | xargs kill -9
 
 serverIP=$(uci get shadowsocksr.$(uci get shadowsocksr.@global[0].global_server).ip)
 if [[ $(lua -e "print(luci.ip.new('192.168.0.0/16'):contains('$serverIP'))") == 'false' ]]; then
