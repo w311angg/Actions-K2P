@@ -40,9 +40,6 @@ cd package/feeds/helloworld
 git apply ../../../1070.patch
 cd -
 
-#ssrplus自定义防火墙规则配置
-cp $GITHUB_WORKSPACE/replace_files/ssrplus/iptables_config.sh package/feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/iptables_config.sh
-
 # Delete files of patch
 find . '(' \
     -name \*-baseline -o \
@@ -58,8 +55,10 @@ touch feeds/helloworld/luci-app-ssr-plus/root/etc/ssrplus/autoupdate_hook.sh
 # Set permissions
 chmod +x $root_folder_path/etc/ssrplus/iptables_config.sh
 chmod +x $root_folder_path/usr/share/dnsforwarder-bropc/genlist.sh
-chmod +x $root_folder_path/usr/share/ssrplus/quic_blocking_genconf.sh
+chmod +x $root_folder_path/usr/share/shadowsocksr/quic_blocking_genconf.sh
 chmod +x $root_folder_path/etc/ssrplus/autoupdate_hook.sh
+chmod +x $root_folder_path/usr/share/shadowsocksr/when_start.sh
+chmod +x $root_folder_path/usr/share/shadowsocksr/when_stop.sh
 
 # 设置WiFi密码
 sed -i 's/^DefaultKeyID=.*/DefaultKeyID=2/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.2G.dat
