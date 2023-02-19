@@ -1,0 +1,10 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2023-02-19 11:39:18.640236430 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2023-02-19 11:40:17.300236408 +0800
+@@ -1006,6 +1006,7 @@ reset() {
+ 		set shadowsocksr.@global[0].mydnsport='5335'
+ 		set shadowsocksr.@global[0].no_ipv6='0'
+ 		set shadowsocksr.@global[0].block_quic='0'
++		set shadowsocksr.@global[0].chinadns_forward='127.0.0.1:5336'
+ 		add shadowsocksr server_subscribe
+ 		set shadowsocksr.@server_subscribe[0].proxy='0'
+ 		set shadowsocksr.@server_subscribe[0].auto_update_time='2'
