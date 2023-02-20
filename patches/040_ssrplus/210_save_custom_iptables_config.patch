@@ -15,15 +15,16 @@
  		echo 'COMMIT'
  	}
  	cat <<-EOF >>$FWI
-@@ -331,6 +338,12 @@ gen_include() {
+@@ -331,6 +338,13 @@ gen_include() {
  		iptables-restore -n <<-EOT
  		$(extract_rules nat)
  		$(extract_rules mangle)
 +		$(extract_rules filter)
+ 		EOT
 +
 +		ip6tables-save -c | grep -v "SS_SPEC" | ip6tables-restore -c
 +		ip6tables-restore -n <<-EOT
 +		$(extract_rules6 nat)
- 		EOT
++		EOT
  	EOF
  	return 0
