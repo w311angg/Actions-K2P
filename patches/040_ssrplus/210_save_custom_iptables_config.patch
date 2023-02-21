@@ -1,6 +1,6 @@
 --- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-20 22:34:15.155025950 +0800
 +++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-20 22:33:56.935025957 +0800
-@@ -323,7 +323,12 @@ gen_include() {
+@@ -323,7 +323,13 @@ gen_include() {
  	[ -n "$FWI" ] || return 0
  	extract_rules() {
  		echo "*$1"
@@ -15,16 +15,16 @@
  		echo 'COMMIT'
  	}
  	cat <<-EOF >>$FWI
-@@ -331,6 +338,13 @@ gen_include() {
+@@ -331,6 +337,12 @@ gen_include() {
  		iptables-restore -n <<-EOT
  		$(extract_rules nat)
  		$(extract_rules mangle)
 +		$(extract_rules filter)
- 		EOT
++		EOT
 +
 +		ip6tables-save -c | grep -v "SS_SPEC" | ip6tables-restore -c
 +		ip6tables-restore -n <<-EOT
 +		$(extract_rules6 nat)
-+		EOT
+ 		EOT
  	EOF
  	return 0
