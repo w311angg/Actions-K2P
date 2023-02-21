@@ -23,3 +23,6 @@ if [[ $(lua -e "require 'luci.ip'; print(luci.ip.new('192.168.0.0/16'):contains(
   uci set dhcp.@dnsmasq[0].cachesize='0'
   uci commit
 fi
+
+#specific domain block quic
+/usr/share/shadowsocksr/quic_blocking_genconf.sh >/dev/null
