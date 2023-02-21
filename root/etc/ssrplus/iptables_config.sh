@@ -82,4 +82,5 @@ iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp --dport 2153 -m set --match-set go
 #bropc
 iptables -t mangle -I SS_SPEC_TPROXY 1 -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set --match-set whitelist dst -j RETURN
 iptables -t mangle -I SS_SPEC_TPROXY 2 -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set ! --match-set gfwlist dst -m set ! --match-set blacklist dst -j RETURN
-$IPT -I SS_SPEC_WAN_AC $(($(iptables -L SS_SPEC_WAN_AC -t nat | wc -l)-2-2)) -m set --match-set bropc src -p tcp -m set --match-set gfwlist dst -j SS_SPEC_WAN_FW
+$IPT -I SS_SPEC_WAN_AC $(($(iptables -L SS_SPEC_WAN_AC -t nat | wc -l)-2-2)) -m set --match-set bropc src -m set --match-set gfwlist dst -j SS_SPEC_WAN_FW
+$IPT -I SS_SPEC_WAN_AC $(($(iptables -L SS_SPEC_WAN_AC -t nat | wc -l)-2-1)) -m set --match-set bropc src -j RETURN
