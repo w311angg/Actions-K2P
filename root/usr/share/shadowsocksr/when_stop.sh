@@ -17,3 +17,6 @@ if [[ $(lua -e "require 'luci.ip'; print(luci.ip.new('192.168.0.0/16'):contains(
   uci delete dhcp.@dnsmasq[0].cachesize
   uci commit
 fi
+
+#specific domain block quic
+rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/010_quic_blocking.conf
