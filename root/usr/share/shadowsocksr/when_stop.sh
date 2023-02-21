@@ -9,9 +9,6 @@ ps -w | grep -v "grep" | grep '\[dnsforwarder-br\]' | awk '{print $1}' | xargs k
 rm -rf /var/etc/dnsforwarder-bropc/
 rm -rf /tmp/dnsforwarder-bropc
 
-uci set shadowsocksr.@global[0].chinadns_forward='wan_114'
-uci set shadowsocksr.@global[0].mydnsip="127.0.0.1"
-uci set shadowsocksr.@global[0].mydnsport='5335'
 uci delete dhcp.@dnsmasq[0].cachesize
 uci commit
 
