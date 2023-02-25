@@ -128,24 +128,9 @@ cp $GITHUB_WORKSPACE/replace_files/dnsforwarder/dnsforwarder.config feeds/packag
 echo > feeds/packages/net/dnsforwarder/files/etc/dnsforwarder/gfw.txt
 
 #预处理dnsforwarder-bropc的gfwlist域名列表
-for domain in $(cat $root_folder_path/etc/ssrplus/gfw_base.conf); do
-  if [[ "$domain" =~ '^server=' ]]; then
-    domain=$(echo $domain | sed 's/^server=\/\(.*\)\/.*$/\1/')
-  else
-    continue
-  fi
-  cat <<EOF >>$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
-$domain
-*.$domain
-EOF
-done
+grep '^server=' $root_folder_path/etc/ssrplus/gfw_base.conf | sed 's/^server=\/\(.*\)\/.*$/\1\n*.\1/g' >$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
 gfwdomains=$(curl https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt | base64 -d | grep -P -o '^\|\|\K.+\..+|^\|(?!\|)(http://|https://)\K((?!/).)+')
-for domain in $gfwdomains; do
-  cat <<EOF >>$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
-$domain
-*.$domain
-EOF
-done
+echo $gfwdomains | sed '/^$/d' | sed "/.*/s/.*/&\n*.&/" >$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
 
 #ssrplus添加chinalist
 wget -O $root_folder_path/etc/ssrplus/chn_list.conf https://github.com/felixonmars/dnsmasq-china-list/raw/master/accelerated-domains.china.conf 
