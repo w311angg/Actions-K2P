@@ -67,7 +67,8 @@ iptables -t nat -A SS_SPEC_CUS_WAN_AC -p tcp --dport 53 -j REDIRECT --to-ports 5
 function get_rule_number() {
   input=""
   while read -r line; do
-    input="$input$line\n"
+    input="$input$line
+"
   done
   echo $input | awk 'NR>2' | awk "{count++} /$1/{print count; exit}"
 }
