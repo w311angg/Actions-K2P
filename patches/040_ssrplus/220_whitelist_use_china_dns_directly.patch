@@ -1,5 +1,5 @@
---- storage/downloads/gfw.sh	2023-02-25 22:14:33.018655075 +0800
-+++ storage/downloads/gfw.sh.2	2023-02-26 04:07:34.020115592 +0800
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2023-02-25 22:14:33.018655075 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2023-02-26 04:07:34.020115592 +0800
 @@ -39,7 +39,10 @@ for line in $(cat /etc/ssrplus/white.lis
  for line in $(cat /etc/ssrplus/deny.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/gfw_list.conf; done
  for line in $(cat /etc/ssrplus/deny.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/gfw_base.conf; done
