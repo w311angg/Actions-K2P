@@ -26,24 +26,9 @@ mkdir -p /var/etc/dnsforwarder-bropc/
 echo -n >$output_path
 
 for file in $files; do
-  line_number_and_filename=$(wc -l "/etc/ssrplus/$file")
-  finishing_number=0
-  for domain in $(cat "/etc/ssrplus/$file"); do
-    finishing_number=$(($finishing_number+1))
-    if [[ "$domain" != "" ]]; then
-      if [[ "$file" == "gfw_base.conf" ]] || [[ "$file" == "gfw_list.conf" ]]; then
-        if [[ "$domain" =~ '^server=' ]]; then
-          domain=$(echo $domain | sed 's/^server=\/\(.*\)\/.*$/\1/')
-        else
-          continue
-        fi
-      fi
-      printf "$finishing_number/$line_number_and_filename\r"
-      cat <<EOF >>$output_path
-$domain
-*.$domain
-EOF
-    fi
-  done
+  if [[ "$file" == "gfw_base.conf" ]] || [[ "$file" == "gfw_list.conf" ]]; then
+    grep '^server=' /etc/ssrplus/$file | sed 's/^server=\/\(.*\)\/.*$/\1\n*.\1/g' > /etc/ssrplus/$file
+  else
+    cat /etc/ssrplus/$file | sed '/^$/d' | sed "/.*/s/.*/&\n*.&/"
+  fi
 done
-echo
