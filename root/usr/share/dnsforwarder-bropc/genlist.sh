@@ -1,4 +1,5 @@
-gfwlist_files='gfw_list.conf gfw_base.conf'
+#更改时也要更改diy脚本预处理部分，文件后缀为.conf的按dnsmasq配置格式处理
+gfwlist_files='gfw_list.conf gfw_base.conf chn_list.conf'
 custom_files='black.list white.list chinadns_white.list chinadns_black.list'
 
 case "$1" in
@@ -26,7 +27,7 @@ mkdir -p /var/etc/dnsforwarder-bropc/
 echo -n >$output_path
 
 for file in $files; do
-  if [[ "$file" == "gfw_base.conf" ]] || [[ "$file" == "gfw_list.conf" ]]; then
+  if [[ "$file" ~= ".conf$" ]]; then
     grep '^server=' /etc/ssrplus/$file | sed 's/^server=\/\(.*\)\/.*$/\1\n*.\1/g' >/etc/ssrplus/$file
   else
     cat /etc/ssrplus/$file | sed '/^$/d' | sed "/.*/s/.*/&\n*.&/" >/etc/ssrplus/$file
