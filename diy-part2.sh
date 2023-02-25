@@ -148,4 +148,4 @@ EOF
 done
 
 #ssrplus添加chinalist
-wget -O $root_folder_path/etc/ssrplus/chn_base.conf https://github.com/felixonmars/dnsmasq-china-list/raw/master/accelerated-domains.china.conf 
+wget -O $root_folder_path/etc/ssrplus/chn_list.conf https://github.com/felixonmars/dnsmasq-china-list/raw/master/accelerated-domains.china.conf 
