@@ -27,8 +27,8 @@ echo -n >$output_path
 
 for file in $files; do
   if [[ "$file" == "gfw_base.conf" ]] || [[ "$file" == "gfw_list.conf" ]]; then
-    grep '^server=' /etc/ssrplus/$file | sed 's/^server=\/\(.*\)\/.*$/\1\n*.\1/g' > /etc/ssrplus/$file
+    grep '^server=' /etc/ssrplus/$file | sed 's/^server=\/\(.*\)\/.*$/\1\n*.\1/g' >/etc/ssrplus/$file
   else
-    cat /etc/ssrplus/$file | sed '/^$/d' | sed "/.*/s/.*/&\n*.&/" > /etc/ssrplus/$file
+    cat /etc/ssrplus/$file | sed '/^$/d' | sed "/.*/s/.*/&\n*.&/" >/etc/ssrplus/$file
   fi
 done
