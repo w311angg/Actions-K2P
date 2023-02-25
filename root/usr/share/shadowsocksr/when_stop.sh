@@ -22,3 +22,6 @@ if [ ! -n "$chinadns" ]; then
   ipset destroy chinalist
   rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/chn_list.conf
 fi
+
+ipset destroy chinalist
+rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/chn_list.conf
