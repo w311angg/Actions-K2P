@@ -1,4 +1,4 @@
-#会在restart,stop时运行
+#会在reload,restart,stop时运行
 uci set dnsforwarder.@arguments[0].enabled='0'
 uci commit
 /etc/init.d/dnsforwarder reload
