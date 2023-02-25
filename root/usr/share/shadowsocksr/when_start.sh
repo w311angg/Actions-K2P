@@ -1,3 +1,4 @@
+#会在reload,restart,start,系统启动(当enabled)时运行
 #重启后不会消失的需要加以判断
 if [[ "$(uci get dnsforwarder.@arguments[0].enabled)" != '1' ]]; then
   uci set dnsforwarder.@arguments[0].enabled='1'
