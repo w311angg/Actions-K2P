@@ -70,7 +70,7 @@ function get_rule_number() {
     input="$input$line
 "
   done
-  echo $input | awk 'NR>2' | awk "{count++} /$1/{print count; exit}"
+  echo "$input" | awk 'NR>2' | awk "{count++} /$1/{print count; exit}"
 }
 #$IPT -A SS_SPEC_WAN_FW -p tcp -m multiport --dport 85,86 -j REDIRECT --to-ports $local_port
 #$IPT -I SS_SPEC_WAN_AC 1 -p tcp --dport 443 -j RETURN -d 1.1.1.1
