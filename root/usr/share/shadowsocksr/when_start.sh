@@ -28,10 +28,22 @@ fi
 #specific domain block quic
 /usr/share/shadowsocksr/quic_blocking_genconf.sh >/dev/null
 
+function change_dns_server() {
+  dns=$(grep '^server=/' -m1 $1)
+  dns=${dns##*/}
+  if [[ "$dns" != "${2/:/#}" ]]; then
+    sed -i "s/^(server=\/.*\/).*$/\1${2/:/#}/g" $1
+  else
+    return 1
+  fi
+}
 chinadns="$(uci get shadowsocksr.@global[0].chinadns_forward)"
-if [ -n "$chinadns" ] && [ ! -e /var/dnsmasq.d/dnsmasq-ssrplus.d/chn_list.conf ]; then
+if [ -n "$chinadns" ]; then
   ipset create chinalist hash:net
-  cp /etc/ssrplus/chn_list.conf /var/dnsmasq.d/dnsmasq-ssrplus.d/
-  sed -i "s/\/114.114.114.114/\/${chinadns/:/#}/g" /var/dnsmasq.d/dnsmasq-ssrplus.d/chn_list.conf
-  sed -i '^server=\/(.+)\//a\ipset=\/\1\/chinalist' /var/dnsmasq.d/dnsmasq-ssrplus.d/chn_list.conf
+  if change_dns_server /etc/ssrplus/chn_list.conf $chinadns; then
+    if ! head -n3 /etc/ssrplus/chn_list.conf | grep '^ipset=/' -m1; then
+      sed -i '^server=\/(.+)\//a\ipset=\/\1\/chinalist' /etc/ssrplus/chn_list.conf
+    fi
+    cp /etc/ssrplus/chn_list.conf /var/dnsmasq.d/dnsmasq-ssrplus.d/
+  fi
 fi
