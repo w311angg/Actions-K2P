@@ -65,7 +65,10 @@ iptables -t nat -A SS_SPEC_CUS_WAN_AC -p tcp --dport 53 -j REDIRECT --to-ports 5
 #------------------
 
 function get_rule_number() {
-  read input
+  input=""
+  while read -r line; do
+    input="$input$line\n"
+  done
   echo $input | awk 'NR>2' | awk "{count++} /$1/{print count; exit}"
 }
 #$IPT -A SS_SPEC_WAN_FW -p tcp -m multiport --dport 85,86 -j REDIRECT --to-ports $local_port
