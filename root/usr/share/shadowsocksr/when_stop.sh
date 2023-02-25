@@ -18,11 +18,5 @@ uci commit
 #specific domain block quic
 rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/010_quic_blocking.conf
 
-chinadns="$(uci get shadowsocksr.@global[0].chinadns_forward)"
-if [ ! -n "$chinadns" ]; then
-  ipset destroy chinalist
-  rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/chn_list.conf
-fi
-
 ipset destroy chinalist
 rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/chn_list.conf
