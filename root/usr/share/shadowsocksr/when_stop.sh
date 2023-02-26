@@ -19,4 +19,4 @@ uci commit
 rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/010_quic_blocking.conf
 
 ipset destroy chinalist
-rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/chn_list.conf
+rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/china.conf
