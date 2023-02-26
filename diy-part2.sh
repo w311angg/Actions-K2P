@@ -129,10 +129,3 @@ echo > feeds/packages/net/dnsforwarder/files/etc/dnsforwarder/gfw.txt
 
 #ssrplus添加chinalist
 curl -L https://github.com/felixonmars/dnsmasq-china-list/raw/master/accelerated-domains.china.conf | grep '^server=/' | sed 's/^server=\/\(.*\)\/.*$/\1/g' >$root_folder_path/etc/ssrplus/china.list
-
-#预处理dnsforwarder-bropc的域名列表
-for file in 'gfw_base.conf chn_list.conf'; do
-  grep '^server=' $root_folder_path/etc/ssrplus/$file | sed 's/^server=\/\(.*\)\/.*$/\1\n*.\1/g' >>$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
-done
-gfwdomains=$(curl https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt | base64 -d | grep -P -o '^\|\|\K.+\..+|^\|(?!\|)(http://|https://)\K((?!/).)+')
-echo $gfwdomains | sed '/^$/d' | sed "/.*/s/.*/&\n*.&/" >>$root_folder_path/etc/dnsforwarder-bropc/gfwlist.list
