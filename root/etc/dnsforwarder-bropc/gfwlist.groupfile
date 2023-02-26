@@ -2,4 +2,4 @@ PROTOCOL UDP
 SERVER 127.0.0.1
 PARALLEL ON
 
-LIST /etc/dnsforwarder-bropc/gfwlist.list
+LIST /var/etc/dnsforwarder-bropc/gfwlist.list
