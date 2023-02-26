@@ -5,7 +5,7 @@ custom_files='black.list white.list chinadns_white.list chinadns_black.list quic
 case "$1" in
   "gfwlist")
     files=$gfwlist_files
-    output_path='/etc/dnsforwarder-bropc/gfwlist.list'
+    output_path='/var/etc/dnsforwarder-bropc/gfwlist.list'
     ;;
   "custom")
     files=$custom_files
