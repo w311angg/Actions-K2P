@@ -33,6 +33,5 @@ chinadns="$(uci get shadowsocksr.@global[0].chinadns_forward)"
 if [ -n "$chinadns" ]; then
   ipset create chinalist hash:net
   mkdir -p /var/dnsmasq.d/dnsmasq-ssrplus.d/
-  cat /etc/ssrplus/china.list | sed '/^$/d' | sed "/.*/s/.*/server=\/&\/${chinadns/:/#}/" >/var/dnsmasq.d/dnsmasq-ssrplus.d/china.conf
-  sed -i '^server=\/\(.\+\)\//a\ipset=\/\1\/chinalist' /var/dnsmasq.d/dnsmasq-ssrplus.d/china.conf
+  cat /etc/ssrplus/china.list | sed '/^$/d' | sed "/.*/s/.*/server=\/&\/${chinadns/:/#}\nipset=\/&\/chinalist/" >/var/dnsmasq.d/dnsmasq-ssrplus.d/china.conf
 fi
