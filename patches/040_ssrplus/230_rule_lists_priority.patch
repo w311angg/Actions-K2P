@@ -1,0 +1,24 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2023-02-26 17:56:56.943697988 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2023-02-27 00:18:25.843500629 +0800
+@@ -919,6 +919,21 @@ start() {
+ 			echolog "广告过滤加载完毕。"
+ 		fi
+ 	fi
++	config_order=$(cat <<EOF
++chinadns_fixed_server.conf
++denylist.conf
++010_quic_blocking.conf
++whitelist_forward.conf
++blacklist_forward.conf
++china.conf
++gfw_base.conf
++gfw_list.conf
++EOF
++)
++	for i in $(seq 1 $(echo "$config_order" | wc -l)); do
++		file=$(echo "$config_order" | sed -n "${i}p")
++		mv /var/dnsmasq.d/dnsmasq-ssrplus.d/$file /var/dnsmasq.d/dnsmasq-ssrplus.d/$(printf "%02d" $i)0_${file#[0-9][0-9][0-9]_} 2>/dev/null
++	done
+ 	/etc/init.d/dnsmasq restart >/dev/null 2>&1
+ 	check_server
+ 	start_server
