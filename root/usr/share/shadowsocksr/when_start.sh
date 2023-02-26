@@ -3,7 +3,7 @@
 if [[ "$(uci get dnsforwarder.@arguments[0].enabled)" != '1' ]]; then
   uci set dnsforwarder.@arguments[0].enabled='1'
   uci commit
-  /etc/init.d/dnsforwarder reload
+  reload_config
 fi
 (tcp2udp 127.0.0.1:5333 :5333 >/dev/null 2>&1)&
 ipset -! -R <<-EOF
