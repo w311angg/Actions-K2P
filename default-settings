@@ -10,13 +10,13 @@ uci delete dhcp.bplan_tag || true
 uci set dhcp.bplan_tag="tag"
 uci add_list dhcp.bplan_tag.dhcp_option="option:dns-server,223.5.5.5,223.6.6.6"
 uci add_list dhcp.bplan_tag.dhcp_option="option6:dns-server,[2400:3200::1],[2400:3200:baba::1]"
-uci commit
+uci commit; reload_config
 
 #默认开启分配IPv6地址
 if ! uci get dhcp.lan.dhcpv6 && ! uci get dhcp.lan.ra; then
   uci set dhcp.lan.dhcpv6="server"
   uci set dhcp.lan.ra="server"
-  uci commit
+  uci commit; reload_config
 fi
 
 #设置dnsforwarder，添加wan端dns
@@ -35,5 +35,3 @@ if [[ "$(cat /etc/config/dnsforwarder)" =~ "%wan_dns%" ]]; then
     fi
   done
 fi
-
-reload_config
