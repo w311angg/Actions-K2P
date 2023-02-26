@@ -13,6 +13,7 @@ EOF
 
 #bropc
 /usr/share/dnsforwarder-bropc/genlist.sh custom >/dev/null
+/usr/share/dnsforwarder-bropc/genlist.sh gfwlist >/dev/null
 ln -s /usr/bin/dnsforwarder /tmp/dnsforwarder-bropc
 /tmp/dnsforwarder-bropc -d -f /etc/dnsforwarder-bropc/dnsforwarder.config
 
