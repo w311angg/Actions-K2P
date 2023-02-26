@@ -22,16 +22,24 @@ ipset -N bplan_dns6 hash:net family inet6 2>/dev/null; ipset flush bplan_dns6; i
 #specific domain block quic
 ipset -N quic_blocking hash:net 2>/dev/null
 
+#block dns over any except udp/tcp
+dns='1.1.1.1 1.0.0.1 8.8.8.8 8.8.4.4'
+dns6='2606:4700::1111 2606:4700:4700::1001 2001:4860:4860::8888 2001:4860:4860::8844'
+ipset -N dns hash:net 2>/dev/null; ipset flush dns; for ip in $dns; do ipset add dns $ip 2>/dev/null; done
+ipset -N dns6 hash:net family inet6 2>/dev/null; ipset flush dns6; for ip6 in $dns6; do ipset add dns6 $ip6 2>/dev/null; done
+
 iptables -t filter -N SS_SPEC_CUS_LAN_FWD
 iptables -t filter -I zone_lan_forward 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
 iptables -t filter -A SS_SPEC_CUS_LAN_FWD -m set --match-set bplanmac src -j RETURN
+
+#block dns over any except udp/tcp
+iptables -t filter -A SS_SPEC_CUS_LAN_FWD -p udp -m set --match-set dns dst ! --dport 53 -j REJECT
+iptables -t filter -A SS_SPEC_CUS_LAN_FWD -p tcp -m set --match-set dns dst ! --dport 53 -j REJECT --reject-with tcp-reset
 
 #specific domain block quic
 iptables -t filter -A SS_SPEC_CUS_LAN_FWD -o eth1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j REJECT
 
 #iptables -t filter -A SS_SPEC_CUS_LAN_FWD -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j REJECT
-#iptables -t filter -A SS_SPEC_CUS_LAN_FWD -p tcp -d 1.1.1.1 --dport 443 -j REJECT --reject-with tcp-reset
-#iptables -t filter -A SS_SPEC_CUS_LAN_FWD -p tcp -d 8.8.8.8 --dport 443 -j REJECT --reject-with tcp-reset
 
 iptables -t nat -N SS_SPEC_CUS_WAN_AC
 iptables -t nat -I PREROUTING 2 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
@@ -56,6 +64,10 @@ if [ -n "$(command -v ip6tables)" ]; then
 	ip6tables -t filter -N SS_SPEC_CUS_LAN_FWD
 	ip6tables -t filter -I zone_lan_forward 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
 	ip6tables -t filter -A SS_SPEC_CUS_LAN_FWD -m set --match-set bplanmac src -j RETURN
+
+	#block dns over any except udp/tcp
+	ip6tables -t filter -A SS_SPEC_CUS_LAN_FWD -p udp -m set --match-set dns6 dst ! --dport 53 -j REJECT
+	ip6tables -t filter -A SS_SPEC_CUS_LAN_FWD -p tcp -m set --match-set dns6 dst ! --dport 53 -j REJECT --reject-with tcp-reset
 
 	ip6tables -t nat -N SS_SPEC_CUS_WAN_AC
 	ip6tables -t nat -I PREROUTING 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
@@ -82,8 +94,6 @@ fi
 
 
 #$IPT -A SS_SPEC_WAN_FW -p tcp -m multiport --dport 85,86 -j REDIRECT --to-ports $local_port
-#$IPT -I SS_SPEC_WAN_AC 1 -p tcp --dport 443 -j RETURN -d 1.1.1.1
-#$IPT -I SS_SPEC_WAN_AC 2 -p tcp --dport 443 -j RETURN -d 8.8.8.8
 $IPT -I SS_SPEC_WAN_AC 1 -i br-lan -p udp --dport 53 -j RETURN
 $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 #iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j RETURN
@@ -104,3 +114,7 @@ iptables -t mangle -I SS_SPEC_TPROXY 1 -m set --match-set bropc src -m set ! --m
 iptables -t mangle -I SS_SPEC_TPROXY 2 -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set ! --match-set gfwlist dst -m set ! --match-set blacklist dst -j RETURN
 $IPT -I SS_SPEC_WAN_AC $(($(iptables -L SS_SPEC_WAN_AC -t nat | wc -l)-2-2)) -m set --match-set bropc src -m set --match-set gfwlist dst -j SS_SPEC_WAN_FW
 $IPT -I SS_SPEC_WAN_AC $(($(iptables -L SS_SPEC_WAN_AC -t nat | wc -l)-2-1)) -m set --match-set bropc src -j RETURN
+
+#block dns over any except udp/tcp
+iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m set --match-set dns dst ! --dport 53 -j RETURN
+$IPT -I SS_SPEC_WAN_AC 1 -p tcp -m set --match-set dns dst ! --dport 53 -j RETURN
