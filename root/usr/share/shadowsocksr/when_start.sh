@@ -2,8 +2,7 @@
 #重启后不会消失的需要加以判断
 if [[ "$(uci get dnsforwarder.@arguments[0].enabled)" != '1' ]]; then
   uci set dnsforwarder.@arguments[0].enabled='1'
-  uci commit
-  reload_config
+  uci commit; reload_config
 fi
 (tcp2udp 127.0.0.1:5333 :5333 >/dev/null 2>&1)&
 ipset -! -R <<-EOF
