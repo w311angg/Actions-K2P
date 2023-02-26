@@ -128,7 +128,7 @@ cp $GITHUB_WORKSPACE/replace_files/dnsforwarder/dnsforwarder.config feeds/packag
 echo > feeds/packages/net/dnsforwarder/files/etc/dnsforwarder/gfw.txt
 
 #ssrplus添加chinalist
-curl -L https://github.com/felixonmars/dnsmasq-china-list/raw/master/accelerated-domains.china.conf | grep '^server=/' | sed 's/^server=\/\(.*\)\/.*$/\1/g' >$root_folder_path/etc/ssrplus/chn_list.conf
+curl -L https://github.com/felixonmars/dnsmasq-china-list/raw/master/accelerated-domains.china.conf | grep '^server=/' | sed 's/^server=\/\(.*\)\/.*$/\1/g' >$root_folder_path/etc/ssrplus/china.list
 
 #预处理dnsforwarder-bropc的域名列表
 for file in 'gfw_base.conf chn_list.conf'; do
