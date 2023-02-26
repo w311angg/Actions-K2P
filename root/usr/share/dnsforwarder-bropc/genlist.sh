@@ -1,6 +1,6 @@
 #更改时也要更改diy脚本预处理部分，文件后缀为.conf的按dnsmasq配置格式处理
-gfwlist_files='gfw_list.conf gfw_base.conf chn_list.conf'
-custom_files='black.list white.list chinadns_white.list chinadns_black.list quic_blocking.list'
+gfwlist_files='gfw_list.conf gfw_base.conf'
+custom_files='black.list white.list chinadns_white.list chinadns_black.list quic_blocking.list china.list'
 
 case "$1" in
   "gfwlist")
