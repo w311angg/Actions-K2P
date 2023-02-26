@@ -33,3 +33,5 @@ for file in $files; do
     cat /etc/ssrplus/$file | sed '/^$/d' | sed "/.*/s/.*/&\n*.&/" >>$output_path
   fi
 done
+
+cat $output_path | sort | uniq >$output_path
