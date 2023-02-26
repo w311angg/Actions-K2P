@@ -1,7 +1,6 @@
 #会在reload,restart,stop时运行
 uci set dnsforwarder.@arguments[0].enabled='0'
-uci commit
-/etc/init.d/dnsforwarder reload
+uci commit; reload_config
 ps -w | grep -v "grep" | grep 'tcp2udp 127.0.0.1:5333 :5333' | awk '{print $1}' | xargs kill -9
 ipset destroy china6
 
