@@ -53,6 +53,10 @@ iptables -t nat -A SS_SPEC_CUS_WAN_AC -p udp --dport 53 -j REDIRECT --to-ports 5
 iptables -t nat -A SS_SPEC_CUS_WAN_AC -p tcp --dport 53 -j REDIRECT --to-ports 53
 
 if [ -n "$(command -v ip6tables)" ]; then
+	ip6tables -t filter -N SS_SPEC_CUS_LAN_FWD
+	ip6tables -t filter -I zone_lan_forward 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
+	ip6tables -t filter -A SS_SPEC_CUS_LAN_FWD -m set --match-set bplanmac src -j RETURN
+
 	ip6tables -t nat -N SS_SPEC_CUS_WAN_AC
 	ip6tables -t nat -I PREROUTING 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
 
