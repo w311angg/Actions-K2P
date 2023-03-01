@@ -28,8 +28,6 @@ dns6='2606:4700::1111 2606:4700:4700::1001 2001:4860:4860::8888 2001:4860:4860::
 ipset -N dns hash:net 2>/dev/null; ipset flush dns; for ip in $dns; do ipset add dns $ip 2>/dev/null; done
 ipset -N dns6 hash:net family inet6 2>/dev/null; ipset flush dns6; for ip6 in $dns6; do ipset add dns6 $ip6 2>/dev/null; done
 
-iptables -t filter -N SS_SPEC_CUS_LAN_FWD
-iptables -t filter -I zone_lan_forward 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
 iptables -t filter -A SS_SPEC_CUS_LAN_FWD -m set --match-set bplanmac src -j RETURN
 
 #block dns over any except udp/tcp
@@ -40,9 +38,6 @@ iptables -t filter -A SS_SPEC_CUS_LAN_FWD -p tcp -m set --match-set dns dst ! --
 iptables -t filter -A SS_SPEC_CUS_LAN_FWD -o eth1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j REJECT
 
 #iptables -t filter -A SS_SPEC_CUS_LAN_FWD -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j REJECT
-
-iptables -t nat -N SS_SPEC_CUS_WAN_AC
-iptables -t nat -I PREROUTING 2 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
 
 #bplan
 iptables -t nat -A SS_SPEC_CUS_WAN_AC -p udp -m set --match-set bplanmac src -m set --match-set bplan_dns dst --dport 53 -j REDIRECT --to-ports 5336
@@ -61,16 +56,11 @@ iptables -t nat -A SS_SPEC_CUS_WAN_AC -p udp --dport 53 -j REDIRECT --to-ports 5
 iptables -t nat -A SS_SPEC_CUS_WAN_AC -p tcp --dport 53 -j REDIRECT --to-ports 53
 
 if [ -n "$(command -v ip6tables)" ]; then
-	ip6tables -t filter -N SS_SPEC_CUS_LAN_FWD
-	ip6tables -t filter -I zone_lan_forward 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
 	ip6tables -t filter -A SS_SPEC_CUS_LAN_FWD -m set --match-set bplanmac src -j RETURN
 
 	#block dns over any except udp/tcp
 	ip6tables -t filter -A SS_SPEC_CUS_LAN_FWD -p udp -m set --match-set dns6 dst ! --dport 53 -j REJECT
 	ip6tables -t filter -A SS_SPEC_CUS_LAN_FWD -p tcp -m set --match-set dns6 dst ! --dport 53 -j REJECT --reject-with tcp-reset
-
-	ip6tables -t nat -N SS_SPEC_CUS_WAN_AC
-	ip6tables -t nat -I PREROUTING 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
 
 	#bplan
 	ip6tables -t nat -A SS_SPEC_CUS_WAN_AC -p udp -m set --match-set bplanmac src -m set --match-set bplan_dns6 dst --dport 53 -j REDIRECT --to-ports 5336
