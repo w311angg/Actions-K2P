@@ -1,10 +1,21 @@
 --- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-08-30 21:41:27.743478022 +0800
 +++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-08-30 21:42:46.003477993 +0800
-@@ -214,6 +214,14 @@ ac_rule() {
+@@ -214,6 +214,25 @@ ac_rule() {
         return $?
  }
 
 +iptables_config() {
++       iptables -t filter -N SS_SPEC_CUS_LAN_FWD
++       iptables -t filter -I zone_lan_forward 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
++       iptables -t nat -N SS_SPEC_CUS_WAN_AC
++       iptables -t nat -I PREROUTING 2 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
++       if [ -n "$(command -v ip6tables)" ]; then
++              ip6tables -t filter -N SS_SPEC_CUS_LAN_FWD
++              ip6tables -t filter -I zone_lan_forward 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
++              ip6tables -t nat -N SS_SPEC_CUS_WAN_AC
++              ip6tables -t nat -I PREROUTING 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
++       fi
++
 +       source /etc/ssrplus/iptables_config.sh 2>/dev/null || {
 +               loger 3 "Can't config iptables, please check the config."
 +               exit 1
@@ -24,3 +35,35 @@
  RET=$?
  [ "$RET" = 0 ] || loger 3 "Start failed!"
  exit $RET
+
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-20 22:34:15.155025950 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-20 22:33:56.935025957 +0800
+@@ -323,7 +323,13 @@ gen_include() {
+ 	[ -n "$FWI" ] || return 0
+ 	extract_rules() {
+ 		echo "*$1"
+-		iptables-save -t $1 | grep SS_SPEC_ | sed -e "s/^-A \(OUTPUT\|PREROUTING\)/-I \1 1/"
++		iptables-save -t $1 | grep 'SS_SPEC_[^CUS_]' | sed -e "s/^-A \(OUTPUT\|PREROUTING\)/-I \1 1/"
++		iptables-save -t $1 | grep 'SS_SPEC_CUS_' | sed -e "s/^-A \(zone_lan_forward\)/-I \1 1/" | sed -e "s/^-A \(PREROUTING\)/-I \1 2/"
++		echo 'COMMIT'
++	}
++	extract_rules6() {
++		echo "*$1"
++		ip6tables-save -t $1 | grep 'SS_SPEC_CUS_' | sed -e "s/^-A \(PREROUTING\|zone_lan_forward\)/-I \1 1/"
+ 		echo 'COMMIT'
+ 	}
+ 	cat <<-EOF >>$FWI
+@@ -331,6 +337,13 @@ gen_include() {
+ 		iptables-restore -n <<-EOT
+ 		$(extract_rules nat)
+ 		$(extract_rules mangle)
++		$(extract_rules filter)
++		EOT
++
++		ip6tables-save -c | grep -v "SS_SPEC" | ip6tables-restore -c
++		ip6tables-restore -n <<-EOT
++		$(extract_rules6 nat)
++		$(extract_rules6 filter)
+ 		EOT
+ 	EOF
+ 	return 0
