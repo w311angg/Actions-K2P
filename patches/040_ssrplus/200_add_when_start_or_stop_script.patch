@@ -8,11 +8,11 @@
  		Start_Run
  		start_rules
  		start_dns
-@@ -936,6 +937,7 @@ boot() {
- stop() {
- 	unlock
- 	set_lock
+@@ -965,6 +966,7 @@ stop() {
+ 	fi
+ 	$PS -w | grep -v "grep" | grep ssr-monitor | awk '{print $1}' | xargs kill -9 >/dev/null 2>&1 &
+ 	$PS -w | grep -v "grep" | grep "sleep 0000" | awk '{print $1}' | xargs kill -9 >/dev/null 2>&1 &
 +	/usr/share/shadowsocksr/when_stop.sh
- 	/usr/bin/ssr-rules -f
- 	local srulecount=$(iptables -L | grep SSR-SERVER-RULE | wc -l)
- 	if [ $srulecount -gt 0 ]; then
+ 	( \
+ 		# Graceful kill first, so programs have the chance to stop its subprocesses
+ 		$PS -w | grep -v "grep" | grep "$TMP_PATH" | awk '{print $1}' | xargs kill >/dev/null 2>&1 ; \
