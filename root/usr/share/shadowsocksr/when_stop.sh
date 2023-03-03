@@ -12,11 +12,11 @@ rm -rf /tmp/dnsforwarder-bropc
 
 uci set shadowsocksr.@global[0].mydnsip="127.0.0.1"
 uci set shadowsocksr.@global[0].mydnsport='5335'
-uci delete dhcp.@dnsmasq[0].cachesize
+uci delete dhcp.@dnsmasq[0].cachesize 2>/dev/null
 uci commit
 
 #specific domain block quic
 rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/010_quic_blocking.conf
 
-ipset destroy chinalist
-rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/china.conf
+ipset destroy chinalist 2>/dev/null
+rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/china.conf 2>/dev/null
