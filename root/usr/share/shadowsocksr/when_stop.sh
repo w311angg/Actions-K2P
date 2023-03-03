@@ -1,7 +1,7 @@
 #会在reload,restart,stop时运行
 ps -w | grep -v "grep" | grep '\[dnsforwarder-bp\]' | awk '{print $1}' | xargs kill -9
 rm -rf /tmp/dnsforwarder-bplan
-rm -rf /var/etc/dnsforwarder-bplan
+rm -rf /var/etc/dnsforwarder-bplan/
 ps -w | grep -v "grep" | grep 'tcp2udp 127.0.0.1:5333 :5333' | awk '{print $1}' | xargs kill -9
 ipset destroy china6
 
