@@ -1,0 +1,17 @@
+--- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2023-03-03 23:10:18.058176601 +0800
++++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-monitor	2023-03-03 23:38:03.692068807 +0800
+@@ -126,4 +126,14 @@ while [ "1" == "1" ]; do #死循环
+ 	if [ $(uci get dnsforwarder.@arguments[0].enabled 2>/dev/null || echo 0) == 1 ]; then
+ 		/etc/init.d/dnsforwarder health #如果进程挂掉就重启它
+ 	fi
++	#dnsforwarder-bplan
++	icount=$(busybox ps -w | grep '\[dnsforwarder-bp\]' | grep -v grep | wc -l)
++	if [ "$icount" -lt 1 ]; then #如果进程挂掉就重启它
++		$(grep -m1 '^/tmp/dnsforwarder-bplan' /usr/share/shadowsocksr/when_start.sh)
++	fi
++	#dnsforwarder-bropc
++	icount=$(busybox ps -w | grep '\[dnsforwarder-br\]' | grep -v grep | wc -l)
++	if [ "$icount" -lt 1 ]; then #如果进程挂掉就重启它
++		$(grep -m1 '^/tmp/dnsforwarder-bropc' /usr/share/shadowsocksr/when_start.sh)
++	fi
+ done
