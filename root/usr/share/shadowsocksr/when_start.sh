@@ -1,9 +1,10 @@
 #会在reload,restart,start,系统启动(当enabled)时运行
 #重启后不会消失的需要加以判断
-if [[ "$(uci get dnsforwarder.@arguments[0].enabled)" != '1' ]]; then
-  uci set dnsforwarder.@arguments[0].enabled='1'
-  uci commit; reload_config
-fi
+ln -s /usr/bin/dnsforwarder /tmp/dnsforwarder-bplan
+mkdir -p /var/etc/dnsforwarder-bplan
+wan_dns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo '')"
+cat /etc/dnsforwarder-bplan/dnsforwarder.config | sed "s/%wan_dns%/${wan_dns}$([[ -n '$wan_dns' ]] && echo ,)/" >/var/etc/dnsforwarder-bplan/dnsforwarder.conf
+/tmp/dnsforwarder-bplan -d -f /var/etc/dnsforwarder-bplan/dnsforwarder.config
 (tcp2udp 127.0.0.1:5333 :5333 >/dev/null 2>&1)&
 ipset -! -R <<-EOF
 	create china6 hash:net family inet6
