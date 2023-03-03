@@ -3,7 +3,7 @@
 ln -s /usr/bin/dnsforwarder /tmp/dnsforwarder-bplan
 mkdir -p /var/etc/dnsforwarder-bplan
 wan_dns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo '')"
-cat /etc/dnsforwarder-bplan/dnsforwarder.config | sed "s/%wan_dns%/${wan_dns}$([[ -n '$wan_dns' ]] && echo ,)/" >/var/etc/dnsforwarder-bplan/dnsforwarder.conf
+cat /etc/dnsforwarder-bplan/dnsforwarder.config | sed "s/%wan_dns%/${wan_dns}$([[ -n '$wan_dns' ]] && echo ,)/" >/var/etc/dnsforwarder-bplan/dnsforwarder.config
 /tmp/dnsforwarder-bplan -d -f /var/etc/dnsforwarder-bplan/dnsforwarder.config
 (tcp2udp 127.0.0.1:5333 :5333 >/dev/null 2>&1)&
 ipset -! -R <<-EOF
