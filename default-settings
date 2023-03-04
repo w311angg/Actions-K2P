@@ -13,7 +13,7 @@ uci add_list dhcp.bplan_tag.dhcp_option="option6:dns-server,[2400:3200::1],[2400
 uci commit; reload_config
 
 #默认开启分配IPv6地址
-if ! uci get dhcp.lan.dhcpv6 && ! uci get dhcp.lan.ra; then
+if ! uci get dhcp.lan.dhcpv6 >/dev/null 2>&1 && ! uci get dhcp.lan.ra >/dev/null 2>&1; then
   uci set dhcp.lan.dhcpv6="server"
   uci set dhcp.lan.ra="server"
   uci commit; reload_config
