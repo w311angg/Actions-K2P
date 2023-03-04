@@ -6,7 +6,8 @@
  			local chinadns="$(uci_get_by_type global chinadns_forward)"
 +			local chinadns_second="$(uci_get_by_type global chinadns_forward_second)"
  			if [ -n "$chinadns" ]; then
- 				local wandns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo "119.29.29.29")"
+-				local wandns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo "119.29.29.29")"
++ 				local wandns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo '')"
  				case "$chinadns" in
  				"wan") chinadns="$wandns" ;;
 -				"wan_114") chinadns="$wandns,114.114.114.114" ;;
