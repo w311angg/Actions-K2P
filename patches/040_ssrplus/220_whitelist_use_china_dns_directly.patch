@@ -1,14 +1,21 @@
 --- feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2023-02-25 22:14:33.018655075 +0800
 +++ feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/gfw2ipset.sh	2023-02-26 04:07:34.020115592 +0800
-@@ -39,7 +39,10 @@ for line in $(cat /etc/ssrplus/white.lis
+@@ -39,7 +39,18 @@ for line in $(cat /etc/ssrplus/white.lis
  for line in $(cat /etc/ssrplus/deny.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/gfw_list.conf; done
  for line in $(cat /etc/ssrplus/deny.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/gfw_base.conf; done
  cat /etc/ssrplus/black.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/server=\/&\/$dns_ip#$dns_port\nipset=\/&\/blacklist/" >$TMP_DNSMASQ_PATH/blacklist_forward.conf
 -cat /etc/ssrplus/white.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/server=\/&\/127.0.0.1\nipset=\/&\/whitelist/" >$TMP_DNSMASQ_PATH/whitelist_forward.conf
-+whitedns="$(uci get shadowsocksr.@global[0].chinadns_forward)"
++chinadns="$(uci get shadowsocksr.@global[0].chinadns_forward)"
++chinadns_second="$(uci get shadowsocksr.@global[0].chinadns_forward_second)"
 +whitedns="${chinadns/:/#}"
-+whitedns="${chinadns:-127.0.0.1}"
-+cat /etc/ssrplus/white.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/server=\/&\/$whitedns\nipset=\/&\/whitelist/" >$TMP_DNSMASQ_PATH/whitelist_forward.conf
++whitedns="${whitedns:-127.0.0.1}"
++wandns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo '')"
++case "$chinadns" in
++	"wan") sed_expression="/.*/s/.*/server=\/&\/$wandns\nipset=\/&\/whitelist/" ;;
++	"wan_114") sed_expression="/.*/s/.*/server=\/&\/$wandns\nserver=\/&\/$chinadns_second\nipset=\/&\/whitelist/" ;;
++	*) sed_expression="/.*/s/.*/server=\/&\/$whitedns\nipset=\/&\/whitelist/" ;;
++esac
++cat /etc/ssrplus/white.list | sed '/^$/d' | sed '/#/d' | sed "$sed_expression" >$TMP_DNSMASQ_PATH/whitelist_forward.conf
  cat /etc/ssrplus/deny.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/address=\/&\//" >$TMP_DNSMASQ_PATH/denylist.conf
  if [ "$(uci_get_by_type global adblock 0)" == "1" ]; then
  	cp -f /etc/ssrplus/ad.conf $TMP_DNSMASQ_PATH/
