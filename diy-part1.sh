@@ -19,21 +19,3 @@ echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.defau
 #echo 'src-git passwallluci https://github.com/xiaorouji/openwrt-passwall;luci' >>feeds.conf.default
 git clone https://github.com/w311ang/openwrt-tcp2udp.git package/tcp2udp
 #git clone https://github.com/w311ang/openwrt-ipportfwd.git package/ipportfwd
-
-#更新dnsforwarder
-git clone https://github.com/lifenjoiner/dnsforwarder /tmp/dnsforwarder
-cd /tmp/dnsforwarder
-hash=$(git log -1 --format="%H")
-date=$(git log -1 --format="%cd" --date=short)
-version=$(grep -oP -m1 '(?<=#define VERSION__ ").*?(?=")' main.c)
-cd -
-sed -i "s/{%pkg_version%,%pkg_source_date%,%pkg_source_version%}/{$version,$date,$hash}/" feeds/packages/net/dnsforwarder/Makefile
-
-#更新ssrplus chinadns-ng
-git clone https://github.com/zfl9/chinadns-ng /tmp/chinadns-ng
-cd /tmp/chinadns-ng
-hash=$(git log -1 --format="%H")
-date=$(git log -1 --format="%cd" --date=short)
-version=$(grep -oP -m1 '(?<=#define CHINADNS_VERSION "ChinaDNS-NG ).*?(?= <.*?>")' opt.c)
-cd -
-sed -i "s/{%pkg_version%,%pkg_source_date%,%pkg_source_version%}/{$version,$date,$hash}/" feeds/helloworld/chinadns-ng/Makefile
