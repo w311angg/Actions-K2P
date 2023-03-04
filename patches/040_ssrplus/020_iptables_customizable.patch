@@ -6,14 +6,14 @@
 
 +iptables_config() {
 +       iptables -t filter -N SS_SPEC_CUS_LAN_FWD
-+       iptables -t filter -I zone_lan_forward 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
++       iptables -t filter -I zone_lan_forward 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
 +       iptables -t nat -N SS_SPEC_CUS_WAN_AC
-+       iptables -t nat -I PREROUTING 2 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
++       iptables -t nat -I PREROUTING 2 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
 +       if [ -n "$(command -v ip6tables)" ]; then
 +              ip6tables -t filter -N SS_SPEC_CUS_LAN_FWD
-+              ip6tables -t filter -I zone_lan_forward 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
++              ip6tables -t filter -I zone_lan_forward 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
 +              ip6tables -t nat -N SS_SPEC_CUS_WAN_AC
-+              ip6tables -t nat -I PREROUTING 1 --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
++              ip6tables -t nat -I PREROUTING 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
 +       fi
 +
 +       source /etc/ssrplus/iptables_config.sh 2>/dev/null || {
