@@ -33,6 +33,7 @@ sed {
   "s/%pkg_source_version%/$hash/"
 } feeds/packages/net/dnsforwarder/Makefile
 
+#更新ssrplus chinadns-ng
 git clone https://github.com/zfl9/chinadns-ng /tmp/chinadns-ng
 cd /tmp/chinadns-ng
 hash=$(git log -1 --format="%H")
