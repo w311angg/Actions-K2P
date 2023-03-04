@@ -1,4 +1,4 @@
-#会在每次更新系统后执行
+#会在每次更新系统或exitcode不为0重启后执行
 
 #修改保留内存到1M
 sed -i '/vm.min_free_kbytes=/d' /etc/sysctl.conf
