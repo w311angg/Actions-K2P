@@ -1,10 +1,11 @@
 --- feeds/helloworld/chinadns-ng/Makefile	2023-03-04 21:04:35.687983708 +0800
 +++ feeds/helloworld/chinadns-ng/Makefile	2023-03-04 21:04:25.907983712 +0800
-@@ -5,14 +5,13 @@
+@@ -5,14 +5,14 @@
  include $(TOPDIR)/rules.mk
  
  PKG_NAME:=chinadns-ng
 -PKG_VERSION:=1.0-beta.25
++PKG_VERSION:=%pkg_version%
  PKG_RELEASE:=1
  
  PKG_SOURCE_PROTO:=git
