@@ -30,11 +30,11 @@ fi
 /usr/share/shadowsocksr/quic_blocking_genconf.sh >/dev/null
 
 chinadns="$(uci get shadowsocksr.@global[0].chinadns_forward)"
-chinadns_second="$(uci get shadowsocksr.@global[0].chinadns_forward_second)"
 if [ -n "$chinadns" ]; then
   ipset create chinalist hash:net
   mkdir -p /var/dnsmasq.d/dnsmasq-ssrplus.d/
   wandns="$(ifstatus wan | jsonfilter -e '@["dns-server"][0]' || echo '')"
+  chinadns_second="$(uci get shadowsocksr.@global[0].chinadns_forward_second)"
   case "$chinadns" in
     "wan") sed_expression="/.*/s/.*/server=\/&\/${wandns}\nipset=\/&\/chinalist/" ;;
     "wan_114") sed_expression="/.*/s/.*/server=\/&\/${wandns}\nserver=\/&\/${chinadns_second/:/#}\nipset=\/&\/chinalist/" ;;
