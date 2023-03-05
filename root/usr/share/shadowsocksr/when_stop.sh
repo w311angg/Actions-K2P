@@ -17,6 +17,3 @@ uci commit
 
 #specific domain block quic
 rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/010_quic_blocking.conf
-
-ipset destroy chinalist 2>/dev/null
-rm -rf /var/dnsmasq.d/dnsmasq-ssrplus.d/china.conf 2>/dev/null
