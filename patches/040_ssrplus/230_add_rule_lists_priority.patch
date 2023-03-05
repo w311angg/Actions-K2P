@@ -1,7 +1,7 @@
 因为dnsmasq只会将一个域名解析的ip添加到最先的一个ipset
 --- feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2023-02-26 17:56:56.943697988 +0800
 +++ feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr	2023-02-27 00:18:25.843500629 +0800
-@@ -919,6 +919,21 @@ start() {
+@@ -919,6 +919,20 @@ start() {
  			echolog "广告过滤加载完毕。"
  		fi
  	fi
@@ -11,7 +11,6 @@
 +010_quic_blocking.conf
 +whitelist_forward.conf
 +blacklist_forward.conf
-+china.conf
 +gfw_base.conf
 +gfw_list.conf
 +EOF
