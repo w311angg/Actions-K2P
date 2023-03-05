@@ -16,3 +16,5 @@ if [[ "$(cat /etc/config/dnsforwarder)" =~ "%wan_dns%" ]]; then
     fi
   done
 fi
+
+exit 0
