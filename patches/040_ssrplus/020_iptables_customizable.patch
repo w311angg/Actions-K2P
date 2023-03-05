@@ -1,44 +1,54 @@
 --- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-08-30 21:41:27.743478022 +0800
 +++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2022-08-30 21:42:46.003477993 +0800
-@@ -214,6 +214,25 @@ ac_rule() {
-        return $?
+@@ -63,8 +63,21 @@ flush_r() {
+ 			$ipt -F ${chain:1} 2>/dev/null && $ipt -X ${chain:1}
+ 		done
+ 	}
++	flush_ip6tables() {
++		local ipt="ip6tables -t $1"
++		local DAT=$(ip6tables-save -t $1)
++		eval $(echo "$DAT" | grep "$TAG" | sed -e 's/^-A/$ipt -D/' -e 's/$/;/')
++		for chain in $(echo "$DAT" | awk '/^:SS_SPEC/{print $1}'); do
++			$ipt -F ${chain:1} 2>/dev/null && $ipt -X ${chain:1}
++		done
++	}
+ 	flush_iptables nat
+ 	flush_iptables mangle
++	flush_iptables filter
++	if [ -n "$(command -v ip6tables)" ]; then
++		flush_ip6tables nat
++		flush_ip6tables filter
++	fi
+ 	ip rule del fwmark 0x01/0x01 table 100 2>/dev/null
+ 	ip route del local 0.0.0.0/0 dev lo table 100 2>/dev/null
+ 	ipset -X ss_spec_lan_ac 2>/dev/null
+@@ -214,6 +227,25 @@ ac_rule() {
+ 	return $?
  }
-
+ 
 +iptables_config() {
-+       iptables -t filter -N SS_SPEC_CUS_LAN_FWD
-+       iptables -t filter -I zone_lan_forward 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
-+       iptables -t nat -N SS_SPEC_CUS_WAN_AC
-+       iptables -t nat -I PREROUTING 2 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
-+       if [ -n "$(command -v ip6tables)" ]; then
-+              ip6tables -t filter -N SS_SPEC_CUS_LAN_FWD
-+              ip6tables -t filter -I zone_lan_forward 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
-+              ip6tables -t nat -N SS_SPEC_CUS_WAN_AC
-+              ip6tables -t nat -I PREROUTING 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
-+       fi
++	iptables -t filter -N SS_SPEC_CUS_LAN_FWD
++	iptables -t filter -I zone_lan_forward 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
++	iptables -t nat -N SS_SPEC_CUS_WAN_AC
++	iptables -t nat -I PREROUTING 2 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
++	if [ -n "$(command -v ip6tables)" ]; then
++		ip6tables -t filter -N SS_SPEC_CUS_LAN_FWD
++		ip6tables -t filter -I zone_lan_forward 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_LAN_FWD
++		ip6tables -t nat -N SS_SPEC_CUS_WAN_AC
++		ip6tables -t nat -I PREROUTING 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
++	fi
 +
-+       source /etc/ssrplus/iptables_config.sh 2>/dev/null || {
-+               loger 3 "Can't config iptables, please check the config."
-+               exit 1
-+       }
-+       return $?
++	source /etc/ssrplus/iptables_config.sh 2>/dev/null || {
++		loger 3 "Can't config iptables, please check the config."
++		exit 1
++	}
++	return $?
 +}
 +
  tp_rule() {
-        [ -n "$TPROXY" ] || return 0
-        ip rule add fwmark 0x01/0x01 table 100
-@@ -420,7 +439,7 @@ case "$TPROXY" in
-        ;;
- esac
-
--flush_r && fw_rule && ipset_r && ac_rule && tp_rule && gen_include
-+flush_r && fw_rule && ipset_r && ac_rule && tp_rule && iptables_config && gen_include
- RET=$?
- [ "$RET" = 0 ] || loger 3 "Start failed!"
- exit $RET
-
---- feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-20 22:34:15.155025950 +0800
-+++ feeds/helloworld/luci-app-ssr-plus/root/usr/bin/ssr-rules	2023-02-20 22:33:56.935025957 +0800
-@@ -323,7 +323,13 @@ gen_include() {
+ 	[ -n "$TPROXY" ] || return 0
+ 	ip rule add fwmark 0x01/0x01 table 100
+@@ -304,7 +336,13 @@ gen_include() {
  	[ -n "$FWI" ] || return 0
  	extract_rules() {
  		echo "*$1"
@@ -53,7 +63,7 @@
  		echo 'COMMIT'
  	}
  	cat <<-EOF >>$FWI
-@@ -331,6 +337,13 @@ gen_include() {
+@@ -312,6 +350,13 @@ gen_include() {
  		iptables-restore -n <<-EOT
  		$(extract_rules nat)
  		$(extract_rules mangle)
@@ -67,3 +77,13 @@
  		EOT
  	EOF
  	return 0
+@@ -420,7 +465,7 @@ case "$TPROXY" in
+ 	;;
+ esac
+ 
+-flush_r && fw_rule && ipset_r && ac_rule && tp_rule && gen_include
++flush_r && fw_rule && ipset_r && ac_rule && tp_rule && iptables_config && gen_include
+ RET=$?
+ [ "$RET" = 0 ] || loger 3 "Start failed!"
+ exit $RET
+\ No newline at end of file
