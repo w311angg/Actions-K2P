@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 #设置dnsforwarder，添加wan端dns
 if [[ "$(cat /etc/config/dnsforwarder)" =~ "%wan_dns%" ]]; then
