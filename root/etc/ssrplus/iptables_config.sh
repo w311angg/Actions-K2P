@@ -88,10 +88,6 @@ $IPT -I SS_SPEC_WAN_AC 1 -i br-lan -p udp --dport 53 -j RETURN
 $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 #iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j RETURN
 #iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m set ! --match-set blacklist dst -j RETURN
-if uci get shadowsocksr.@global[0].chinadns_forward >/dev/null 2>&1; then
-	$IPT -I SS_SPEC_WAN_AC $(iptables -t nat -L SS_SPEC_WAN_AC | get_rule_number 'match-set china dst') -m set --match-set chinalist -j RETURN
-	iptables -t mangle -I SS_SPEC_TPROXY $(iptables -t mangle -L SS_SPEC_TPROXY | get_rule_number 'match-set china dst ! match-set blacklist dst') -p udp -m set --match-set chinalist dst -m set ! --match-set blacklist dst -j RETURN
-fi
 
 #specific domain block quic
 iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j RETURN
