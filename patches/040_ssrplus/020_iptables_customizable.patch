@@ -53,13 +53,13 @@
  	extract_rules() {
  		echo "*$1"
 -		iptables-save -t $1 | grep SS_SPEC_ | sed -e "s/^-A \(OUTPUT\|PREROUTING\)/-I \1 1/"
-+		iptables-save -t $1 | grep 'SS_SPEC_[^CUS_]' | sed -e "s/^-A \(OUTPUT\|PREROUTING\)/-I \1 1/"
-+		iptables-save -t $1 | grep 'SS_SPEC_CUS_' | sed -e "s/^-A \(zone_lan_forward\)/-I \1 1/" | sed -e "s/^-A \(PREROUTING\)/-I \1 2/"
++		iptables-save -t $1 | grep SS_SPEC_ | sed '/SS_SPEC_CUS_/d' | sed -e "s/^-A \(OUTPUT\|PREROUTING\)/-I \1 1/"
++		iptables-save -t $1 | grep SS_SPEC_CUS_ | sed -e "s/^-A \(zone_lan_forward\)/-I \1 1/" | sed -e "s/^-A \(PREROUTING\)/-I \1 2/"
 +		echo 'COMMIT'
 +	}
 +	extract_rules6() {
 +		echo "*$1"
-+		ip6tables-save -t $1 | grep 'SS_SPEC_CUS_' | sed -e "s/^-A \(PREROUTING\|zone_lan_forward\)/-I \1 1/"
++		ip6tables-save -t $1 | grep SS_SPEC_CUS_ | sed -e "s/^-A \(PREROUTING\|zone_lan_forward\)/-I \1 1/"
  		echo 'COMMIT'
  	}
  	cat <<-EOF >>$FWI
