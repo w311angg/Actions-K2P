@@ -89,17 +89,18 @@ $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 #iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j RETURN
 #iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m set ! --match-set blacklist dst -j RETURN
 
+#bropc
+iptables -t mangle -I SS_SPEC_TPROXY 1 -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set --match-set whitelist dst -j RETURN
+iptables -t mangle -I SS_SPEC_TPROXY 2 -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set --match-set blacklist dst -j TPROXY --on-port 1234 --on-ip 0.0.0.0 --tproxy-mark 0x1/0x1
+iptables -t mangle -I SS_SPEC_TPROXY 3 -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set --match-set gfwlist dst -j TPROXY --on-port 1234 --on-ip 0.0.0.0 --tproxy-mark 0x1/0x1
+$IPT -I SS_SPEC_WAN_AC $(($(iptables -L SS_SPEC_WAN_AC -t nat | wc -l)-2-2)) -m set --match-set bropc src -m set --match-set gfwlist dst -j SS_SPEC_WAN_FW
+$IPT -I SS_SPEC_WAN_AC $(($(iptables -L SS_SPEC_WAN_AC -t nat | wc -l)-2-2)) -m set --match-set bropc src -j RETURN
+
 #specific domain block quic
 iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j RETURN
 
 #google one vpn bypass
 iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp --dport 2153 -m set --match-set googlevpn_lan src -j RETURN
-
-#bropc
-iptables -t mangle -I SS_SPEC_TPROXY 1 -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set --match-set whitelist dst -j RETURN
-iptables -t mangle -I SS_SPEC_TPROXY 2 -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set ! --match-set gfwlist dst -m set ! --match-set blacklist dst -j RETURN
-$IPT -I SS_SPEC_WAN_AC $(($(iptables -L SS_SPEC_WAN_AC -t nat | wc -l)-2-2)) -m set --match-set bropc src -m set --match-set gfwlist dst -j SS_SPEC_WAN_FW
-$IPT -I SS_SPEC_WAN_AC $(($(iptables -L SS_SPEC_WAN_AC -t nat | wc -l)-2-1)) -m set --match-set bropc src -j RETURN
 
 #block dns over any except udp/tcp
 iptables -t mangle -I SS_SPEC_TPROXY 1 -p udp -m set --match-set dns dst ! --dport 53 -j RETURN
