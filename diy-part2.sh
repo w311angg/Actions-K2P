@@ -59,7 +59,7 @@ chmod +x $root_folder_path/usr/share/shadowsocksr/quic_blocking_genconf.sh
 chmod +x $root_folder_path/etc/ssrplus/autoupdate_hook.sh
 chmod +x $root_folder_path/usr/share/shadowsocksr/when_start.sh
 chmod +x $root_folder_path/usr/share/shadowsocksr/when_stop.sh
-chmod +x $root_folder_path/etc/uci-defaults/dnsforwarder
+chmod +x $root_folder_path/etc/uci-defaults/99-dnsforwarder
 
 # 设置WiFi密码
 sed -i 's/^DefaultKeyID=.*/DefaultKeyID=2/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.2G.dat
