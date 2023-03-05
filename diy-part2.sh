@@ -94,9 +94,6 @@ sed -i "s/set \(.*\)enable_switch=.*/set \1enable_switch='0'/" feeds/helloworld/
 #ssrplus不屏蔽quic
 sed -i "s/set \(.*\)block_quic=.*/set \1block_quic='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
-#ssrplus chinadns-ng不屏蔽ipv6
-sed -i "s/set \(.*\)no_ipv6=.*/set \1no_ipv6='0'/" feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
-
 #ssrplus chinadns-ng添加中国ipv6地址文件
 for i in {0..2}; do
   exit_code=0
