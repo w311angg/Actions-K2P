@@ -76,7 +76,7 @@
  	return $?
  }
  
-@@ -919,6 +925,7 @@ reset() {
+@@ -919,6 +924,7 @@ reset() {
  		set shadowsocksr.@global[0].adblock_url='https://anti-ad.net/anti-ad-for-dnsmasq.conf'
  		set shadowsocksr.@global[0].mydnsip='127.0.0.1'
  		set shadowsocksr.@global[0].mydnsport='5335'
