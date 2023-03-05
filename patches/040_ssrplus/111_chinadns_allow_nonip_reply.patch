@@ -4,8 +4,8 @@
  				"wan_114") chinadns="$wandns,$chinadns_second" ;;
  				esac
  
--				ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port $(test "$no_ipv6" -eq 1 && echo -N) -f -r -M -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
-+				ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port $(test "$no_ipv6" -eq 1 && echo -N) -f -r -M -n -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
+-				ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port -N=gt -f -r -M -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
++				ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port -N=gt -f -r -M -n -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
  
  				cat <<-EOF >> "$TMP_DNSMASQ_PATH/chinadns_fixed_server.conf"
  					no-poll
@@ -16,8 +16,8 @@
  			""|"wan_114") chinadns="$wandns,$chinadns_second" ;;
  			esac
  			kill -9 $(busybox ps -w | grep $TMP_BIN_PATH/chinadns-ng | grep -v grep | awk '{print $1}') >/dev/null 2>&1
--			ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port $(test "$no_ipv6" -eq 1 && echo -N) -f -r -M -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
-+			ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port $(test "$no_ipv6" -eq 1 && echo -N) -f -r -M -n -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
+-			ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port -N=gt -f -r -M -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
++			ln_start_bin $(first_type chinadns-ng) chinadns-ng -l $china_dns_port -4 china -6 china6 -p 3 -c ${chinadns/:/#} -t $dns_ip#$dns_port -N=gt -f -r -M -n -g /etc/ssrplus/chinadns_black.list -m /etc/ssrplus/chinadns_white.list
  		fi
  	fi
  done
