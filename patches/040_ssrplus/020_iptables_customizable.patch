@@ -86,4 +86,3 @@
  RET=$?
  [ "$RET" = 0 ] || loger 3 "Start failed!"
  exit $RET
-\ No newline at end of file
