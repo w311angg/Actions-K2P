@@ -128,9 +128,6 @@ cp $GITHUB_WORKSPACE/replace_files/dnsforwarder/dnsforwarder.config feeds/packag
 #清空dnsforwarder无用文件
 echo > feeds/packages/net/dnsforwarder/files/etc/dnsforwarder/gfw.txt
 
-#ssrplus添加chinalist
-curl -L https://github.com/felixonmars/dnsmasq-china-list/raw/master/accelerated-domains.china.conf | grep '^server=/' | sed 's/^server=\/\(.*\)\/.*$/\1/g' >$root_folder_path/etc/ssrplus/china.list
-
 #更新dnsforwarder
 git clone https://github.com/lifenjoiner/dnsforwarder /tmp/dnsforwarder
 cd /tmp/dnsforwarder
