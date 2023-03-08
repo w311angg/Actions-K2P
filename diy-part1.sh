@@ -19,3 +19,4 @@ echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.defau
 #echo 'src-git passwallluci https://github.com/xiaorouji/openwrt-passwall;luci' >>feeds.conf.default
 git clone https://github.com/w311ang/openwrt-tcp2udp.git package/tcp2udp
 #git clone https://github.com/w311ang/openwrt-ipportfwd.git package/ipportfwd
+git clone https://github.com/skyformat99/eqos.git package/eqos
