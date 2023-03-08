@@ -132,7 +132,7 @@ hash=$(git log -1 --format="%H")
 date=$(git log -1 --format="%cd" --date=short)
 version=$(grep -oP -m1 '(?<=#define VERSION__ ").*?(?=")' main.c)
 cd -
-sed -i -e "s/%pkg_version%/${version}/" -e "s/%pkg_source_date%/${date}/" -e "s/%pkg_source_version%/${hash}/" feeds/packages/net/dnsforwarder/Makefile
+sed -i -e "s/^\(PKG_VERSION:=\).*/\1${version}/" -e "s/^\(PKG_SOURCE_DATE:=\).*/\1${date}/" -e "s/^\(PKG_SOURCE_VERSION:=\).*/\1${hash}/" feeds/packages/net/dnsforwarder/Makefile
 
 #更新ssrplus chinadns-ng
 git clone https://github.com/zfl9/chinadns-ng /tmp/chinadns-ng
@@ -141,4 +141,4 @@ hash=$(git log -1 --format="%H")
 date=$(git log -1 --format="%cd" --date=short)
 version=$(grep -oP -m1 '(?<=#define CHINADNS_VERSION "ChinaDNS-NG ).*?(?= <.*?>")' opt.c)
 cd -
-sed -i -e "s/%pkg_version%/${version}/" -e "s/%pkg_source_date%/${date}/" -e "s/%pkg_source_version%/${hash}/" feeds/helloworld/chinadns-ng/Makefile
+sed -i -e "s/^\(PKG_VERSION:=\).*/\1${version}/" -e "s/^\(PKG_SOURCE_DATE:=\).*/\1${date}/" -e "s/^\(PKG_SOURCE_VERSION:=\).*/\1${hash}/" feeds/helloworld/chinadns-ng/Makefile
