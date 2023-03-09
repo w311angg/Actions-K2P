@@ -43,7 +43,7 @@
  luci.ip.neighbors({family = 4}, function(entry)
  	if entry.reachable then
 -		o:value(entry.dest:string())
-+		o:value(entry.mac, "%s (%s)" %{ entry.mac, entry.dest():string() })
++		o:value(entry.mac, "%s (%s)" %{ entry.mac, entry.dest:string() })
  	end
  end)
  
