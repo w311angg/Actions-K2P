@@ -18,6 +18,7 @@ function main() {
     done
   fi
   rm -rf /etc/uci-defaults/99-dnsforwarder
+}
 
 main &
 exit 1
