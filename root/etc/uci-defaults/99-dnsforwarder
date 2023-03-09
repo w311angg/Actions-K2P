@@ -12,7 +12,7 @@ function main() {
         if [[ $i == 5 ]]; then
           return 0
         else
-          sleep 1s
+          sleep 10s
         fi
       fi
     done
