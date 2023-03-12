@@ -92,6 +92,7 @@ $IPT -I SS_SPEC_WAN_AC 2 -i br-lan -p tcp --dport 53 -j RETURN
 #bropc
 iptables -t mangle -I SS_SPEC_TPROXY $(iptables -t mangle -L SS_SPEC_TPROXY | get_rule_number 'match-set china dst ! match-set blacklist dst') -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set --match-set blacklist dst -j TPROXY --on-port 1234 --on-ip 0.0.0.0 --tproxy-mark 0x1/0x1
 iptables -t mangle -I SS_SPEC_TPROXY $(iptables -t mangle -L SS_SPEC_TPROXY | get_rule_number 'match-set china dst ! match-set blacklist dst') -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -m set --match-set gfwlist dst -j TPROXY --on-port 1234 --on-ip 0.0.0.0 --tproxy-mark 0x1/0x1
+iptables -t mangle -I SS_SPEC_TPROXY $(iptables -t mangle -L SS_SPEC_TPROXY | get_rule_number 'match-set china dst ! match-set blacklist dst') -m set --match-set bropc src -m set ! --match-set bplanmac src -p udp -j RETURN
 $IPT -I SS_SPEC_WAN_AC $(iptables -t nat -L SS_SPEC_WAN_AC | get_rule_number 'match-set china dst') -m set --match-set bropc src -m set --match-set gfwlist dst -j SS_SPEC_WAN_FW
 $IPT -I SS_SPEC_WAN_AC $(iptables -t nat -L SS_SPEC_WAN_AC | get_rule_number 'match-set china dst') -m set --match-set bropc src -j RETURN
 
