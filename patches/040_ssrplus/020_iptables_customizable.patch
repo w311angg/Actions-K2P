@@ -38,7 +38,7 @@
 +		ip6tables -t nat -I PREROUTING 1 -m comment --comment _SS_SPEC_RULE_ -j SS_SPEC_CUS_WAN_AC
 +	fi
 +
-+	source /etc/ssrplus/iptables_config.sh 2>/dev/null || {
++	source /etc/ssrplus/iptables_config.sh || {
 +		loger 3 "Can't config iptables, please check the config."
 +		exit 1
 +	}
