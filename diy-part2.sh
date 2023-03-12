@@ -62,16 +62,11 @@ chmod +x $root_folder_path/usr/share/shadowsocksr/when_stop.sh
 chmod +x $root_folder_path/etc/uci-defaults/99-dnsforwarder
 
 # 设置WiFi密码
-sed -i 's/^DefaultKeyID=.*/DefaultKeyID=2/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.2G.dat
-sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.2G.dat
-sed -i 's/^EncrypType=.*/EncrypType=AES/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.2G.dat
-sed -i 's/^WPAPSK1=.*/WPAPSK1=password/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.2G.dat
-sed -i 's/^RekeyMethod=.*/RekeyMethod=TIME/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.2G.dat
-sed -i 's/^DefaultKeyID=.*/DefaultKeyID=2/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.5G.dat
-sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.5G.dat
-sed -i 's/^EncrypType=.*/EncrypType=AES/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.5G.dat
-sed -i 's/^WPAPSK1=.*/WPAPSK1=password/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.5G.dat
-sed -i 's/^RekeyMethod=.*/RekeyMethod=TIME/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.5G.dat
+sed -i 's/^DefaultKeyID=.*/DefaultKeyID=2/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.{2G,5G}.dat
+sed -i 's/^AuthMode=.*/AuthMode=WPAPSKWPA2PSK/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.{2G,5G}.dat
+sed -i 's/^EncrypType=.*/EncrypType=AES/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.{2G,5G}.dat
+sed -i 's/^WPAPSK1=.*/WPAPSK1=password/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.{2G,5G}.dat
+sed -i 's/^RekeyMethod=.*/RekeyMethod=TIME/' package/lean/mt/drivers/mt_wifi/files/mt7615.1.{2G,5G}.dat
 
 #打开bbr加速
 sed -i "s/option bbr_cca.*/option bbr_cca '1'/" feeds/luci/applications/luci-app-turboacc/root/etc/config/turboacc
