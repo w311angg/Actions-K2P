@@ -4,7 +4,7 @@
  	mkdir -p /var/run /var/lock /var/log /tmp/dnsmasq.d $TMP_BIN_PATH $TMP_DNSMASQ_PATH
  	echo "conf-dir=${TMP_DNSMASQ_PATH}" >"/tmp/dnsmasq.d/dnsmasq-ssrplus.conf"
  	if load_config; then
-+		/usr/share/shadowsocksr/when_start.sh
++		. /usr/share/shadowsocksr/when_start.sh
  		Start_Run
  		start_rules
  		start_dns
