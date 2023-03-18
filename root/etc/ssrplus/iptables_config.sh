@@ -6,6 +6,14 @@ function get_rule_number() {
 	done
 	echo "$input" | awk 'NR>2' | awk "{count++} /$1/{print count; exit}"
 }
+function is_udp_enabled() {
+	local udp_server_point=$(uci get shadowsocksr.@global[0].udp_relay_server 2>/dev/null)
+	if [[ "$udp_server_point" == 'nil' ]] || [[ "$udp_server_point" == '' ]]; then
+		return 1
+	else
+		return 0
+	fi
+}
 
 
 ipset -N bplanmac hash:mac 2>/dev/null
@@ -34,10 +42,12 @@ iptables -t filter -A SS_SPEC_CUS_LAN_FWD -m set --match-set bplanmac src -j RET
 iptables -t filter -A SS_SPEC_CUS_LAN_FWD -p udp -m set --match-set dns dst ! --dport 53 -j REJECT
 iptables -t filter -A SS_SPEC_CUS_LAN_FWD -p tcp -m set --match-set dns dst ! --dport 53 -j REJECT --reject-with tcp-reset
 
-#specific domain block quic
-iptables -t filter -A SS_SPEC_CUS_LAN_FWD -o eth1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j REJECT
-
-#iptables -t filter -A SS_SPEC_CUS_LAN_FWD -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j REJECT
+#specific domain block quic/block all quic
+if is_udp_enabled; then
+	iptables -t filter -A SS_SPEC_CUS_LAN_FWD -o eth1 -p udp -m multiport --dport 80,443 -m set --match-set quic_blocking dst -j REJECT
+else
+	iptables -t filter -A SS_SPEC_CUS_LAN_FWD -o eth1 -p udp -m multiport --dport 80,443 -m set ! --match-set china dst -m set ! --match-set whitelist dst -j REJECT
+fi
 
 #bplan
 iptables -t nat -A SS_SPEC_CUS_WAN_AC -p udp -m set --match-set bplanmac src -m set --match-set bplan_dns dst --dport 53 -j REDIRECT --to-ports 5336
