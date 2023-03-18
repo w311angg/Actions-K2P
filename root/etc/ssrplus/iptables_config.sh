@@ -1,5 +1,5 @@
 function get_rule_number() {
-	input=""
+	local input=""
 	while read -r line; do
 		input="$input$line
 "
